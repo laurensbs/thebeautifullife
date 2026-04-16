@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Brain, Heart, Sparkles, Sun, Lock, Check } from "lucide-react";
-import { motion } from "framer-motion";
+import { Brain, Heart, Sparkles, Sun, Lock, Check, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import FadeIn from "@/components/ui/FadeIn";
 import Divider from "@/components/ui/Divider";
 import IconBullet from "@/components/ui/IconBullet";
@@ -37,6 +37,7 @@ export default function RecognitionSection() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [showPrivacy, setShowPrivacy] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -248,16 +249,117 @@ export default function RecognitionSection() {
               )}
 
               {/* Privacy note */}
-              <div className="flex items-center justify-center gap-2 mt-5">
-                <Lock className="text-taupe flex-shrink-0" size={14} strokeWidth={1.5} />
-                <span className="font-sans text-taupe text-xs font-light">
+              <button
+                onClick={() => setShowPrivacy(true)}
+                className="flex items-center justify-center gap-2 mt-5 group cursor-pointer"
+              >
+                <Lock className="text-taupe flex-shrink-0 group-hover:text-accent transition-colors" size={14} strokeWidth={1.5} />
+                <span className="font-sans text-taupe text-xs font-light group-hover:text-accent transition-colors underline decoration-taupe/30 underline-offset-2 group-hover:decoration-accent/40">
                   jouw gegevens zijn veilig bij mij
                 </span>
-              </div>
+              </button>
             </motion.div>
           </FadeIn>
         </div>
       </div>
+
+      {/* Privacy popup */}
+      <AnimatePresence>
+        {showPrivacy && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            onClick={() => setShowPrivacy(false)}
+          >
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-dark/30 backdrop-blur-sm" />
+
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative bg-card rounded-2xl border border-border/40 shadow-2xl w-full max-w-md max-h-[80vh] overflow-y-auto"
+            >
+              {/* Header */}
+              <div className="sticky top-0 bg-card/95 backdrop-blur-sm border-b border-border/30 px-5 py-4 flex items-center justify-between rounded-t-2xl">
+                <div className="flex items-center gap-2">
+                  <Lock className="text-accent" size={16} strokeWidth={1.5} />
+                  <h3 className="font-serif text-dark text-lg font-light">Privacy</h3>
+                </div>
+                <button
+                  onClick={() => setShowPrivacy(false)}
+                  className="text-taupe hover:text-dark p-1 transition-colors"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="px-5 py-5 font-sans text-brown text-[13px] leading-[1.85] font-light space-y-4">
+                <p>
+                  Ik vind jouw privacy belangrijk. Hier lees je hoe ik omga met
+                  de gegevens die je via dit formulier achterlaat.
+                </p>
+
+                <div>
+                  <p className="font-semibold text-dark text-xs uppercase tracking-wider mb-1.5">
+                    Wat ik bewaar
+                  </p>
+                  <p>
+                    Alleen je voornaam en e-mailadres. Niets meer.
+                  </p>
+                </div>
+
+                <div>
+                  <p className="font-semibold text-dark text-xs uppercase tracking-wider mb-1.5">
+                    Waarvoor
+                  </p>
+                  <p>
+                    Om je de reflectievragenlijst te sturen en eventueel
+                    opvolging te geven als je daar toestemming voor geeft.
+                  </p>
+                </div>
+
+                <div>
+                  <p className="font-semibold text-dark text-xs uppercase tracking-wider mb-1.5">
+                    Delen met derden
+                  </p>
+                  <p>
+                    Nee. Ik deel je gegevens nooit met derden. Geen uitzonderingen.
+                  </p>
+                </div>
+
+                <div>
+                  <p className="font-semibold text-dark text-xs uppercase tracking-wider mb-1.5">
+                    Verwijderen
+                  </p>
+                  <p>
+                    Je kunt op elk moment vragen om je gegevens te verwijderen
+                    door een mail te sturen naar{" "}
+                    <a href="mailto:contact@thebeautifullife.nl" className="text-accent hover:underline">
+                      contact@thebeautifullife.nl
+                    </a>
+                  </p>
+                </div>
+
+                <div className="pt-2 border-t border-border/30">
+                  <p className="text-taupe text-[11px]">
+                    Lees het volledige{" "}
+                    <a href="/privacy" className="text-accent hover:underline">
+                      privacybeleid
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
