@@ -21,11 +21,17 @@ export async function setupDatabase() {
       id SERIAL PRIMARY KEY,
       first_name VARCHAR(100) NOT NULL,
       contact VARCHAR(200) NOT NULL,
+      phone VARCHAR(20),
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       email_sent BOOLEAN NOT NULL DEFAULT false,
       questionnaire_completed BOOLEAN NOT NULL DEFAULT false,
       questionnaire_token VARCHAR(100) UNIQUE
     )
+  `;
+
+  // Add phone column if missing (for existing databases)
+  await sql`
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS phone VARCHAR(20)
   `;
 
   // Answers table

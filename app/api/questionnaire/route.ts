@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { token, answers } = await request.json();
+    const { token, answers, phone } = await request.json();
 
     if (!token || !answers || !Array.isArray(answers)) {
       return NextResponse.json(
@@ -79,10 +79,12 @@ export async function POST(request: NextRequest) {
       `;
     }
 
-    // Mark as completed
+    // Save phone if provided and mark as completed
+    const cleanPhone = phone ? String(phone).replace(/[^0-9+\-\s()]/g, "").trim().slice(0, 20) : null;
     await sql`
       UPDATE submissions
-      SET questionnaire_completed = true
+      SET questionnaire_completed = true,
+          phone = COALESCE(${cleanPhone}, phone)
       WHERE id = ${submissionId}
     `;
 
@@ -93,5 +95,32 @@ export async function POST(request: NextRequest) {
       { error: "Er ging iets mis" },
       { status: 500 }
     );
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const { token, phone } = await request.json();
+
+    if (!token || !phone) {
+      return NextResponse.json({ error: "Ongeldige gegevens" }, { status: 400 });
+    }
+
+    const cleanPhone = String(phone).replace(/[^0-9+\-\s()]/g, "").trim().slice(0, 20);
+
+    if (!cleanPhone) {
+      return NextResponse.json({ error: "Ongeldig telefoonnummer" }, { status: 400 });
+    }
+
+    await sql`
+      UPDATE submissions
+      SET phone = ${cleanPhone}
+      WHERE questionnaire_token = ${token}
+    `;
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Phone save error:", error);
+    return NextResponse.json({ error: "Er ging iets mis" }, { status: 500 });
   }
 }

@@ -20,6 +20,7 @@ import {
   Search,
   X,
   AlertTriangle,
+  Phone,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -28,6 +29,7 @@ type Submission = {
   id: number;
   first_name: string;
   contact: string;
+  phone: string | null;
   created_at: string;
   email_sent: boolean;
   questionnaire_completed: boolean;
@@ -346,6 +348,15 @@ export default function AdminDashboard() {
                       <span className="font-sans text-brown/80 text-xs truncate max-w-[140px] md:max-w-none">
                         {s.contact}
                       </span>
+                      {s.phone && (
+                        <>
+                          <span className="font-sans text-taupe/50 text-[10px]">·</span>
+                          <span className="font-sans text-brown/80 text-xs flex items-center gap-0.5 flex-shrink-0">
+                            <Phone size={10} className="text-taupe" />
+                            {s.phone}
+                          </span>
+                        </>
+                      )}
                       <span className="font-sans text-taupe/50 text-[10px]">·</span>
                       <span className="font-sans text-taupe text-[10px] flex-shrink-0">
                         {fmtShort(s.created_at)}

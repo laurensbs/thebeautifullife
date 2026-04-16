@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
-import { Leaf, Heart, ChevronRight, ChevronLeft, Send, Check } from "lucide-react";
+import { Leaf, Heart, ChevronRight, ChevronLeft, Send, Check, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Question = {
@@ -45,6 +45,9 @@ function VragenlijstContent() {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [showPhone, setShowPhone] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [phoneSaved, setPhoneSaved] = useState(false);
   const [direction, setDirection] = useState(1);
 
   useEffect(() => {
@@ -113,7 +116,7 @@ function VragenlijstContent() {
         body: JSON.stringify({ token, answers }),
       });
       if (res.ok) {
-        setDone(true);
+        setShowPhone(true);
       } else {
         setError("Er ging iets mis bij het versturen.");
       }
@@ -121,6 +124,24 @@ function VragenlijstContent() {
       setError("Verbindingsfout. Probeer het opnieuw.");
     }
     setSubmitting(false);
+  };
+
+  const savePhone = async () => {
+    if (phone.trim()) {
+      await fetch("/api/questionnaire", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, phone: phone.trim() }),
+      });
+    }
+    setPhoneSaved(true);
+    setShowPhone(false);
+    setDone(true);
+  };
+
+  const skipPhone = () => {
+    setShowPhone(false);
+    setDone(true);
   };
 
   const isLast = current === questions.length - 1;
@@ -163,6 +184,56 @@ function VragenlijstContent() {
           </p>
           <p className="font-script text-accent text-2xl">je eerste stap is gezet</p>
           <Heart className="text-accent fill-accent mx-auto mt-6" size={14} strokeWidth={0} />
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (showPhone) {
+    return (
+      <div className="min-h-screen bg-page flex items-center justify-center px-5">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center max-w-md w-full"
+        >
+          <div className="w-14 h-14 mx-auto mb-6 rounded-full bg-accent/10 flex items-center justify-center">
+            <Phone className="text-accent" size={24} />
+          </div>
+          <h2 className="font-serif text-dark text-2xl md:text-3xl font-light mb-3">
+            Nog één dingetje
+          </h2>
+          <p className="font-sans text-brown text-sm leading-relaxed mb-8">
+            Wil je je mobiele nummer achterlaten? Dan kan Marion je ook via
+            WhatsApp bereiken.
+          </p>
+
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="06 - 12345678"
+            className="w-full max-w-xs mx-auto block bg-card border border-border/60 rounded-xl px-5 py-3.5 font-sans text-dark text-center text-base placeholder:text-taupe/50 focus:outline-none focus:ring-2 focus:ring-accent/30 mb-4"
+            autoFocus
+          />
+
+          <div className="flex flex-col items-center gap-3">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={savePhone}
+              disabled={!phone.trim()}
+              className="w-full max-w-xs bg-accent text-white px-6 py-3 rounded-xl font-sans text-sm tracking-wider uppercase disabled:opacity-40 transition-opacity"
+            >
+              Opslaan
+            </motion.button>
+            <button
+              onClick={skipPhone}
+              className="font-sans text-taupe text-xs hover:text-brown transition-colors"
+            >
+              Liever niet, ga verder
+            </button>
+          </div>
         </motion.div>
       </div>
     );

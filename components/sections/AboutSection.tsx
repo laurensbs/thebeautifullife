@@ -1,7 +1,8 @@
 "use client";
 
-import { Star, Lock, User } from "lucide-react";
+import { Star, Lock } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import FadeIn from "@/components/ui/FadeIn";
 import Divider from "@/components/ui/Divider";
 import HandwrittenText from "@/components/ui/HandwrittenText";
@@ -39,13 +40,14 @@ export default function AboutSection() {
               {/* PLACEHOLDER: Replace with actual portrait photo of Marion
                    Recommended: warm, natural, soft-light headshot
                    Dimensions: ~200x200px circular crop */}
-              <div className="w-24 h-24 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-gradient-to-br from-[#e0d3c4] via-[#d8cab8] to-[#cdbfae] shadow-lg shadow-dark/[0.06] flex items-center justify-center overflow-hidden border-3 md:border-4 border-white/40">
-                <div className="text-center text-taupe/50">
-                  <User className="mx-auto mb-1 opacity-40" size={36} strokeWidth={1} />
-                  <span className="text-[10px] font-sans tracking-widest uppercase opacity-40">
-                    foto
-                  </span>
-                </div>
+              <div className="w-24 h-24 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full shadow-lg shadow-dark/[0.06] overflow-hidden border-3 md:border-4 border-white/40 relative">
+                <Image
+                  src="https://u.cubeupload.com/laurensbos/A17681356D924F568E63.png"
+                  alt="Marion – The Beautiful Life"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 96px, (max-width: 1024px) 144px, 176px"
+                />
               </div>
             </div>
 
