@@ -5,14 +5,15 @@ import { useRouter } from "next/navigation";
 import {
   Leaf,
   ChevronLeft,
+  ChevronDown,
   Plus,
   Trash2,
   Eye,
   EyeOff,
   Save,
   X,
-  GripVertical,
   AlertTriangle,
+  Pencil,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -35,8 +36,11 @@ export default function AdminQuestions() {
   const [newType, setNewType] = useState("open");
   const [newOptions, setNewOptions] = useState("");
   const [saving, setSaving] = useState(false);
-  const [editId, setEditId] = useState<number | null>(null);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
+  const [editType, setEditType] = useState("");
+  const [editOptions, setEditOptions] = useState("");
+  const [editSaving, setEditSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
 
   const fetchQuestions = useCallback(async () => {
@@ -77,6 +81,20 @@ export default function AdminQuestions() {
     fetchQuestions();
   };
 
+  const expandQuestion = (q: Question) => {
+    if (expandedId === q.id) {
+      setExpandedId(null);
+      return;
+    }
+    setExpandedId(q.id);
+    setEditText(q.question_text);
+    setEditType(q.question_type);
+    setEditOptions(
+      q.question_type === "choice" && q.options ? q.options.join("\n") : ""
+    );
+    setDeleteConfirm(null);
+  };
+
   const toggleActive = async (q: Question) => {
     await fetch("/api/admin/questions", {
       method: "PUT",
@@ -88,12 +106,24 @@ export default function AdminQuestions() {
 
   const saveEdit = async (q: Question) => {
     if (!editText.trim()) return;
+    setEditSaving(true);
+    const body: Record<string, unknown> = {
+      id: q.id,
+      question_text: editText.trim(),
+      question_type: editType,
+    };
+    if (editType === "choice" && editOptions.trim()) {
+      body.options = editOptions.split("\n").filter((o) => o.trim());
+    } else if (editType !== "choice") {
+      body.options = null;
+    }
     await fetch("/api/admin/questions", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: q.id, question_text: editText.trim() }),
+      body: JSON.stringify(body),
     });
-    setEditId(null);
+    setEditSaving(false);
+    setExpandedId(null);
     fetchQuestions();
   };
 
@@ -104,10 +134,21 @@ export default function AdminQuestions() {
       body: JSON.stringify({ id }),
     });
     setDeleteConfirm(null);
+    setExpandedId(null);
     fetchQuestions();
   };
 
   const activeCount = questions.filter((q) => q.is_active).length;
+
+  const typeLabel = (t: string) =>
+    t === "open" ? "Open" : t === "scale" ? "Schaal 1-10" : "Meerkeuze";
+
+  const typeBadgeClass = (t: string) =>
+    t === "open"
+      ? "bg-blue-50 text-blue-600"
+      : t === "scale"
+      ? "bg-purple-50 text-purple-600"
+      : "bg-amber-50 text-amber-600";
 
   if (loading) {
     return (
@@ -187,21 +228,17 @@ export default function AdminQuestions() {
 
                 {/* Type selector */}
                 <div className="flex gap-2 mb-3">
-                  {([
-                    { key: "open", label: "Open" },
-                    { key: "scale", label: "Schaal 1-10" },
-                    { key: "choice", label: "Meerkeuze" },
-                  ] as const).map((t) => (
+                  {(["open", "scale", "choice"] as const).map((t) => (
                     <button
-                      key={t.key}
-                      onClick={() => setNewType(t.key)}
+                      key={t}
+                      onClick={() => setNewType(t)}
                       className={`flex-1 py-2 rounded-lg font-sans text-xs transition-all ${
-                        newType === t.key
+                        newType === t
                           ? "bg-accent text-white shadow-sm"
                           : "bg-page border border-border/60 text-brown hover:border-accent/40"
                       }`}
                     >
-                      {t.label}
+                      {typeLabel(t)}
                     </button>
                   ))}
                 </div>
@@ -234,8 +271,14 @@ export default function AdminQuestions() {
         {/* Questions list */}
         {questions.length === 0 ? (
           <div className="text-center py-16">
-            <Leaf className="text-taupe/30 mx-auto mb-3" size={36} strokeWidth={1.2} />
-            <p className="font-sans text-taupe text-sm mb-3">Nog geen vragen</p>
+            <Leaf
+              className="text-taupe/30 mx-auto mb-3"
+              size={36}
+              strokeWidth={1.2}
+            />
+            <p className="font-sans text-taupe text-sm mb-3">
+              Nog geen vragen
+            </p>
             <button
               onClick={() => setShowAdd(true)}
               className="font-sans text-xs text-accent hover:underline"
@@ -254,141 +297,229 @@ export default function AdminQuestions() {
                 className={`bg-card rounded-xl border transition-all duration-200 ${
                   !q.is_active
                     ? "opacity-50 border-border/30"
+                    : expandedId === q.id
+                    ? "border-accent/30 shadow-sm"
                     : deleteConfirm === q.id
                     ? "border-red-200"
                     : "border-border/40"
                 }`}
               >
-                <div className="p-3.5 md:p-4">
-                  <div className="flex items-start gap-2.5">
-                    {/* Order number */}
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blush flex items-center justify-center mt-0.5">
-                      <span className="font-sans text-accent text-[10px] font-medium">
-                        {q.sort_order}
+                {/* Question row */}
+                <button
+                  onClick={() => expandQuestion(q)}
+                  className="w-full text-left p-3.5 md:p-4 flex items-start gap-2.5"
+                >
+                  {/* Order number */}
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blush flex items-center justify-center mt-0.5">
+                    <span className="font-sans text-accent text-[10px] font-medium">
+                      {q.sort_order}
+                    </span>
+                  </div>
+
+                  {/* Question text + meta */}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-sans text-dark text-[13px] md:text-sm leading-relaxed">
+                      {q.question_text}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                      <span
+                        className={`font-sans text-[10px] px-2 py-0.5 rounded-full ${typeBadgeClass(
+                          q.question_type
+                        )}`}
+                      >
+                        {typeLabel(q.question_type)}
                       </span>
-                    </div>
-
-                    {/* Question text */}
-                    <div className="flex-1 min-w-0">
-                      {editId === q.id ? (
-                        <div className="flex flex-col sm:flex-row gap-2">
-                          <input
-                            value={editText}
-                            onChange={(e) => setEditText(e.target.value)}
-                            className="flex-1 bg-page border border-accent/40 rounded-lg px-3 py-2 font-sans text-sm text-dark focus:outline-none focus:ring-2 focus:ring-accent/30"
-                            onKeyDown={(e) => e.key === "Enter" && saveEdit(q)}
-                            autoFocus
-                          />
-                          <div className="flex gap-1.5">
-                            <button
-                              onClick={() => saveEdit(q)}
-                              className="flex items-center gap-1 bg-accent text-white px-3 py-1.5 rounded-lg font-sans text-xs"
-                            >
-                              <Save size={12} />
-                              Opslaan
-                            </button>
-                            <button
-                              onClick={() => setEditId(null)}
-                              className="text-taupe hover:text-brown px-2 py-1.5"
-                            >
-                              <X size={14} />
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <p
-                          onClick={() => {
-                            setEditId(q.id);
-                            setEditText(q.question_text);
-                          }}
-                          className="font-sans text-dark text-[13px] md:text-sm leading-relaxed cursor-pointer hover:text-accent transition-colors"
-                        >
-                          {q.question_text}
-                        </p>
-                      )}
-
-                      {/* Meta row */}
-                      <div className="flex items-center gap-2 mt-2">
-                        <span
-                          className={`font-sans text-[10px] px-2 py-0.5 rounded-full ${
-                            q.question_type === "open"
-                              ? "bg-blue-50 text-blue-600"
-                              : q.question_type === "scale"
-                              ? "bg-purple-50 text-purple-600"
-                              : "bg-amber-50 text-amber-600"
-                          }`}
-                        >
-                          {q.question_type === "open"
-                            ? "Open"
-                            : q.question_type === "scale"
-                            ? "Schaal"
-                            : "Meerkeuze"}
+                      {q.question_type === "choice" && q.options && (
+                        <span className="font-sans text-[10px] text-taupe">
+                          {q.options.length} opties
                         </span>
-                        {!q.is_active && (
-                          <span className="font-sans text-[10px] text-taupe/70 italic">
-                            Inactief
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex items-center gap-0.5 flex-shrink-0">
-                      <button
-                        onClick={() => toggleActive(q)}
-                        className={`p-2 rounded-lg transition-colors ${
-                          q.is_active
-                            ? "text-accent hover:bg-accent/10"
-                            : "text-taupe hover:bg-blush/50"
-                        }`}
-                        title={q.is_active ? "Deactiveren" : "Activeren"}
-                      >
-                        {q.is_active ? <Eye size={15} /> : <EyeOff size={15} />}
-                      </button>
-                      <button
-                        onClick={() =>
-                          setDeleteConfirm(deleteConfirm === q.id ? null : q.id)
-                        }
-                        className="p-2 rounded-lg text-taupe hover:text-red-500 hover:bg-red-50 transition-colors"
-                        title="Verwijderen"
-                      >
-                        <Trash2 size={15} />
-                      </button>
+                      )}
+                      {!q.is_active && (
+                        <span className="font-sans text-[10px] text-taupe/70 italic">
+                          Inactief
+                        </span>
+                      )}
                     </div>
                   </div>
-                </div>
 
-                {/* Delete confirmation */}
+                  {/* Expand arrow */}
+                  <div className="flex items-center gap-0.5 flex-shrink-0 mt-1">
+                    <motion.div
+                      animate={{ rotate: expandedId === q.id ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronDown className="text-taupe" size={16} />
+                    </motion.div>
+                  </div>
+                </button>
+
+                {/* Expanded edit panel */}
                 <AnimatePresence>
-                  {deleteConfirm === q.id && (
+                  {expandedId === q.id && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.25 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-3.5 pb-3.5 md:px-4 md:pb-4">
-                        <div className="flex items-center gap-2 bg-red-50 rounded-lg p-3">
-                          <AlertTriangle
-                            className="text-red-500 flex-shrink-0"
-                            size={15}
-                          />
-                          <p className="font-sans text-red-700 text-xs flex-1">
-                            Vraag verwijderen?
-                          </p>
-                          <button
-                            onClick={() => deleteQuestion(q.id)}
-                            className="font-sans text-xs text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-lg transition-colors"
+                      <div className="px-3.5 pb-4 md:px-4 md:pb-5 border-t border-border/30 pt-4">
+                        {/* Edit question text */}
+                        <label className="block font-sans text-[10px] text-taupe tracking-widest uppercase mb-1.5">
+                          Vraagtekst
+                        </label>
+                        <textarea
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          rows={2}
+                          className="w-full bg-page border border-border/60 rounded-xl px-4 py-2.5 font-sans text-sm text-dark focus:outline-none focus:ring-2 focus:ring-accent/30 resize-none mb-4"
+                        />
+
+                        {/* Edit type */}
+                        <label className="block font-sans text-[10px] text-taupe tracking-widest uppercase mb-1.5">
+                          Type
+                        </label>
+                        <div className="flex gap-2 mb-4">
+                          {(["open", "scale", "choice"] as const).map((t) => (
+                            <button
+                              key={t}
+                              onClick={() => setEditType(t)}
+                              className={`flex-1 py-2 rounded-lg font-sans text-xs transition-all ${
+                                editType === t
+                                  ? "bg-accent text-white shadow-sm"
+                                  : "bg-page border border-border/60 text-brown hover:border-accent/40"
+                              }`}
+                            >
+                              {typeLabel(t)}
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* Choice options editor */}
+                        {editType === "choice" && (
+                          <div className="mb-4">
+                            <label className="block font-sans text-[10px] text-taupe tracking-widest uppercase mb-1.5">
+                              Opties (één per regel)
+                            </label>
+                            <textarea
+                              value={editOptions}
+                              onChange={(e) => setEditOptions(e.target.value)}
+                              rows={4}
+                              placeholder="Optie 1&#10;Optie 2&#10;Optie 3"
+                              className="w-full bg-page border border-border/60 rounded-xl px-4 py-2.5 font-sans text-xs text-dark focus:outline-none focus:ring-2 focus:ring-accent/30 resize-none"
+                            />
+                            {editOptions.trim() && (
+                              <div className="mt-2 flex flex-wrap gap-1.5">
+                                {editOptions
+                                  .split("\n")
+                                  .filter((o) => o.trim())
+                                  .map((opt, oi) => (
+                                    <span
+                                      key={oi}
+                                      className="inline-flex items-center font-sans text-[11px] bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full"
+                                    >
+                                      {opt.trim()}
+                                    </span>
+                                  ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Scale preview */}
+                        {editType === "scale" && (
+                          <div className="mb-4">
+                            <label className="block font-sans text-[10px] text-taupe tracking-widest uppercase mb-2">
+                              Voorbeeld schaal
+                            </label>
+                            <div className="flex gap-1.5 flex-wrap">
+                              {Array.from({ length: 10 }, (_, i) => i + 1).map(
+                                (n) => (
+                                  <div
+                                    key={n}
+                                    className="w-8 h-8 rounded-lg bg-page border border-border/60 flex items-center justify-center font-sans text-xs text-brown"
+                                  >
+                                    {n}
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Action buttons */}
+                        <div className="flex items-center gap-2">
+                          <motion.button
+                            whileHover={{ scale: 1.01 }}
+                            whileTap={{ scale: 0.99 }}
+                            onClick={() => saveEdit(q)}
+                            disabled={editSaving || !editText.trim()}
+                            className="flex-1 bg-accent text-white py-2.5 rounded-xl font-sans text-xs tracking-wider uppercase disabled:opacity-50 flex items-center justify-center gap-2"
                           >
-                            Verwijder
+                            <Save size={13} />
+                            {editSaving ? "Opslaan..." : "Wijzigingen opslaan"}
+                          </motion.button>
+                          <button
+                            onClick={() => toggleActive(q)}
+                            className={`p-2.5 rounded-xl transition-colors ${
+                              q.is_active
+                                ? "text-accent bg-accent/10 hover:bg-accent/20"
+                                : "text-taupe bg-page hover:bg-blush/50"
+                            }`}
+                            title={q.is_active ? "Deactiveren" : "Activeren"}
+                          >
+                            {q.is_active ? (
+                              <Eye size={16} />
+                            ) : (
+                              <EyeOff size={16} />
+                            )}
                           </button>
                           <button
-                            onClick={() => setDeleteConfirm(null)}
-                            className="font-sans text-xs text-red-400 hover:text-red-600 px-2 py-1.5"
+                            onClick={() =>
+                              setDeleteConfirm(
+                                deleteConfirm === q.id ? null : q.id
+                              )
+                            }
+                            className="p-2.5 rounded-xl text-taupe hover:text-red-500 hover:bg-red-50 transition-colors"
+                            title="Verwijderen"
                           >
-                            Nee
+                            <Trash2 size={16} />
                           </button>
                         </div>
+
+                        {/* Delete confirmation */}
+                        <AnimatePresence>
+                          {deleteConfirm === q.id && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="overflow-hidden mt-3"
+                            >
+                              <div className="flex items-center gap-2 bg-red-50 rounded-lg p-3">
+                                <AlertTriangle
+                                  className="text-red-500 flex-shrink-0"
+                                  size={15}
+                                />
+                                <p className="font-sans text-red-700 text-xs flex-1">
+                                  Vraag verwijderen?
+                                </p>
+                                <button
+                                  onClick={() => deleteQuestion(q.id)}
+                                  className="font-sans text-xs text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-lg transition-colors"
+                                >
+                                  Verwijder
+                                </button>
+                                <button
+                                  onClick={() => setDeleteConfirm(null)}
+                                  className="font-sans text-xs text-red-400 hover:text-red-600 px-2 py-1.5"
+                                >
+                                  Nee
+                                </button>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     </motion.div>
                   )}

@@ -49,21 +49,33 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Niet ingelogd" }, { status: 401 });
   }
 
-  const { id, question_text, question_type, options, is_active, sort_order } =
-    await request.json();
+  const body = await request.json();
+  const { id } = body;
 
   if (!id) {
     return NextResponse.json({ error: "ID is verplicht" }, { status: 400 });
   }
 
+  // Build update fields dynamically to allow setting options to null
+  const updates: Record<string, unknown> = {};
+  if ("question_text" in body && body.question_text) updates.question_text = body.question_text;
+  if ("question_type" in body && body.question_type) updates.question_type = body.question_type;
+  if ("is_active" in body) updates.is_active = body.is_active;
+  if ("sort_order" in body) updates.sort_order = body.sort_order;
+
+  // Options: explicitly allow null to clear them
+  const optionsValue = "options" in body
+    ? body.options ? JSON.stringify(body.options) : null
+    : undefined;
+
   const result = await sql`
     UPDATE questions
     SET 
-      question_text = COALESCE(${question_text || null}, question_text),
-      question_type = COALESCE(${question_type || null}, question_type),
-      options = COALESCE(${options ? JSON.stringify(options) : null}, options),
-      is_active = COALESCE(${is_active ?? null}, is_active),
-      sort_order = COALESCE(${sort_order ?? null}, sort_order),
+      question_text = COALESCE(${updates.question_text ?? null}, question_text),
+      question_type = COALESCE(${updates.question_type ?? null}, question_type),
+      options = ${optionsValue !== undefined ? optionsValue : sql`options`},
+      is_active = COALESCE(${updates.is_active ?? null}, is_active),
+      sort_order = COALESCE(${updates.sort_order ?? null}, sort_order),
       updated_at = NOW()
     WHERE id = ${id}
     RETURNING *
