@@ -106,7 +106,7 @@ export async function sendNewSubmissionNotification(
 
   await transporter.sendMail({
     from: `"The Beautiful Life" <${process.env.SMTP_FROM}>`,
-    to: "info@thebeautifullife.nl",
+    to: "contact@thebeautifullife.nl",
     subject: `Nieuwe inzending: ${name}`,
     html,
   });
