@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
+import { sendQuestionnaireCompletedNotification } from "@/lib/email";
 
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get("token");
@@ -87,6 +88,24 @@ export async function POST(request: NextRequest) {
           phone = COALESCE(${cleanPhone}, phone)
       WHERE id = ${submissionId}
     `;
+
+    // Notify Marion that questionnaire is completed
+    try {
+      const sub = await sql`SELECT first_name, contact, phone FROM submissions WHERE id = ${submissionId}`;
+      if (sub.length > 0) {
+        const protocol = request.headers.get("x-forwarded-proto") || "https";
+        const host = request.headers.get("host") || "thebeautifullife.nl";
+        const dashboardUrl = `${protocol}://${host}/admin/dashboard`;
+        await sendQuestionnaireCompletedNotification(
+          sub[0].first_name,
+          sub[0].contact,
+          sub[0].phone,
+          dashboardUrl
+        );
+      }
+    } catch (notifyErr) {
+      console.error("Questionnaire notification error:", notifyErr);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

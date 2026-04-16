@@ -45,7 +45,7 @@ export default function AboutSection() {
                   src="https://u.cubeupload.com/laurensbos/A17681356D924F568E63.png"
                   alt="Marion – The Beautiful Life"
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
                   sizes="(max-width: 768px) 96px, (max-width: 1024px) 144px, 176px"
                 />
               </div>

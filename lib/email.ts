@@ -111,3 +111,76 @@ export async function sendNewSubmissionNotification(
     html,
   });
 }
+
+export async function sendQuestionnaireCompletedNotification(
+  name: string,
+  email: string,
+  phone: string | null,
+  dashboardUrl: string
+) {
+  const now = new Date().toLocaleDateString("nl-NL", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const phoneRow = phone
+    ? `<tr>
+            <td style="color: #cab7a5; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; padding: 8px 0 4px; border-top: 1px solid #efe4d8;">Telefoon</td>
+          </tr>
+          <tr>
+            <td style="color: #3d2b22; font-size: 15px; padding: 0 0 8px;"><a href="tel:${phone}" style="color: #b4875c; text-decoration: none;">${phone}</a></td>
+          </tr>`
+    : "";
+
+  const html = `
+    <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; background: #f5efe7; padding: 40px 30px; border-radius: 16px;">
+      <div style="text-align: center; margin-bottom: 30px;">
+        <span style="font-style: italic; color: #3d2b22; font-size: 15px;">the beautiful life coaching collective</span>
+      </div>
+      <h1 style="font-family: Georgia, serif; color: #3d2b22; font-weight: 300; font-size: 24px; text-align: center; margin-bottom: 6px;">
+        Vragenlijst ingevuld ♥
+      </h1>
+      <p style="color: #cab7a5; font-size: 12px; text-align: center; margin-bottom: 28px;">
+        ${now}
+      </p>
+
+      <div style="background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="color: #cab7a5; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; padding: 8px 0 4px;">Naam</td>
+          </tr>
+          <tr>
+            <td style="color: #3d2b22; font-size: 17px; padding: 0 0 16px; font-weight: 300;">${name}</td>
+          </tr>
+          <tr>
+            <td style="color: #cab7a5; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; padding: 8px 0 4px; border-top: 1px solid #efe4d8;">E-mail</td>
+          </tr>
+          <tr>
+            <td style="padding: 0 0 ${phone ? "16px" : "8px"};"><a href="mailto:${email}" style="color: #b4875c; font-size: 15px; text-decoration: none;">${email}</a></td>
+          </tr>
+          ${phoneRow}
+        </table>
+      </div>
+
+      <div style="text-align: center; margin: 24px 0;">
+        <a href="${dashboardUrl}" style="display: inline-block; background: #b4875c; color: white; padding: 14px 36px; border-radius: 8px; text-decoration: none; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;">
+          BEKIJK ANTWOORDEN
+        </a>
+      </div>
+
+      <p style="color: #cab7a5; font-size: 12px; text-align: center; line-height: 1.6;">
+        ${name} heeft de reflectievragenlijst afgerond.
+      </p>
+    </div>
+  `;
+
+  await transporter.sendMail({
+    from: `"The Beautiful Life" <${process.env.SMTP_FROM}>`,
+    to: "contact@thebeautifullife.nl",
+    subject: `Vragenlijst ingevuld: ${name}${phone ? " (met telefoonnummer)" : ""}`,
+    html,
+  });
+}
