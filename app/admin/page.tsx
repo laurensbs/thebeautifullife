@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Leaf, LogIn, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -12,6 +12,18 @@ export default function AdminLogin() {
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  // Auto-redirect if already logged in
+  useEffect(() => {
+    fetch("/api/admin/me").then((res) => {
+      if (res.ok) {
+        router.replace("/admin/dashboard");
+      } else {
+        setChecking(false);
+      }
+    }).catch(() => setChecking(false));
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +51,11 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen bg-page flex items-center justify-center px-5 py-10">
+      {checking ? (
+        <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
+          <Leaf className="text-accent" size={28} strokeWidth={1.2} />
+        </motion.div>
+      ) : (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -120,6 +137,7 @@ export default function AdminLogin() {
           </motion.button>
         </form>
       </motion.div>
+      )}
     </div>
   );
 }
