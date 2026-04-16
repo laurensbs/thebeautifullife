@@ -1,6 +1,7 @@
 "use client";
 
 import { Star, Lock, User } from "lucide-react";
+import { motion } from "framer-motion";
 import FadeIn from "@/components/ui/FadeIn";
 import Divider from "@/components/ui/Divider";
 import HandwrittenText from "@/components/ui/HandwrittenText";
@@ -8,6 +9,27 @@ import HandwrittenText from "@/components/ui/HandwrittenText";
 export default function AboutSection() {
   return (
     <section className="bg-page relative overflow-hidden z-10">
+      {/* Subtle floating dots */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        {[...Array(4)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1.5 h-1.5 rounded-full bg-accent/[0.08]"
+            style={{ left: `${20 + i * 20}%`, top: `${30 + (i % 2) * 35}%` }}
+            animate={{
+              opacity: [0, 0.3, 0],
+              y: [0, -25, 0],
+              scale: [0.6, 1, 0.6],
+            }}
+            transition={{
+              duration: 5 + i,
+              repeat: Infinity,
+              delay: i * 2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
       <div className="max-w-[1320px] mx-auto px-6 py-10 md:px-8 md:py-16 lg:px-12 lg:py-24">
         <div className="flex flex-col gap-12 md:gap-14 lg:grid lg:grid-cols-2 lg:gap-20">
           {/* Left column – Over Marion */}

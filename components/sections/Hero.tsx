@@ -9,6 +9,13 @@ import HandwrittenText from "@/components/ui/HandwrittenText";
 export default function Hero() {
   return (
     <section className="bg-page relative overflow-hidden z-10">
+      {/* Subtle radial glow */}
+      <motion.div
+        className="absolute left-1/2 top-[60%] -translate-x-1/2 w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full bg-accent/[0.03] blur-3xl pointer-events-none"
+        animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+
       {/* Full-width hero image */}
       <FadeIn delay={0.2} className="w-full">
         <div className="relative w-full aspect-[4/5] sm:aspect-[3/2] md:aspect-[2/1] lg:aspect-[2.4/1]">

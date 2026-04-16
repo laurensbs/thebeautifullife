@@ -68,6 +68,30 @@ export default function RecognitionSection() {
 
   return (
     <section className="bg-page-alt relative overflow-hidden z-10">
+      {/* Ambient sparkle particles */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-accent/[0.15]"
+            style={{
+              left: `${15 + i * 14}%`,
+              top: `${20 + (i % 3) * 25}%`,
+            }}
+            animate={{
+              opacity: [0, 0.4, 0],
+              scale: [0.5, 1.2, 0.5],
+              y: [0, -20, 0],
+            }}
+            transition={{
+              duration: 4 + i * 0.8,
+              repeat: Infinity,
+              delay: i * 1.5,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
       <div className="max-w-[1320px] mx-auto px-6 py-10 md:px-8 md:py-16 lg:px-12 lg:py-24">
         <div className="flex flex-col gap-10 md:gap-12 lg:grid lg:grid-cols-2 lg:gap-16 items-start">
           {/* Left column – Recognition bullets */}
@@ -90,7 +114,7 @@ export default function RecognitionSection() {
 
             {/* Script accent text – large like reference */}
             <FadeIn delay={0.8}>
-              <div className="mt-10 md:mt-14 lg:mt-20">
+              <div className="mt-8 md:mt-14 lg:mt-20 relative">
                 <p className="font-script text-accent text-[1.7rem] md:text-[2.8rem] lg:text-[3.4rem] leading-[1.5]">
                   <HandwrittenText delay={0.3} duration={4.5}>het kan anders.</HandwrittenText>
                 </p>
@@ -100,11 +124,11 @@ export default function RecognitionSection() {
               </div>
             </FadeIn>
 
-            {/* Botanical line art decoration – hidden on mobile */}
-            <div className="hidden md:block mt-8 opacity-[0.12]">
+            {/* Botanical line art decoration */}
+            <div className="mt-6 md:mt-8 opacity-[0.10] md:opacity-[0.12]">
               <svg
-                width="180"
-                height="80"
+                width="140"
+                height="60"
                 viewBox="0 0 180 80"
                 fill="none"
                 className="text-accent"
@@ -137,31 +161,17 @@ export default function RecognitionSection() {
               </svg>
             </div>
 
-            {/* Curved arrow pointing to opt-in card */}
-            <div className="hidden lg:block absolute right-[48%] bottom-[38%] opacity-20">
-              <svg
-                width="60"
-                height="40"
-                viewBox="0 0 60 40"
-                fill="none"
-                className="text-accent"
+            {/* Mobile: soft transition arrow to card below */}
+            <FadeIn delay={1.2} className="flex justify-center mt-6 lg:hidden">
+              <motion.div
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
               >
-                <path
-                  d="M5 35C15 20 30 10 50 8"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M45 3L52 8L45 13"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  fill="none"
-                />
-              </svg>
-            </div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-accent/40">
+                  <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </motion.div>
+            </FadeIn>
           </FadeIn>
 
           {/* Right column – Opt-in card */}

@@ -11,17 +11,13 @@ export default function FooterQuote() {
       {/* Main quote section */}
       <div className="max-w-[1320px] mx-auto px-5 py-12 md:px-8 md:py-16 lg:px-12 lg:py-20 text-center">
         <FadeIn>
-          <p className="font-script text-accent text-[1.3rem] md:text-[2rem] lg:text-[2.6rem] leading-relaxed mb-2 md:mb-3 px-2">
+          <p className="font-script text-accent text-[1.6rem] md:text-[2.4rem] lg:text-[3rem] leading-relaxed mb-3 md:mb-4 px-2">
             <HandwrittenText delay={0.4} duration={5}>jij bent niet hier om een gewoon leven te leiden.</HandwrittenText>
           </p>
-          <p className="font-sans text-dark text-[0.65rem] md:text-[0.8rem] lg:text-[0.95rem] tracking-[0.15em] md:tracking-[0.2em] uppercase font-semibold">
-            JIJ BENT HIER OM JOUW MOOISTE LEVEN TE CREËREN.
+          <p className="font-sans text-dark text-[0.7rem] md:text-[0.9rem] lg:text-[1.05rem] tracking-[0.15em] md:tracking-[0.2em] uppercase font-semibold">
+            JIJ BENT HIER OM JOUW MOOISTE LEVEN TE CREËREN.{" "}
+            <Heart className="text-accent fill-accent inline-block align-middle ml-1" size={14} strokeWidth={0} />
           </p>
-
-          {/* Heart */}
-          <div className="mt-6">
-            <Heart className="text-accent fill-accent mx-auto" size={14} strokeWidth={0} />
-          </div>
         </FadeIn>
       </div>
 
