@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
-import { sendQuestionnaireEmail } from "@/lib/email";
+import { sendQuestionnaireEmail, sendNewSubmissionNotification } from "@/lib/email";
 import crypto from "crypto";
 
 export async function POST(request: NextRequest) {
@@ -44,7 +44,14 @@ export async function POST(request: NextRequest) {
       await sql`UPDATE submissions SET email_sent = true WHERE id = ${result[0].id}`;
     } catch (emailErr) {
       console.error("Email send error:", emailErr);
-      // Don't fail the subscription if email fails
+    }
+
+    // Notify Marion
+    try {
+      const dashboardUrl = `${siteUrl}/admin/dashboard`;
+      await sendNewSubmissionNotification(name, email, dashboardUrl);
+    } catch (notifyErr) {
+      console.error("Notification email error:", notifyErr);
     }
 
     return NextResponse.json({ success: true, id: result[0].id });
