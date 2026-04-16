@@ -35,3 +35,22 @@ export async function GET(
     answers,
   });
 }
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const authed = await getAuthFromCookies();
+  if (!authed) {
+    return NextResponse.json({ error: "Niet ingelogd" }, { status: 401 });
+  }
+
+  const { id } = await params;
+  const submissionId = Number(id);
+
+  // Delete answers first (foreign key), then submission
+  await sql`DELETE FROM answers WHERE submission_id = ${submissionId}`;
+  await sql`DELETE FROM submissions WHERE id = ${submissionId}`;
+
+  return NextResponse.json({ success: true });
+}

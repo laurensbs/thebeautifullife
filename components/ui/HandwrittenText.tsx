@@ -14,7 +14,7 @@ export default function HandwrittenText({
   children,
   className = "",
   delay = 0,
-  duration = 1.2,
+  duration = 4,
   as: Tag = "span",
 }: HandwrittenTextProps) {
   return (
@@ -23,11 +23,11 @@ export default function HandwrittenText({
         className="inline-block"
         initial={{ clipPath: "inset(0 100% 0 0)" }}
         whileInView={{ clipPath: "inset(0 0% 0 0)" }}
-        viewport={{ once: true, margin: "-40px" }}
+        viewport={{ once: true, margin: "-50px" }}
         transition={{
           duration,
           delay,
-          ease: [0.22, 1, 0.36, 1],
+          ease: [0.12, 1, 0.25, 1],
         }}
       >
         {children}

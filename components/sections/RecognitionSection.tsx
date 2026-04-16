@@ -68,17 +68,17 @@ export default function RecognitionSection() {
 
   return (
     <section className="bg-page-alt relative overflow-hidden z-10">
-      <div className="max-w-[1320px] mx-auto px-5 py-12 md:px-8 md:py-16 lg:px-12 lg:py-24">
+      <div className="max-w-[1320px] mx-auto px-6 py-10 md:px-8 md:py-16 lg:px-12 lg:py-24">
         <div className="flex flex-col gap-10 md:gap-12 lg:grid lg:grid-cols-2 lg:gap-16 items-start">
           {/* Left column – Recognition bullets */}
           <FadeIn className="flex flex-col">
-            <h2 className="font-serif text-dark text-[1.8rem] md:text-[2.2rem] lg:text-[2.6rem] font-light leading-tight mb-8 md:mb-10">
+            <h2 className="font-serif text-dark text-[1.6rem] md:text-[2.2rem] lg:text-[2.6rem] font-light leading-tight mb-6 md:mb-10">
               voel je dat dit over jou gaat?
             </h2>
 
-            <div className="flex flex-col gap-6 md:gap-7">
+            <div className="flex flex-col gap-5 md:gap-7">
               {bulletItems.map((item, i) => (
-                <FadeIn key={i} delay={0.1 * (i + 1)}>
+                <FadeIn key={i} delay={0.2 * (i + 1)}>
                   <IconBullet
                     icon={item.icon}
                     title={item.title}
@@ -89,13 +89,13 @@ export default function RecognitionSection() {
             </div>
 
             {/* Script accent text – large like reference */}
-            <FadeIn delay={0.5}>
+            <FadeIn delay={0.8}>
               <div className="mt-10 md:mt-14 lg:mt-20">
-                <p className="font-script text-accent text-[2rem] md:text-[2.8rem] lg:text-[3.4rem] leading-[1.5]">
-                  <HandwrittenText delay={0} duration={1.3}>het kan anders.</HandwrittenText>
+                <p className="font-script text-accent text-[1.7rem] md:text-[2.8rem] lg:text-[3.4rem] leading-[1.5]">
+                  <HandwrittenText delay={0.3} duration={4.5}>het kan anders.</HandwrittenText>
                 </p>
-                <p className="font-script text-accent text-[2rem] md:text-[2.8rem] lg:text-[3.4rem] leading-[1.5] mt-1 md:mt-2">
-                  <HandwrittenText delay={0.4} duration={1.3}>en het begint bij jou.</HandwrittenText>
+                <p className="font-script text-accent text-[1.7rem] md:text-[2.8rem] lg:text-[3.4rem] leading-[1.5] mt-1 md:mt-2">
+                  <HandwrittenText delay={1.5} duration={4.5}>en het begint bij jou.</HandwrittenText>
                 </p>
               </div>
             </FadeIn>
@@ -165,11 +165,11 @@ export default function RecognitionSection() {
           </FadeIn>
 
           {/* Right column – Opt-in card */}
-          <FadeIn delay={0.3} scale className="flex justify-center w-full lg:justify-end">
+          <FadeIn delay={0.5} scale className="flex justify-center w-full lg:justify-end">
             <motion.div
-              whileHover={{ y: -4, boxShadow: "0 20px 50px -12px rgba(61, 43, 34, 0.08)" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="w-full max-w-md bg-card rounded-2xl shadow-xl shadow-dark/[0.04] p-6 md:p-8 lg:p-10 border border-border/40"
+              whileHover={{ y: -3, boxShadow: "0 20px 50px -12px rgba(61, 43, 34, 0.08)" }}
+              transition={{ type: "spring", stiffness: 150, damping: 30 }}
+              className="w-full max-w-md bg-card rounded-2xl shadow-xl shadow-dark/[0.04] p-5 md:p-8 lg:p-10 border border-border/40"
             >
               {/* Card title */}
               <div className="text-center mb-5 md:mb-6">

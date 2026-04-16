@@ -9,87 +9,77 @@ import HandwrittenText from "@/components/ui/HandwrittenText";
 export default function Hero() {
   return (
     <section className="bg-page relative overflow-hidden z-10">
-      <div className="max-w-[1320px] mx-auto px-5 py-8 md:px-8 lg:px-12 md:py-12 lg:py-16">
-        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
-          {/* Left column – Brand & headline */}
-          <FadeIn className="flex flex-col items-center text-center lg:items-start lg:text-left">
-            {/* Logo / brand mark */}
-            <div className="flex items-center gap-3 mb-8 md:mb-10 lg:mb-14">
-              <Leaf className="text-accent" size={28} strokeWidth={1.2} />
-              <span className="font-serif text-dark text-sm md:text-[15px] italic tracking-wide leading-tight">
-                the beautiful life
-                <br />
-                coaching collective
-              </span>
-            </div>
-
-            {/* Main headline */}
-            <h1 className="mb-5 md:mb-6 max-w-lg lg:max-w-xl">
-              <span className="block font-serif text-dark text-[2rem] md:text-[2.8rem] lg:text-[3.8rem] font-light leading-[1.1] tracking-tight">
-                de grootste
-              </span>
-              <span className="block font-serif text-dark text-[2rem] md:text-[2.8rem] lg:text-[3.8rem] font-light leading-[1.1] tracking-tight">
-                rijkdom in het leven
-              </span>
-              <span className="block w-16 h-px bg-accent/40 my-3 md:my-4 mx-auto lg:mx-0" />
-              <span className="block font-script text-accent text-[1.8rem] md:text-[2.5rem] lg:text-[3.4rem] leading-[1.3]">
-                <HandwrittenText delay={0.4} duration={1.4}>is thuiskomen bij</HandwrittenText>
-              </span>
-              <span className="block font-serif text-dark text-[2rem] md:text-[2.8rem] lg:text-[3.8rem] font-light leading-[1.1] tracking-tight">
-                wie je werkelijk bent
-              </span>
-            </h1>
-
-            {/* Heart divider */}
-            <motion.div
-              className="flex items-center gap-4 my-4 md:my-6"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Heart className="text-accent fill-accent" size={14} strokeWidth={0} />
-              <Heart className="text-accent fill-accent" size={14} strokeWidth={0} />
-            </motion.div>
-
-            {/* Subtitle */}
-            <p className="font-sans text-brown text-base md:text-[17px] lg:text-lg leading-relaxed max-w-lg font-light">
-              voor vrouwen en meisjes die verlangen naar
-              <br className="hidden md:block" />
-              {" "}rust, balans en een leven dat goed voelt
-              <br className="hidden md:block" />
-              {" "}en{" "}
-              <span className="inline-block mx-1.5 md:mx-2 align-baseline">
-                <HandwrittenText className="font-script text-accent text-2xl md:text-[1.85rem] lg:text-[2rem]" delay={0.8} duration={1}>
-                  moeiteloos
-                </HandwrittenText>
-              </span>
-              {" "}begint te stromen
-            </p>
-          </FadeIn>
-
-          {/* Right column – Hero image */}
-          <FadeIn delay={0.2} className="relative w-full">
-            <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-xl md:shadow-2xl shadow-dark/5">
-              <div className="aspect-[3/4] md:aspect-[4/5] relative">
-                <Image
-                  src="https://u.cubeupload.com/laurensbos/beautifullife.png"
-                  alt="The Beautiful Life – warm lifestyle sfeer"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
-                />
-                {/* "Live Beautifully" book accent */}
-                <div className="absolute bottom-16 right-6 md:bottom-20 md:right-8 bg-card/80 backdrop-blur-sm rounded px-3 py-1.5 md:px-4 md:py-2 shadow-sm">
-                  <span className="font-script text-accent text-base md:text-lg">
-                    <HandwrittenText delay={0.6} duration={0.8}>live beautifully</HandwrittenText>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </FadeIn>
+      {/* Full-width hero image */}
+      <FadeIn delay={0.2} className="w-full">
+        <div className="relative w-full aspect-[4/5] sm:aspect-[3/2] md:aspect-[2/1] lg:aspect-[2.4/1]">
+          <Image
+            src="https://u.cubeupload.com/laurensbos/beautifullife.png"
+            alt="The Beautiful Life – warm lifestyle sfeer"
+            fill
+            className="object-cover object-center"
+            sizes="100vw"
+            priority
+          />
+          {/* Soft gradient fade at bottom */}
+          <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-page via-page/60 to-transparent" />
         </div>
+      </FadeIn>
+
+      {/* Text content */}
+      <div className="max-w-[1320px] mx-auto px-6 -mt-16 sm:-mt-12 md:-mt-16 lg:-mt-24 relative z-10 pb-10 md:pb-16 lg:pb-20">
+        <FadeIn className="flex flex-col items-center text-center">
+          {/* Logo / brand mark */}
+          <div className="flex items-center gap-2.5 mb-6 md:mb-10 lg:mb-14">
+            <Leaf className="text-accent" size={24} strokeWidth={1.2} />
+            <span className="font-serif text-dark text-[13px] md:text-[15px] italic tracking-wide leading-tight">
+              the beautiful life
+              <br />
+              coaching collective
+            </span>
+          </div>
+
+          {/* Main headline */}
+          <h1 className="mb-5 md:mb-6 max-w-2xl">
+            <span className="block font-serif text-dark text-[2rem] md:text-[2.8rem] lg:text-[3.8rem] font-light leading-[1.1] tracking-tight">
+              de grootste
+            </span>
+            <span className="block font-serif text-dark text-[2rem] md:text-[2.8rem] lg:text-[3.8rem] font-light leading-[1.1] tracking-tight">
+              rijkdom in het leven
+            </span>
+            <span className="block w-16 h-px bg-accent/40 my-3 md:my-4 mx-auto" />
+            <span className="block font-script text-accent text-[1.8rem] md:text-[2.5rem] lg:text-[3.4rem] leading-[1.3]">
+              <HandwrittenText delay={1} duration={4.5}>is thuiskomen bij</HandwrittenText>
+            </span>
+            <span className="block font-serif text-dark text-[2rem] md:text-[2.8rem] lg:text-[3.8rem] font-light leading-[1.1] tracking-tight">
+              wie je werkelijk bent
+            </span>
+          </h1>
+
+          {/* Heart divider */}
+          <motion.div
+            className="flex items-center gap-4 my-4 md:my-6"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Heart className="text-accent fill-accent" size={14} strokeWidth={0} />
+            <Heart className="text-accent fill-accent" size={14} strokeWidth={0} />
+          </motion.div>
+
+          {/* Subtitle */}
+          <p className="font-sans text-brown text-[15px] md:text-[17px] lg:text-lg leading-[1.8] max-w-md md:max-w-lg font-light">
+            voor vrouwen en meisjes die verlangen naar
+            {" "}rust, balans en een leven dat goed voelt
+            {" "}en{" "}
+            <span className="inline mx-0.5">
+              <HandwrittenText className="font-script text-accent text-[1.4rem] md:text-[1.85rem] lg:text-[2rem]" delay={1.8} duration={3.5}>
+                moeiteloos
+              </HandwrittenText>
+            </span>
+            {" "}begint te stromen
+          </p>
+        </FadeIn>
       </div>
 
       {/* Subtle botanical decoration bottom-left – hidden on mobile */}

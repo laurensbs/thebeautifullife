@@ -18,22 +18,22 @@ export default function FadeIn({
   scale = false,
 }: FadeInProps) {
   const directionMap = {
-    up: { y: 28, x: 0 },
-    left: { y: 0, x: -28 },
-    right: { y: 0, x: 28 },
+    up: { y: 20, x: 0 },
+    left: { y: 0, x: -20 },
+    right: { y: 0, x: 20 },
     none: { y: 0, x: 0 },
   };
   const { x, y } = directionMap[direction];
 
   return (
     <motion.div
-      initial={{ opacity: 0, y, x, scale: scale ? 0.97 : 1 }}
+      initial={{ opacity: 0, y, x, scale: scale ? 0.98 : 1 }}
       whileInView={{ opacity: 1, y: 0, x: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={{ once: true, margin: "-60px" }}
       transition={{
-        duration: 0.8,
+        duration: 1.6,
         delay,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.16, 1, 0.3, 1],
       }}
       className={className}
     >
