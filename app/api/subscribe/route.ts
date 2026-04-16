@@ -34,7 +34,9 @@ export async function POST(request: NextRequest) {
     `;
 
     // Send questionnaire email
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const protocol = request.headers.get("x-forwarded-proto") || "https";
+    const host = request.headers.get("host") || "thebeautifullife.nl";
+    const siteUrl = `${protocol}://${host}`;
     const questionnaireUrl = `${siteUrl}/vragenlijst?token=${token}`;
 
     try {
