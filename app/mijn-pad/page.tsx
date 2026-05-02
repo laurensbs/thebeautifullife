@@ -17,6 +17,7 @@ import FadeIn from "@/components/ui/FadeIn";
 import Calligraphy from "@/components/ui/Calligraphy";
 import HeartDivider from "@/components/ui/HeartDivider";
 import BookingCard, { type PortalBooking } from "@/components/portal/BookingCard";
+import TodayCard from "@/components/portal/TodayCard";
 import {
   Heart,
   CheckCircle,
@@ -147,8 +148,89 @@ export default async function MijnPad() {
   // Pick the first contact info we can find for the profile card.
   const profile = subs[0] ?? null;
 
+  // Bepaal het 'Vandaag'-item — eerste relevante actie voor de klant.
+  const upcomingBooking = bookingRows.find(
+    (b) =>
+      new Date(b.scheduled_at).getTime() > Date.now() &&
+      b.status !== "cancelled" &&
+      b.status !== "declined"
+  );
+
+  type TodayItem =
+    | {
+        kind: "upcoming_call";
+        whenLabel: string;
+        meetingUrl: string | null;
+      }
+    | {
+        kind: "resume_workbook";
+        title: string;
+        slug: string;
+        accessToken: string | null;
+        pct: number;
+      }
+    | {
+        kind: "start_workbook";
+        title: string;
+        slug: string;
+        accessToken: string | null;
+      }
+    | { kind: "book_call" }
+    | { kind: "explore" };
+
+  let todayItem: TodayItem;
+  if (upcomingBooking) {
+    todayItem = {
+      kind: "upcoming_call",
+      whenLabel: new Date(upcomingBooking.scheduled_at).toLocaleString(
+        "nl-NL",
+        {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          hour: "2-digit",
+          minute: "2-digit",
+        }
+      ),
+      meetingUrl: upcomingBooking.meeting_url,
+    };
+  } else if (wbRows.length > 0) {
+    // Pak het werkboek waar nog niet alles ingevuld is, of het eerste
+    const wb = wbRows[0];
+    const slug = String(wb.workbook_slug);
+    const meta = getWorkbook(slug);
+    const total = meta ? workbookFieldKeys(meta).length : 1;
+    const filled = Number(wb.filled_count);
+    const pct = total > 0 ? Math.round((filled / total) * 100) : 0;
+    if (filled === 0) {
+      todayItem = {
+        kind: "start_workbook",
+        title: meta?.title.nl ?? slug,
+        slug,
+        accessToken: String(wb.access_token),
+      };
+    } else {
+      todayItem = {
+        kind: "resume_workbook",
+        title: meta?.title.nl ?? slug,
+        slug,
+        accessToken: String(wb.access_token),
+        pct,
+      };
+    }
+  } else if (subs.length > 0) {
+    todayItem = { kind: "book_call" };
+  } else {
+    todayItem = { kind: "explore" };
+  }
+
   return (
     <main className="max-w-[1100px] mx-auto px-5 sm:px-6 pt-6 sm:pt-8 pb-16 sm:pb-20">
+      {/* Vandaag — eerste actie voor de klant */}
+      <div className="mb-7 sm:mb-8">
+        <TodayCard firstName={session.firstName} item={todayItem} />
+      </div>
+
       {/* Header */}
       <FadeIn direction="up" className="bg-page-soft rounded-[6px] px-6 py-7 sm:px-12 sm:py-11 shadow-[0_18px_48px_rgba(60,50,30,0.08)] mb-7 sm:mb-8 relative overflow-hidden">
         <div className="absolute top-6 right-6 flex items-center gap-2">
