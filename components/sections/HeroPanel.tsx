@@ -40,8 +40,9 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
             as="span"
             className="block font-script font-normal text-[clamp(54px,9vw,96px)] tracking-[0.02em] -mt-2 lg:ml-[60px]"
             text="Life"
-            durationPerChar={0.18}
-            delay={0.4}
+            duration={1.6}
+            delay={0.6}
+            underline
           />
         </h1>
 

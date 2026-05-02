@@ -39,8 +39,9 @@ export default async function Bedankt({
           as="p"
           className="font-script text-tan text-3xl sm:text-4xl"
           text={tr(DICT.thanks.word, locale)}
-          durationPerChar={0.1}
-          delay={0.5}
+          duration={1.4}
+          delay={0.7}
+          underline
         />
         <h1 className="font-serif font-medium text-2xl sm:text-3xl tracking-[0.06em] uppercase mt-2 text-ink">
           {tr(DICT.thanks.title, locale)}

@@ -3,32 +3,36 @@
 import { motion } from "framer-motion";
 
 /**
- * Calligraphy — tekst letter-voor-letter laten verschijnen, alsof
- * iemand het langzaam schrijft. Bedoeld voor Pinyon Script-elementen.
+ * Calligraphy — geeft script-tekst een geschreven-wordt-effect.
  *
- * - Animeert via whileInView, één keer (once: true)
- * - Spaties krijgen geen animatie maar wel ruimte
- * - Per-letter delay = durationPerChar × index
+ * Hoe: tekst wordt normaal gerenderd (Pinyon Script blijft Pinyon
+ * Script), maar zit onder een wipe-mask die langzaam van links naar
+ * rechts opent. Dat geeft het visuele effect van een pen die de
+ * letters tekent — zonder dat we per-letter SVG-paden nodig hebben.
  *
- * Gebruik:
- *   <Calligraphy as="p" className="font-script text-tan text-3xl"
- *                text="welkom terug" />
+ * Een fijn detail: een zachte tan-onderlijn die mee-tekent terwijl
+ * de mask opent. Voelt als een pen die over papier glijdt.
  *
- * Of wikkel rond een variabele tekst:
- *   <Calligraphy text={tr(DICT.foo, locale)} className="font-script ..." />
+ * Triggert via whileInView (one-shot).
  */
 export default function Calligraphy({
   text,
   as = "span",
   className,
-  durationPerChar = 0.12,
+  duration,
+  durationPerChar = 0.08,
   delay = 0,
+  underline = false,
 }: {
   text: string;
   as?: "span" | "p" | "h1" | "h2" | "h3";
   className?: string;
+  /** Total duration. Als niet gezet: durationPerChar × text.length, min 0.8s. */
+  duration?: number;
   durationPerChar?: number;
   delay?: number;
+  /** Zachte pen-onderlijn die mee-tekent. Default true. */
+  underline?: boolean;
 }) {
   const Tag =
     as === "p"
@@ -41,47 +45,72 @@ export default function Calligraphy({
             ? motion.h3
             : motion.span;
 
-  // Splits tekst in characters (incl. spaties).
-  const chars = Array.from(text);
+  const totalDuration =
+    duration ?? Math.max(0.8, text.length * durationPerChar);
 
   return (
     <Tag
       className={className}
+      style={{ position: "relative", display: "inline-block" }}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-20px" }}
+      viewport={{ once: true, margin: "-10px" }}
       aria-label={text}
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            staggerChildren: durationPerChar,
-            delayChildren: delay,
-          },
-        },
-      }}
     >
-      {chars.map((c, i) => (
+      {/* Onzichtbare ghost — bepaalt de breedte/hoogte zodat layout klopt */}
+      <span aria-hidden style={{ visibility: "hidden", whiteSpace: "pre" }}>
+        {text}
+      </span>
+
+      {/* De zichtbare tekst, gemaskeerd door een wipe die opent van links naar rechts */}
+      <motion.span
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          whiteSpace: "pre",
+          display: "inline-block",
+          // Mask die zich naar rechts opent — geeft het "geschreven" effect
+        }}
+        variants={{
+          hidden: { clipPath: "inset(0 100% 0 0)" },
+          visible: { clipPath: "inset(0 0% 0 0)" },
+        }}
+        transition={{
+          duration: totalDuration,
+          delay,
+          ease: [0.45, 0.05, 0.55, 0.95], // gelijkmatige pen-snelheid
+        }}
+      >
+        {text}
+      </motion.span>
+
+      {/* Zachte pen-onderlijn die mee-tekent (subtle) */}
+      {underline && (
         <motion.span
-          key={i}
           aria-hidden
           style={{
-            display: "inline-block",
-            // Zorg dat spaties zichtbare ruimte houden tijdens animatie.
-            whiteSpace: "pre",
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: "0.06em",
+            height: "1px",
+            background: "currentColor",
+            opacity: 0.18,
+            transformOrigin: "left center",
+            pointerEvents: "none",
           }}
           variants={{
-            hidden: { opacity: 0, y: 6, filter: "blur(2px)" },
-            visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+            hidden: { scaleX: 0 },
+            visible: { scaleX: 1 },
           }}
           transition={{
-            duration: 0.5,
-            ease: [0.16, 1, 0.3, 1],
+            duration: totalDuration,
+            delay,
+            ease: [0.45, 0.05, 0.55, 0.95],
           }}
-        >
-          {c}
-        </motion.span>
-      ))}
+        />
+      )}
     </Tag>
   );
 }
