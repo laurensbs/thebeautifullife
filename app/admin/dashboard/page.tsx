@@ -469,8 +469,8 @@ export default function AdminDashboard() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Zoek op naam of e-mail..."
-                  className="w-full bg-page-soft border border-line rounded-xl pl-9 pr-9 py-2.5 font-sans text-sm text-ink placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-tan/30"
+                  placeholder="Zoek op naam of e-mail…"
+                  className="w-full bg-page-soft border border-line rounded-md pl-9 pr-9 py-2.5 font-sans text-sm text-ink placeholder:text-muted/60 focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
                   autoFocus
                 />
                 {searchQuery && (
@@ -497,7 +497,7 @@ export default function AdminDashboard() {
             </p>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {filtered.map((s, i) => (
               <motion.div
                 key={s.id}
@@ -507,16 +507,36 @@ export default function AdminDashboard() {
               >
                 <button
                   onClick={() => toggleDetail(s.id)}
-                  className={`w-full text-left rounded-xl p-3.5 md:p-4 border transition-all duration-200 flex items-center gap-3 ${
+                  className={`relative w-full text-left rounded-[6px] p-4 md:p-5 transition-all duration-300 flex items-center gap-3.5 overflow-hidden ${
                     expandedId === s.id
-                      ? "bg-page-soft border-tan/40 shadow-sm rounded-b-none"
-                      : "bg-page-soft hover:bg-page-dark/40 border-line/50"
+                      ? "bg-page-soft shadow-[0_18px_48px_rgba(60,50,30,0.08)] rounded-b-none"
+                      : "bg-page-soft hover:shadow-[0_18px_48px_rgba(60,50,30,0.08)] shadow-[0_8px_24px_rgba(60,50,30,0.04)]"
                   }`}
                 >
-                  <div className="flex-shrink-0 w-9 h-9 md:w-10 md:h-10 rounded-full bg-page-dark flex items-center justify-center">
-                    <span className="font-serif text-tan text-sm md:text-base">
-                      {s.first_name.charAt(0).toUpperCase()}
-                    </span>
+                  {/* Pakket-accent strip aan de linkerkant */}
+                  <span
+                    className={`absolute left-0 top-0 bottom-0 w-0.5 ${
+                      s.package === "ikigai"
+                        ? "bg-sage"
+                        : s.package === "alignment"
+                          ? "bg-tan"
+                          : s.package === "experience"
+                            ? "bg-gold"
+                            : "bg-sage/60"
+                    }`}
+                  />
+                  <div
+                    className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-script text-base leading-none -mt-0.5 ${
+                      s.package === "ikigai"
+                        ? "bg-sage/15 text-sage-deep"
+                        : s.package === "alignment"
+                          ? "bg-tan/15 text-tan"
+                          : s.package === "experience"
+                            ? "bg-gold/15 text-gold"
+                            : "bg-page-dark text-tan"
+                    }`}
+                  >
+                    {s.first_name.charAt(0).toUpperCase()}
                   </div>
 
                   <div className="flex-1 min-w-0">
@@ -595,7 +615,7 @@ export default function AdminDashboard() {
                       transition={{ duration: 0.25 }}
                       className="overflow-hidden"
                     >
-                      <div className="bg-page-soft border-x border-b border-tan/40 rounded-b-xl px-4 pb-5 md:px-6">
+                      <div className="bg-page-soft rounded-b-[6px] px-4 pb-5 md:px-6 shadow-[0_18px_48px_rgba(60,50,30,0.08)] border-t border-line/40">
                         <Detail
                           submission={s}
                           detail={details[s.id]}
