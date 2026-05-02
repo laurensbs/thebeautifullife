@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Montserrat, Pinyon_Script } from "next/font/google";
 import "./globals.css";
+import ChromeGate from "@/components/layout/ChromeGate";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -43,7 +44,9 @@ export default function RootLayout({
       lang="nl"
       className={`${cormorant.variable} ${montserrat.variable} ${pinyon.variable} antialiased`}
     >
-      <body className="min-h-screen font-sans">{children}</body>
+      <body className="min-h-screen font-sans flex flex-col">
+        <ChromeGate>{children}</ChromeGate>
+      </body>
     </html>
   );
 }

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { setupDatabase } from "@/lib/setup-db";
 
-export async function POST() {
+async function runSetup() {
   try {
     await setupDatabase();
     return NextResponse.json({ success: true });
@@ -12,4 +12,12 @@ export async function POST() {
       { status: 500 }
     );
   }
+}
+
+export async function GET() {
+  return runSetup();
+}
+
+export async function POST() {
+  return runSetup();
 }

@@ -40,7 +40,7 @@ export default function PackageCard({
 
       {/* Image */}
       <div
-        className={`h-[260px] flex items-center justify-center text-white/70 font-serif tracking-[0.2em] text-sm bg-gradient-to-br from-page-dark to-line ${
+        className={`h-[200px] sm:h-[240px] lg:h-[260px] flex items-center justify-center text-white/70 font-serif tracking-[0.2em] text-sm bg-gradient-to-br from-page-dark to-line ${
           pkg.number === 3 ? "rounded-bl-[60px] rounded-br-[60px]" : ""
         }`}
       >
@@ -48,7 +48,7 @@ export default function PackageCard({
       </div>
 
       {/* Body */}
-      <div className="px-9 py-9 text-center flex flex-col flex-1">
+      <div className="px-6 sm:px-8 lg:px-9 py-7 sm:py-8 lg:py-9 text-center flex flex-col flex-1">
         <p className="font-script text-tan text-2xl font-normal mb-2.5">
           {pkg.kicker}
         </p>

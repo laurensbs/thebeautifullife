@@ -108,9 +108,9 @@ export default async function MijnPad() {
   const profile = subs[0] ?? null;
 
   return (
-    <main className="max-w-[1100px] mx-auto px-6 pt-8 pb-20">
+    <main className="max-w-[1100px] mx-auto px-5 sm:px-6 pt-6 sm:pt-8 pb-16 sm:pb-20">
       {/* Header */}
-      <div className="bg-page-soft rounded-[6px] px-8 py-9 sm:px-12 sm:py-11 shadow-[0_18px_48px_rgba(60,50,30,0.08)] mb-8 relative overflow-hidden">
+      <div className="bg-page-soft rounded-[6px] px-6 py-7 sm:px-12 sm:py-11 shadow-[0_18px_48px_rgba(60,50,30,0.08)] mb-7 sm:mb-8 relative overflow-hidden">
         <div className="absolute top-6 right-6 flex items-center gap-2">
           {isTestMode && (
             <span className="text-[10px] tracking-[0.18em] uppercase bg-amber-100 text-amber-800 border border-amber-300 px-2 py-1 rounded">
@@ -142,7 +142,7 @@ export default async function MijnPad() {
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-[1.7fr_1fr] gap-7 items-start">
+      <div className="grid lg:grid-cols-[1.7fr_1fr] gap-6 sm:gap-7 items-start">
         {/* Left column — paths */}
         <div className="space-y-5">
           <h2 className="font-serif font-medium tracking-[0.22em] uppercase text-sm text-ink mb-1">
@@ -205,7 +205,7 @@ export default async function MijnPad() {
                   }`}
                 />
 
-                <div className="px-7 py-7 sm:px-9 sm:py-9">
+                <div className="px-5 py-6 sm:px-9 sm:py-9">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <p className="font-script text-tan text-xl">
@@ -358,7 +358,7 @@ export default async function MijnPad() {
           <h2 className="font-serif font-medium tracking-[0.22em] uppercase text-sm text-ink mb-1">
             Mijn gegevens
           </h2>
-          <div className="bg-page-soft rounded-[6px] px-7 py-7 shadow-[0_18px_48px_rgba(60,50,30,0.08)] space-y-4">
+          <div className="bg-page-soft rounded-[6px] px-5 py-6 sm:px-7 sm:py-7 shadow-[0_18px_48px_rgba(60,50,30,0.08)] space-y-4">
             <p className="font-script text-tan text-2xl">{session.firstName}</p>
             <div className="space-y-3">
               <InfoRow
@@ -386,7 +386,7 @@ export default async function MijnPad() {
             </p>
           </div>
 
-          <div className="bg-page-dark rounded-[6px] px-7 py-7">
+          <div className="bg-page-dark rounded-[6px] px-5 py-6 sm:px-7 sm:py-7">
             <p className="font-script text-sage-deep text-2xl mb-2">
               ✿ The Beautiful Life
             </p>

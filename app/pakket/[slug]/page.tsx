@@ -43,23 +43,23 @@ export default async function PackagePage({
     pkg.accent === "sage" ? "bg-sage" : pkg.accent === "tan" ? "bg-tan" : "bg-gold";
 
   return (
-    <main className="max-w-[1180px] mx-auto px-6 pt-6 pb-16">
+    <main className="max-w-[1180px] mx-auto px-5 sm:px-6 pt-4 sm:pt-6 pb-12 sm:pb-16">
       <Link
         href="/"
-        className="inline-flex items-center gap-1.5 text-ink-soft hover:text-tan text-sm mb-6 transition-colors"
+        className="inline-flex items-center gap-1.5 text-ink-soft hover:text-tan text-sm mb-5 sm:mb-6 transition-colors"
       >
         <ArrowLeft size={14} /> terug
       </Link>
 
-      <div className="grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-14 items-start">
+      <div className="grid lg:grid-cols-[1.05fr_1fr] gap-8 lg:gap-14 items-start">
         {/* Left column: package story */}
-        <div className="bg-page-soft rounded-[6px] p-8 sm:p-12 shadow-[0_12px_40px_rgba(60,50,30,0.08)]">
+        <div className="bg-page-soft rounded-[6px] p-6 sm:p-10 lg:p-12 shadow-[0_12px_40px_rgba(60,50,30,0.08)]">
           <div className={`flex items-center gap-2.5 ${accentText}`}>
             <span className={`h-px w-10 ${accentBar} opacity-60`} />
             <span className="font-script text-2xl">{pkg.kicker}</span>
           </div>
 
-          <h1 className="mt-3 font-serif font-medium text-3xl sm:text-4xl tracking-[0.06em] uppercase leading-tight text-ink">
+          <h1 className="mt-3 font-serif font-medium text-2xl sm:text-3xl lg:text-4xl tracking-[0.06em] uppercase leading-tight text-ink">
             {pkg.nameLines[0]}
             {pkg.nameLines[1] && (
               <>
@@ -115,7 +115,7 @@ export default async function PackagePage({
         </div>
 
         {/* Right column: intake form */}
-        <div className="bg-page-soft rounded-[6px] p-8 sm:p-10 shadow-[0_12px_40px_rgba(60,50,30,0.08)] lg:sticky lg:top-6">
+        <div className="bg-page-soft rounded-[6px] p-6 sm:p-9 lg:p-10 shadow-[0_12px_40px_rgba(60,50,30,0.08)] lg:sticky lg:top-24">
           <div className="text-center mb-6">
             <p className={`font-script text-2xl ${accentText}`}>Aanmelden</p>
             <h2 className="font-serif font-medium tracking-[0.18em] uppercase text-lg text-ink mt-1">

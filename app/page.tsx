@@ -1,4 +1,3 @@
-import Link from "next/link";
 import HeroPanel from "@/components/sections/HeroPanel";
 import PackageCard from "@/components/sections/PackageCard";
 import WhatYouGet from "@/components/sections/WhatYouGet";
@@ -7,18 +6,13 @@ import { PACKAGE_LIST } from "@/lib/packages";
 
 export default function Home() {
   return (
-    <main className="max-w-[1180px] mx-auto px-6 pt-6 pb-16">
-      <div className="flex justify-end mb-3">
-        <Link
-          href="/mijn-pad/login"
-          className="text-[11px] tracking-[0.22em] uppercase text-ink-soft hover:text-tan transition"
-        >
-          Mijn pad →
-        </Link>
-      </div>
+    <main className="max-w-[1180px] mx-auto px-5 sm:px-6 pt-4 sm:pt-6 pb-12 sm:pb-16">
       <HeroPanel />
 
-      <section className="grid md:grid-cols-3 gap-7 mt-12">
+      <section
+        id="packages"
+        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 mt-10 sm:mt-12 scroll-mt-20"
+      >
         {PACKAGE_LIST.map((pkg, i) => (
           <PackageCard key={pkg.slug} pkg={pkg} index={i} />
         ))}
