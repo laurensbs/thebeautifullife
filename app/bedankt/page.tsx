@@ -5,6 +5,11 @@ import { getLocale } from "@/lib/i18n/server";
 import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
 
+export const metadata = {
+  robots: { index: false, follow: false },
+  title: "Bedankt — The Beautiful Life",
+};
+
 export default async function Bedankt({
   searchParams,
 }: {

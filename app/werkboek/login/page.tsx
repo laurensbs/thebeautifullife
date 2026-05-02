@@ -4,6 +4,11 @@ import { getLocale } from "@/lib/i18n/server";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = {
+  robots: { index: false, follow: false },
+  title: "Werkboek — Login",
+};
+
 export default async function WorkbookLoginPage() {
   const locale = await getLocale();
   return (

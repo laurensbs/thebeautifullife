@@ -5,6 +5,8 @@ import ChromeGate from "@/components/layout/ChromeGate";
 import { getLocale } from "@/lib/i18n/server";
 import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
+import { buildMetadata, ORGANIZATION_LD, PERSON_LD } from "@/lib/seo";
+import JsonLd from "@/components/seo/JsonLd";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -29,16 +31,12 @@ const pinyon = Pinyon_Script({
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
-  return {
+  return buildMetadata({
     title: tr(DICT.meta.homeTitle, locale),
     description: tr(DICT.meta.homeDesc, locale),
-    openGraph: {
-      title: tr(DICT.meta.homeTitle, locale),
-      description: tr(DICT.meta.homeDesc, locale),
-      type: "website",
-      locale: locale === "nl" ? "nl_NL" : "en_US",
-    },
-  };
+    path: "/",
+    locale,
+  });
 }
 
 export default async function RootLayout({
@@ -51,6 +49,7 @@ export default async function RootLayout({
       className={`${cormorant.variable} ${montserrat.variable} ${pinyon.variable} antialiased`}
     >
       <body className="min-h-screen font-sans flex flex-col">
+        <JsonLd data={[ORGANIZATION_LD, PERSON_LD]} />
         <ChromeGate>{children}</ChromeGate>
       </body>
     </html>

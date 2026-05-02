@@ -1,12 +1,34 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Check } from "lucide-react";
+import type { Metadata } from "next";
 import { PACKAGES, isPackageSlug } from "@/lib/packages";
 import { BASE_FIELDS, PACKAGE_INTAKE } from "@/lib/intake-fields";
 import IntakeForm from "@/components/intake/IntakeForm";
 import { getLocale } from "@/lib/i18n/server";
 import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
+import { buildMetadata, serviceLd } from "@/lib/seo";
+import JsonLd from "@/components/seo/JsonLd";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  if (!isPackageSlug(slug)) return {};
+  const locale = await getLocale();
+  const name = tr(DICT.packages.name[slug], locale);
+  const tagline = tr(DICT.packages.tagline[slug], locale);
+  return buildMetadata({
+    title: `${name} — The Beautiful Life`,
+    description: tagline,
+    path: `/pakket/${slug}`,
+    locale,
+    ogImage: PACKAGES[slug].imageUrl,
+  });
+}
 
 const KICKER = {
   ikigai: "kicker1",
@@ -49,8 +71,17 @@ export default async function PackagePage({
       ? tr(DICT.pkgPage.ctaExperience, locale)
       : tr(DICT.pkgPage.cta, locale);
 
+  const ld = serviceLd({
+    name: tr(DICT.packages.name[slug], locale),
+    description: tagline,
+    priceCents: pkg.priceCents,
+    slug,
+    locale,
+  });
+
   return (
     <main className="max-w-[1180px] mx-auto px-5 sm:px-6 pt-4 sm:pt-6 pb-12 sm:pb-16">
+      <JsonLd data={ld} />
       <Link
         href="/"
         className="inline-flex items-center gap-1.5 text-ink-soft hover:text-tan text-sm mb-5 sm:mb-6 transition-colors"
