@@ -41,22 +41,21 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
               heen valt — text-center op alle breakpoints. */}
           <Calligraphy
             as="span"
-            className="block font-script font-normal text-[clamp(56px,10vw,108px)] tracking-[0.02em] -mt-[0.28em] sm:-mt-[0.32em] text-center text-ink/85 leading-[0.95]"
+            className="block font-script font-normal text-[clamp(56px,10vw,108px)] tracking-[0.02em] -mt-[0.14em] sm:-mt-[0.18em] text-center text-ink/85 leading-[0.95]"
             text="Life"
           />
         </h1>
 
-        <HeartDivider className="mt-6 mb-4 lg:!justify-start" />
+        <HeartDivider className="mt-6 mb-4" />
 
-
-        <p className="font-sans text-[12px] sm:text-[13px] tracking-[0.28em] sm:tracking-[0.32em] uppercase text-ink text-center lg:text-left">
+        <p className="font-sans text-[12px] sm:text-[13px] tracking-[0.28em] sm:tracking-[0.32em] uppercase text-ink text-center">
           {tr(DICT.hero.threePaths, locale)}
           <strong className="block font-medium text-tan tracking-[0.28em] sm:tracking-[0.32em] mt-1.5">
             {tr(DICT.hero.yourIdealLife, locale)}
           </strong>
         </p>
 
-        <p className="mt-6 max-w-[360px] mx-auto lg:mx-0 text-ink-soft text-[14px] sm:text-[15px] leading-[1.7] pb-8 lg:pb-16 text-center lg:text-left">
+        <p className="mt-6 max-w-[360px] mx-auto text-ink-soft text-[14px] sm:text-[15px] leading-[1.7] pb-8 lg:pb-16 text-center">
           {tr(DICT.hero.lead, locale)}
         </p>
       </motion.div>
