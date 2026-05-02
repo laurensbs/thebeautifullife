@@ -11,31 +11,32 @@ export default function AppleIcon() {
         style={{
           width: "100%",
           height: "100%",
-          background: "#F1EBE0",
+          background: "#F6F1E7",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: 8,
+          gap: 14,
           padding: 24,
         }}
       >
         <div
           style={{
-            width: 88,
-            height: 88,
+            width: 96,
+            height: 96,
             borderRadius: "50%",
-            background: "#7C8867",
+            background: "#F6F1E7",
+            border: "2.5px solid #7C8867",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "#F6F1E7",
-            fontSize: 56,
-            fontWeight: 600,
-            fontStyle: "italic",
-            lineHeight: 1,
+            color: "#B6906A",
             fontFamily: "serif",
-            paddingBottom: 4,
+            fontSize: 64,
+            fontStyle: "italic",
+            fontWeight: 500,
+            lineHeight: 1,
+            paddingBottom: 6,
           }}
         >
           B
@@ -44,10 +45,10 @@ export default function AppleIcon() {
           style={{
             color: "#2A2A28",
             fontSize: 11,
-            letterSpacing: "0.18em",
+            letterSpacing: "0.22em",
             textTransform: "uppercase",
-            fontWeight: 500,
             fontFamily: "serif",
+            fontWeight: 500,
             display: "flex",
           }}
         >
