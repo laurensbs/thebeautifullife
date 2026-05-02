@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyCredentials, createToken } from "@/lib/auth";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
+    // Strikt: 8 inlogpogingen per IP per 15 min op de admin login.
+    const limited = await checkRateLimit(request, {
+      bucket: "admin-login",
+      max: 8,
+      windowMs: 15 * 60_000,
+    });
+    if (limited) return limited;
+
     const { username, password } = await request.json();
 
     if (!username || !password) {

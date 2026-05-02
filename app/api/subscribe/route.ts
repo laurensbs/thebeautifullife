@@ -7,10 +7,18 @@ import {
 import { PACKAGES, isPackageSlug } from "@/lib/packages";
 import { grantWorkbooksForPackage } from "@/lib/workbook-grants";
 import { getLocale } from "@/lib/i18n/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 import crypto from "crypto";
 
 export async function POST(request: NextRequest) {
   try {
+    const limited = await checkRateLimit(request, {
+      bucket: "subscribe",
+      max: 5,
+      windowMs: 10 * 60_000, // 5 inschrijvingen per IP per 10 min
+    });
+    if (limited) return limited;
+
     const body = await request.json();
     const { firstName, contact, phone, package: pkgSlug, intake_data } = body;
 

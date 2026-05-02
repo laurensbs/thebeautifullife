@@ -57,9 +57,7 @@ export default function PackageCard({
       </span>
 
       <div
-        className={`relative h-[200px] sm:h-[240px] lg:h-[260px] overflow-hidden bg-gradient-to-br from-page-dark to-line ${
-          pkg.number === 3 ? "rounded-bl-[60px] rounded-br-[60px]" : ""
-        }`}
+        className="relative h-[200px] sm:h-[240px] lg:h-[260px] overflow-hidden bg-gradient-to-br from-page-dark to-line rounded-tl-[40px] rounded-tr-[40px]"
       >
         {pkg.imageUrl ? (
           <Image

@@ -2,12 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 import { getWorkbookSession } from "@/lib/workbook-auth";
 import { getWorkbook, workbookFieldKeys } from "@/lib/workbooks";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   const session = await getWorkbookSession();
   if (!session) {
     return NextResponse.json({ error: "Niet ingelogd" }, { status: 401 });
   }
+
+  // Soepel limiet: auto-save is debounced (~800ms). 200/min is ruim
+  // genoeg voor normaal gebruik en houdt abuse onder de duim.
+  const limited = await checkRateLimit(request, {
+    bucket: "workbook-answer",
+    identifier: String(session.accessId),
+    max: 200,
+    windowMs: 60_000,
+  });
+  if (limited) return limited;
 
   const body = await request.json();
   const fieldKey = String(body.field_key ?? "").trim();

@@ -2,11 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { sql } from "@/lib/db";
 import { sendWorkbookMagicLink } from "@/lib/email";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 // Magic link to enter /mijn-pad. Reuses workbook_magic_links table
 // with a "client:" prefix on the token to distinguish purpose.
 export async function POST(request: NextRequest) {
   try {
+    // IP-bucket: 10 magic-link verzoeken per 10 min per IP.
+    const ipLimited = await checkRateLimit(request, {
+      bucket: "client-login-ip",
+      max: 10,
+      windowMs: 10 * 60_000,
+    });
+    if (ipLimited) return ipLimited;
+
     const body = await request.json();
     const email = String(body.email ?? "").trim().toLowerCase();
 
@@ -16,6 +25,16 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // E-mail-bucket: 3 verzoeken per e-mail per 10 min — voorkomt
+    // mailbox-spammen aan iemand anders.
+    const emailLimited = await checkRateLimit(request, {
+      bucket: "client-login-email",
+      identifier: email,
+      max: 3,
+      windowMs: 10 * 60_000,
+    });
+    if (emailLimited) return emailLimited;
 
     const subs = await sql`
       SELECT first_name FROM submissions

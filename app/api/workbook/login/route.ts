@@ -2,9 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { sql } from "@/lib/db";
 import { sendWorkbookMagicLink } from "@/lib/email";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
+    const ipLimited = await checkRateLimit(request, {
+      bucket: "workbook-login-ip",
+      max: 10,
+      windowMs: 10 * 60_000,
+    });
+    if (ipLimited) return ipLimited;
+
     const body = await request.json();
     const email = String(body.email ?? "").trim().toLowerCase();
     const slug = body.slug ? String(body.slug) : null;
@@ -15,6 +23,14 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const emailLimited = await checkRateLimit(request, {
+      bucket: "workbook-login-email",
+      identifier: email,
+      max: 3,
+      windowMs: 10 * 60_000,
+    });
+    if (emailLimited) return emailLimited;
 
     // Find any workbook_access for this email — pick most recent.
     // If a slug is provided, prefer that one.
