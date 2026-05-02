@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import type { PACKAGES } from "@/lib/packages";
@@ -56,11 +57,23 @@ export default function PackageCard({
       </span>
 
       <div
-        className={`h-[200px] sm:h-[240px] lg:h-[260px] flex items-center justify-center text-white/70 font-serif tracking-[0.2em] text-sm bg-gradient-to-br from-page-dark to-line ${
+        className={`relative h-[200px] sm:h-[240px] lg:h-[260px] overflow-hidden bg-gradient-to-br from-page-dark to-line ${
           pkg.number === 3 ? "rounded-bl-[60px] rounded-br-[60px]" : ""
         }`}
       >
-        PACKAGE {pkg.number} IMAGE
+        {pkg.imageUrl ? (
+          <Image
+            src={pkg.imageUrl}
+            alt={pkg.name}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover object-center"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-white/70 font-serif tracking-[0.2em] text-sm">
+            PACKAGE {pkg.number} IMAGE
+          </div>
+        )}
       </div>
 
       <div className="px-6 sm:px-8 lg:px-9 py-7 sm:py-8 lg:py-9 text-center flex flex-col flex-1">

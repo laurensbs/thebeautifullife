@@ -28,6 +28,7 @@ export const PACKAGES: Record<
     priceLabel: string;
     priceCents: number;
     accent: "sage" | "tan" | "gold";
+    imageUrl?: string;
     quote: string;
     features: string[];
     statusFlow: PackageStatus[];
@@ -35,6 +36,7 @@ export const PACKAGES: Record<
 > = {
   ikigai: {
     slug: "ikigai",
+    imageUrl: "https://u.cubeupload.com/laurensbos/werkboekreturntocalm.png",
     number: 1,
     name: "The Ikigai Story",
     nameLines: ["The Ikigai Story"],
@@ -56,6 +58,7 @@ export const PACKAGES: Record<
   },
   alignment: {
     slug: "alignment",
+    imageUrl: "https://u.cubeupload.com/laurensbos/noisetostructure.png",
     number: 2,
     name: "From Insight to Alignment",
     nameLines: ["From Insight", "to Alignment"],
@@ -84,6 +87,7 @@ export const PACKAGES: Record<
   },
   experience: {
     slug: "experience",
+    imageUrl: "https://u.cubeupload.com/laurensbos/beautifullife.png",
     number: 3,
     name: "The Beautiful Life Experience",
     nameLines: ["The Beautiful Life", "Experience"],
