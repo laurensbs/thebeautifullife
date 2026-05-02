@@ -83,9 +83,10 @@ function layout({
 
           <!-- Brand strip -->
           <tr>
-            <td align="center" style="padding:32px 32px 20px;">
-              <div style="font-family:${BRAND.serifStack};font-weight:500;font-size:14px;letter-spacing:0.18em;text-transform:uppercase;color:${BRAND.ink};">The Beautiful Life</div>
-              <div style="font-family:${BRAND.scriptStack};font-size:18px;color:${BRAND.tan};margin-top:4px;line-height:1;">coaching collective</div>
+            <td align="center" style="padding:36px 32px 22px;">
+              <div style="font-family:${BRAND.serifStack};letter-spacing:0.32em;text-transform:uppercase;font-size:9px;color:${BRAND.inkSoft};line-height:1;">The</div>
+              <div style="font-family:${BRAND.serifStack};letter-spacing:0.18em;text-transform:uppercase;font-size:22px;color:${BRAND.ink};font-weight:500;line-height:1;margin-top:3px;">Beautiful</div>
+              <div style="font-family:${BRAND.scriptStack};font-size:36px;color:${BRAND.ink};opacity:0.85;line-height:0.9;margin-top:-4px;">Life</div>
             </td>
           </tr>
 

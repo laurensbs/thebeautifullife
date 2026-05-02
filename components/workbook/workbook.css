@@ -322,6 +322,16 @@
   .wb-toolbar__actions { width: 100%; justify-content: flex-end; }
   .wb-btn { padding: 8px 12px; font-size: 10px; letter-spacing: 0.18em; }
 }
+.wb-toolbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.wb-toolbar__greet--small {
+  font-size: 16px !important;
+  color: var(--color-muted) !important;
+}
 .wb-toolbar__greet {
   font-family: var(--font-script);
   color: var(--color-ink);

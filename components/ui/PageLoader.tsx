@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import HeartDraw from "@/components/ui/HeartDraw";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 export default function PageLoader({
   label,
@@ -11,19 +12,13 @@ export default function PageLoader({
   return (
     <div className="min-h-[70vh] flex items-center justify-center bg-page">
       <div className="flex flex-col items-center gap-5 px-6 text-center">
-        {/* Brand-tekst zoals in de header */}
+        {/* Brand-logo gestapeld */}
         <motion.div
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col leading-none"
         >
-          <span className="font-serif text-ink text-[14px] tracking-[0.18em] uppercase">
-            The Beautiful Life
-          </span>
-          <span className="font-script text-tan text-[15px] -mt-0.5">
-            coaching collective
-          </span>
+          <BrandLogo size="md" align="center" />
         </motion.div>
 
         {/* Hartjes-divider */}

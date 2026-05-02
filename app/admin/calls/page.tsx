@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import PageLoader from "@/components/ui/PageLoader";
 import HeartDraw from "@/components/ui/HeartDraw";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 type Booking = {
   id: number;
@@ -137,18 +138,13 @@ export default function CallsPage() {
     <div className="min-h-screen bg-page">
       {/* Header */}
       <header className="sticky top-0 z-30 bg-page/90 backdrop-blur-md border-b border-line/40">
-        <div className="max-w-5xl mx-auto px-5 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
-          <Link
-            href="/admin/dashboard"
-            className="flex flex-col leading-none group"
-          >
-            <span className="font-serif text-ink text-[14px] tracking-[0.18em] uppercase group-hover:text-tan transition-colors">
-              The Beautiful Life
-            </span>
-            <span className="font-script text-tan text-[15px] -mt-0.5">
+        <div className="max-w-5xl mx-auto px-5 sm:px-6 py-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <BrandLogo size="sm" linkTo="/admin/dashboard" />
+            <span className="text-[10px] tracking-[0.22em] uppercase text-muted border border-line rounded-full px-2 py-0.5">
               admin
             </span>
-          </Link>
+          </div>
           <nav className="flex items-center gap-1 sm:gap-3">
             <Link
               href="/admin/dashboard"

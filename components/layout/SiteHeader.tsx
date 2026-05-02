@@ -8,6 +8,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
 import HeartDraw from "@/components/ui/HeartDraw";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 export default function SiteHeader({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
@@ -41,19 +42,9 @@ export default function SiteHeader({ locale }: { locale: Locale }) {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-[1180px] mx-auto px-5 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
-        <Link
-          href="/"
-          className="flex flex-col leading-none group"
-          aria-label="The Beautiful Life — home"
-        >
-          <span className="font-serif text-ink text-[14px] tracking-[0.18em] uppercase group-hover:text-tan transition-colors">
-            The Beautiful Life
-          </span>
-          <span className="font-script text-tan text-[15px] -mt-0.5">
-            coaching collective
-          </span>
-        </Link>
+      <div className="max-w-[1180px] mx-auto px-5 sm:px-6 py-3 flex items-center justify-between">
+        <BrandLogo size="sm" linkTo="/" />
+
 
         <nav className="hidden md:flex items-center gap-7">
           {NAV.map((item) => (

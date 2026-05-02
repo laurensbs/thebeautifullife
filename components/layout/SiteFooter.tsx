@@ -5,6 +5,7 @@ import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
 import Calligraphy from "@/components/ui/Calligraphy";
 import HeartDivider from "@/components/ui/HeartDivider";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 function InstagramIcon({ size = 14 }: { size?: number }) {
   return (
@@ -36,19 +37,17 @@ export default function SiteFooter({ locale }: { locale: Locale }) {
         <div className="bg-page-soft rounded-tl-[40px] rounded-tr-[40px] rounded-b-[6px] shadow-[0_18px_48px_rgba(60,50,30,0.08)] overflow-hidden">
           {/* Brand / tagline — centered op mobiel + tablet, links op desktop */}
           <div className="px-6 py-10 sm:px-12 sm:py-12 text-center lg:text-left">
-            <p className="font-serif text-ink text-[14px] tracking-[0.18em] uppercase">
-              The Beautiful Life
-            </p>
+            <div className="inline-flex lg:flex">
+              <BrandLogo size="md" align={"left"} />
+            </div>
             <Calligraphy
               as="p"
-              className="font-script text-tan text-2xl sm:text-3xl mt-2"
+              className="font-script text-tan text-xl sm:text-2xl mt-3"
               text={tr(DICT.footer.tagline, locale)}
               durationPerChar={0.04}
             />
 
-            <HeartDivider
-              className="mt-5 mb-6 lg:!justify-start"
-            />
+            <HeartDivider className="mt-5 mb-6 lg:!justify-start" />
 
             <p className="text-ink-soft text-sm leading-[1.85] max-w-md mx-auto lg:mx-0">
               {tr(DICT.footer.intro, locale)}

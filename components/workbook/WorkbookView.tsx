@@ -14,6 +14,7 @@ import { tr } from "@/lib/i18n/types";
 import AudioCueIcon from "./AudioCueIcon";
 import WorkbookField from "./WorkbookField";
 import HeartDraw from "@/components/ui/HeartDraw";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 type SaveState = "idle" | "saving" | "saved";
 
@@ -106,10 +107,13 @@ export default function WorkbookView({
     <div className="wb">
       {/* Toolbar */}
       <div className="wb-toolbar">
-        <p className="wb-toolbar__greet">
-          {tr(DICT.workbook.welcomeBack, locale)}
-          {firstName}
-        </p>
+        <div className="wb-toolbar__brand">
+          <BrandLogo size="sm" />
+          <p className="wb-toolbar__greet wb-toolbar__greet--small">
+            {tr(DICT.workbook.welcomeBack, locale)}
+            {firstName}
+          </p>
+        </div>
         <div className="wb-toolbar__actions">
           <span className="wb-locale">
             <button

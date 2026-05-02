@@ -67,7 +67,7 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
         className="relative min-h-[280px] sm:min-h-[380px] lg:min-h-[560px] bg-page-dark"
       >
         <Image
-          src="https://u.cubeupload.com/laurensbos/beautifullife.png"
+          src="https://u.cubeupload.com/laurensbos/bf5fdd986cf4196c6c66.jpeg"
           alt={tr(DICT.hero.imageAlt, locale)}
           fill
           priority

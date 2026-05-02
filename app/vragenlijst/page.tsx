@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import HeartDivider from "@/components/ui/HeartDivider";
 import HeartDraw from "@/components/ui/HeartDraw";
 import PageLoader from "@/components/ui/PageLoader";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 type Question = {
   id: number;
@@ -280,13 +281,11 @@ function VragenlijstContent() {
   return (
     <main className="max-w-[720px] mx-auto px-5 sm:px-6 py-8 sm:py-12 min-h-screen flex flex-col">
       {/* Brand + counter */}
-      <div className="flex items-center justify-between mb-5">
-        <div className="flex flex-col leading-none">
-          <span className="font-serif text-ink text-[12px] tracking-[0.18em] uppercase">
-            The Beautiful Life
-          </span>
-          <span className="font-script text-tan text-[14px] -mt-0.5">
-            even reflecteren
+      <div className="flex items-center justify-between mb-5 gap-3">
+        <div className="flex items-center gap-3">
+          <BrandLogo size="sm" />
+          <span className="text-[10px] tracking-[0.22em] uppercase text-muted border border-line rounded-full px-2 py-0.5 hidden sm:inline">
+            reflectie
           </span>
         </div>
         <span className="font-sans text-muted text-[11px] tracking-[0.18em] uppercase">
