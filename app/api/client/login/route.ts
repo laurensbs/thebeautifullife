@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       LIMIT 1
     `;
 
-    // Always pretend success
+    // Always pretend success — voorkomt e-mail-enumeratie.
     if (subs.length === 0) {
       return NextResponse.json({ ok: true });
     }
@@ -60,15 +60,41 @@ export async function POST(request: NextRequest) {
     const host = request.headers.get("host") || "thebeautifullife.nl";
     const url = `${protocol}://${host}/api/client/login/consume?token=${linkToken}`;
 
+    let emailSent = false;
+    let emailError: string | null = null;
     try {
       await sendWorkbookMagicLink(email, String(subs[0].first_name), url);
+      emailSent = true;
     } catch (err) {
-      console.error("Client magic link email failed:", err);
+      emailError = err instanceof Error ? err.message : String(err);
+      console.error("Client magic link email failed:", emailError);
+    }
+
+    // In productie: altijd 'ok' terug zodat klant geen email-status leakt.
+    // In dev / als email expliciet faalt door SMTP-config: response bevat
+    // een hint zodat developer 'm in DevTools ziet.
+    if (!emailSent) {
+      return NextResponse.json({
+        ok: true,
+        warning: "email_failed",
+        // detail alleen in non-prod
+        ...(process.env.NODE_ENV !== "production" && {
+          detail: emailError,
+          dev_link: url,
+        }),
+      });
     }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("Client login error:", err);
-    return NextResponse.json({ error: "Er ging iets mis." }, { status: 500 });
+    const detail = err instanceof Error ? err.message : String(err);
+    console.error("Client login error:", detail);
+    return NextResponse.json(
+      {
+        error: "Er ging iets mis.",
+        ...(process.env.NODE_ENV !== "production" && { detail }),
+      },
+      { status: 500 }
+    );
   }
 }
