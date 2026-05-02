@@ -3,14 +3,20 @@ import nodemailer from "nodemailer";
 // ─── SMTP transport ──────────────────────────────────────────────────
 // Vereist SMTP_HOST, SMTP_USER, SMTP_PASS, SMTP_FROM env-vars.
 // Op Vercel zet ze in Project Settings → Environment Variables.
+const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT || 465),
-  secure: true,
+  port: SMTP_PORT,
+  // Port 465 → SSL/TLS; alle andere poorten (587, 25) → STARTTLS
+  secure: SMTP_PORT === 465,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  // Vercel function timeout = 10s default; geef SMTP wat ruimte.
+  connectionTimeout: 8000,
+  greetingTimeout: 8000,
+  socketTimeout: 8000,
 });
 
 /** Throwt expliciet als SMTP niet geconfigureerd is. */
