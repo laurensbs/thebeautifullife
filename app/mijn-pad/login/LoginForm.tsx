@@ -8,6 +8,7 @@ import Link from "next/link";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
 import Calligraphy from "@/components/ui/Calligraphy";
+import HeartDivider from "@/components/ui/HeartDivider";
 
 export default function LoginForm({ locale }: { locale: Locale }) {
   const params = useSearchParams();
@@ -64,11 +65,7 @@ export default function LoginForm({ locale }: { locale: Locale }) {
           {tr(DICT.portal.loginTitle, locale)}
         </h1>
 
-        <div className="my-6 flex items-center justify-center gap-2.5 text-tan">
-          <span className="h-px w-12 bg-tan/55" />
-          <span className="text-sm">♡</span>
-          <span className="h-px w-12 bg-tan/55" />
-        </div>
+        <HeartDivider className="my-6" />
 
         {sent ? (
           <motion.div

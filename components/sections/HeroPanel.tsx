@@ -6,6 +6,7 @@ import { Sun, Leaf, Heart, Sparkles } from "lucide-react";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
 import Calligraphy from "@/components/ui/Calligraphy";
+import HeartDivider from "@/components/ui/HeartDivider";
 
 export default function HeroPanel({ locale }: { locale: Locale }) {
   const FEATURES = [
@@ -44,11 +45,8 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
           />
         </h1>
 
-        <div className="mt-6 mb-4 flex items-center gap-2.5 text-tan justify-center lg:justify-start">
-          <span className="h-px w-12 sm:w-14 bg-tan/55" />
-          <span className="text-sm">♡</span>
-          <span className="h-px w-12 sm:w-14 bg-tan/55" />
-        </div>
+        <HeartDivider className="mt-6 mb-4 lg:!justify-start" />
+
 
         <p className="font-sans text-[12px] sm:text-[13px] tracking-[0.28em] sm:tracking-[0.32em] uppercase text-ink text-center lg:text-left">
           {tr(DICT.hero.threePaths, locale)}

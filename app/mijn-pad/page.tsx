@@ -15,6 +15,7 @@ import { tr, type Locale } from "@/lib/i18n/types";
 import { tx } from "@/lib/workbooks/types";
 import FadeIn from "@/components/ui/FadeIn";
 import Calligraphy from "@/components/ui/Calligraphy";
+import HeartDivider from "@/components/ui/HeartDivider";
 import {
   Heart,
   CheckCircle,
@@ -159,11 +160,7 @@ export default async function MijnPad() {
           {session.firstName}
         </h1>
 
-        <div className="my-5 flex items-center gap-2.5 text-tan">
-          <span className="h-px w-12 bg-tan/55" />
-          <span className="text-sm">♡</span>
-          <span className="h-px w-12 bg-tan/55" />
-        </div>
+        <HeartDivider align="left" className="my-5" />
 
         <p className="text-ink-soft text-[15px] leading-[1.85] max-w-md">
           {tr(DICT.portal.intro, locale)}

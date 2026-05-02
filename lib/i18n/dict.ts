@@ -187,14 +187,14 @@ export const DICT = {
     title: t("What You Get", "What You Get"),
     items: {
       nl: [
-        "Een werkboek dat je écht meeneemt — geen invuloefening",
+        "Een werkboek dat je écht meeneemt",
         "Pagina's om te vertragen, voelen & schrijven",
         "Persoonlijke begeleiding op jouw tempo",
         "Een eigen portaal waar alles bewaard blijft",
         "Het begin van een leven dat past bij wie je bent",
       ],
       en: [
-        "A workbook that truly takes you along — no checkbox exercise",
+        "A workbook that truly takes you along",
         "Pages to slow down, feel & write",
         "Personal guidance at your own pace",
         "A personal portal where everything is saved",

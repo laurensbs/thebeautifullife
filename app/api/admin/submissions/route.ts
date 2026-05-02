@@ -2,12 +2,29 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthFromCookies } from "@/lib/auth";
 import { sql } from "@/lib/db";
 import { isPackageSlug } from "@/lib/packages";
+import { setupDatabase } from "@/lib/setup-db";
+
+// Run lazy DB-migrate één keer per cold start. Voorkomt dat admin
+// queries 500'en omdat ALTER TABLE-kolommen nog niet bestaan.
+let migrated = false;
+async function ensureMigrated() {
+  if (migrated) return;
+  try {
+    await setupDatabase();
+    migrated = true;
+  } catch (err) {
+    console.error("setupDatabase lazy-migrate failed:", err);
+  }
+}
 
 export async function GET(request: NextRequest) {
+  try {
   const authed = await getAuthFromCookies();
   if (!authed) {
     return NextResponse.json({ error: "Niet ingelogd" }, { status: 401 });
   }
+
+  await ensureMigrated();
 
   const page = Number(request.nextUrl.searchParams.get("page") || "1");
   const pkgFilter = request.nextUrl.searchParams.get("package");
@@ -54,29 +71,35 @@ export async function GET(request: NextRequest) {
     FROM submissions
   `;
 
-  // Werkboek-progress per submissie zodat we het inline kunnen tonen.
-  const wbProgress = (await sql`
-    SELECT
-      wa.submission_id AS id,
-      ARRAY_AGG(
-        json_build_object(
-          'slug', wa.workbook_slug,
-          'last_seen_at', wa.last_seen_at,
-          'filled', (
-            SELECT COUNT(*) FROM workbook_answers wn
-            WHERE wn.access_id = wa.id
-              AND COALESCE(LENGTH(TRIM(wn.value)), 0) > 0
-          )
-        )
-      ) AS workbooks
-    FROM workbook_access wa
-    GROUP BY wa.submission_id
-  `) as unknown as Array<{
+  // Werkboek-progress per submissie. Defensief: als de tabellen nog
+  // niet bestaan of de query faalt, val terug op een lege map.
+  type WbProgressRow = {
     id: number;
     workbooks: Array<{ slug: string; last_seen_at: string | null; filled: number }>;
-  }>;
-  const wbBySubmission = new Map<number, typeof wbProgress[number]["workbooks"]>();
-  for (const r of wbProgress) wbBySubmission.set(Number(r.id), r.workbooks);
+  };
+  const wbBySubmission = new Map<number, WbProgressRow["workbooks"]>();
+  try {
+    const wbProgress = (await sql`
+      SELECT
+        wa.submission_id AS id,
+        ARRAY_AGG(
+          json_build_object(
+            'slug', wa.workbook_slug,
+            'last_seen_at', wa.last_seen_at,
+            'filled', (
+              SELECT COUNT(*) FROM workbook_answers wn
+              WHERE wn.access_id = wa.id
+                AND COALESCE(LENGTH(TRIM(wn.value)), 0) > 0
+            )
+          )
+        ) AS workbooks
+      FROM workbook_access wa
+      GROUP BY wa.submission_id
+    `) as unknown as WbProgressRow[];
+    for (const r of wbProgress) wbBySubmission.set(Number(r.id), r.workbooks);
+  } catch (err) {
+    console.error("wb-progress query failed:", err);
+  }
 
   const enriched = (submissions as Array<Record<string, unknown>>).map((s) => ({
     ...s,
@@ -91,4 +114,11 @@ export async function GET(request: NextRequest) {
     stats: stats[0],
     test_mode: process.env.PAYMENTS_TEST_MODE !== "false",
   });
+  } catch (err) {
+    console.error("admin submissions GET failed:", err);
+    return NextResponse.json(
+      { error: "Server error", detail: err instanceof Error ? err.message : String(err) },
+      { status: 500 }
+    );
+  }
 }
