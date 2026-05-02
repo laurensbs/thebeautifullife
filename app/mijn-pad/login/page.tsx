@@ -1,12 +1,14 @@
 import { Suspense } from "react";
 import LoginForm from "./LoginForm";
+import { getLocale } from "@/lib/i18n/server";
 
 export const dynamic = "force-dynamic";
 
-export default function ClientLoginPage() {
+export default async function ClientLoginPage() {
+  const locale = await getLocale();
   return (
     <Suspense fallback={null}>
-      <LoginForm />
+      <LoginForm locale={locale} />
     </Suspense>
   );
 }

@@ -1,138 +1,142 @@
 import type { IntakeField } from "@/components/intake/IntakeForm";
 import type { PackageSlug } from "./packages";
+import { DICT } from "@/lib/i18n/dict";
+import { tr, type Locale } from "@/lib/i18n/types";
 
-export const BASE_FIELDS: IntakeField[] = [
-  {
-    name: "firstName",
-    label: "Voornaam",
-    type: "text",
-    required: true,
-    placeholder: "Hoe mag ik je noemen?",
-  },
-  {
-    name: "contact",
-    label: "E-mailadres",
-    type: "email",
-    required: true,
-    placeholder: "naam@voorbeeld.nl",
-  },
-  {
-    name: "phone",
-    label: "Telefoonnummer",
-    type: "tel",
-    placeholder: "+31 6 …",
-    hint: "Optioneel, maar handig als Marion contact opneemt voor de planning.",
-  },
-];
-
-export const PACKAGE_INTAKE: Record<PackageSlug, IntakeField[]> = {
-  ikigai: [
+export function BASE_FIELDS(locale: Locale): IntakeField[] {
+  const f = DICT.intake.fields;
+  return [
     {
-      name: "biggest_question",
-      label: "Wat is je grootste vraag aan jezelf op dit moment?",
-      type: "textarea",
-      required: true,
-      rows: 3,
-      placeholder: "Bijv. wie ben ik nu echt, los van wat anderen verwachten?",
-    },
-    {
-      name: "current_clarity",
-      label: "Hoe helder voelt je richting nu?",
-      type: "scale",
-      required: true,
-    },
-    {
-      name: "discovered_via",
-      label: "Hoe ken je The Beautiful Life?",
-      type: "select",
-      options: ["Instagram", "Via een vriend(in)", "Google", "Anders"],
-    },
-  ],
-
-  alignment: [
-    {
-      name: "life_situation",
-      label: "Beschrijf kort je huidige levenssituatie",
-      type: "textarea",
-      required: true,
-      rows: 3,
-      placeholder: "Werk, gezin, woonsituatie — wat je relevant vindt.",
-    },
-    {
-      name: "biggest_wish",
-      label: "Wat zou er over 6 maanden anders mogen zijn?",
-      type: "textarea",
-      required: true,
-      rows: 3,
-    },
-    {
-      name: "energy_level",
-      label: "Hoeveel energie ervaar je in een gemiddelde week?",
-      type: "scale",
-      required: true,
-    },
-    {
-      name: "balance_level",
-      label: "Hoe zit het met je balans tussen geven en ontvangen?",
-      type: "scale",
-      required: true,
-    },
-    {
-      name: "preferred_call_window",
-      label: "Wanneer ben je doorgaans goed bereikbaar voor een call?",
-      type: "select",
-      required: true,
-      options: [
-        "Doordeweeks overdag",
-        "Doordeweeks 's avonds",
-        "Weekend overdag",
-        "Flexibel",
-      ],
-    },
-  ],
-
-  experience: [
-    {
-      name: "address",
-      label: "Adres (voor het wellness pakket)",
+      name: "firstName",
+      label: tr(f.firstName, locale),
       type: "text",
       required: true,
-      placeholder: "Straat, huisnummer, postcode, woonplaats",
+      placeholder: tr(f.firstNamePlaceholder, locale),
+    },
+    {
+      name: "contact",
+      label: tr(f.contact, locale),
+      type: "email",
+      required: true,
+      placeholder: tr(f.contactPlaceholder, locale),
+    },
+    {
+      name: "phone",
+      label: tr(f.phone, locale),
+      type: "tel",
+      placeholder: tr(f.phonePlaceholder, locale),
+      hint: tr(f.phoneHint, locale),
+    },
+  ];
+}
+
+export function PACKAGE_INTAKE(
+  slug: PackageSlug,
+  locale: Locale
+): IntakeField[] {
+  const f = DICT.intake.fields;
+
+  if (slug === "ikigai") {
+    return [
+      {
+        name: "biggest_question",
+        label: tr(f.biggestQuestion, locale),
+        type: "textarea",
+        required: true,
+        rows: 3,
+        placeholder: tr(f.biggestQuestionPlaceholder, locale),
+      },
+      {
+        name: "current_clarity",
+        label: tr(f.currentClarity, locale),
+        type: "scale",
+        required: true,
+      },
+      {
+        name: "discovered_via",
+        label: tr(f.discoveredVia, locale),
+        type: "select",
+        options: [...f.discoveredViaOptions[locale]],
+      },
+    ];
+  }
+
+  if (slug === "alignment") {
+    return [
+      {
+        name: "life_situation",
+        label: tr(f.lifeSituation, locale),
+        type: "textarea",
+        required: true,
+        rows: 3,
+        placeholder: tr(f.lifeSituationPlaceholder, locale),
+      },
+      {
+        name: "biggest_wish",
+        label: tr(f.biggestWish, locale),
+        type: "textarea",
+        required: true,
+        rows: 3,
+      },
+      {
+        name: "energy_level",
+        label: tr(f.energyLevel, locale),
+        type: "scale",
+        required: true,
+      },
+      {
+        name: "balance_level",
+        label: tr(f.balanceLevel, locale),
+        type: "scale",
+        required: true,
+      },
+      {
+        name: "preferred_call_window",
+        label: tr(f.preferredCallWindow, locale),
+        type: "select",
+        required: true,
+        options: [...f.callWindowOptions[locale]],
+      },
+    ];
+  }
+
+  // experience
+  return [
+    {
+      name: "address",
+      label: tr(f.address, locale),
+      type: "text",
+      required: true,
+      placeholder: tr(f.addressPlaceholder, locale),
     },
     {
       name: "preferred_start",
-      label: "Gewenste startperiode",
+      label: tr(f.preferredStart, locale),
       type: "select",
       required: true,
-      options: [
-        "Komende 4 weken",
-        "Binnen 1–2 maanden",
-        "Binnen 3–6 maanden",
-        "Nog flexibel",
-      ],
+      options: [...f.startOptions[locale]],
     },
     {
       name: "diet_allergies",
-      label: "Dieetwensen of allergieën",
+      label: tr(f.dietAllergies, locale),
       type: "textarea",
       rows: 2,
-      placeholder: "Vegetarisch, glutenvrij, allergieën, etc. — of 'geen'.",
+      placeholder: tr(f.dietAllergiesPlaceholder, locale),
     },
     {
       name: "motivation",
-      label: "Wat maakt dat je nu kiest voor 8 dagen volledig voor jezelf?",
+      label: tr(f.motivation, locale),
       type: "textarea",
       required: true,
       rows: 5,
-      placeholder:
-        "Neem hier rustig de tijd. Hoe meer Marion vooraf van je weet, hoe persoonlijker de ervaring.",
+      placeholder: tr(f.motivationPlaceholder, locale),
     },
     {
       name: "emergency_contact",
-      label: "Noodcontact (naam + telefoon)",
+      label: tr(f.emergencyContact, locale),
       type: "text",
       required: true,
-      hint: "Iemand die we kunnen bereiken tijdens de Experience.",
+      hint: tr(f.emergencyContactHint, locale),
     },
-  ],
-};
+  ];
+}

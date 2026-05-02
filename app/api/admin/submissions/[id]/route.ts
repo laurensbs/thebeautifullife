@@ -65,7 +65,7 @@ export async function GET(
     ).length;
     workbooks.push({
       slug: String(a.workbook_slug),
-      title: wb?.title ?? String(a.workbook_slug),
+      title: wb?.title.nl ?? String(a.workbook_slug),
       access_token: String(a.access_token),
       created_at: String(a.created_at),
       last_seen_at: a.last_seen_at ? String(a.last_seen_at) : null,

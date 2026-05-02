@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { Mail } from "lucide-react";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { DICT } from "@/lib/i18n/dict";
+import { tr, type Locale } from "@/lib/i18n/types";
 
 function InstagramIcon({ size = 14 }: { size?: number }) {
   return (
@@ -22,13 +25,12 @@ function InstagramIcon({ size = 14 }: { size?: number }) {
   );
 }
 
-export default function SiteFooter() {
+export default function SiteFooter({ locale }: { locale: Locale }) {
   const year = new Date().getFullYear();
   return (
     <footer className="mt-16 sm:mt-24 bg-page-dark border-t border-line/40">
       <div className="max-w-[1180px] mx-auto px-6 py-12 sm:py-16">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12">
-          {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-2 max-w-sm">
             <div className="flex items-center gap-2.5 mb-4">
               <span className="w-8 h-8 rounded-full bg-sage flex items-center justify-center">
@@ -41,18 +43,16 @@ export default function SiteFooter() {
               </span>
             </div>
             <p className="font-script text-tan text-2xl mb-2">
-              the beginning of your beautiful life
+              {tr(DICT.footer.tagline, locale)}
             </p>
             <p className="text-ink-soft text-sm leading-[1.85]">
-              Voor vrouwen die verlangen naar rust, balans en een leven dat
-              goed voelt en moeiteloos begint te stromen.
+              {tr(DICT.footer.intro, locale)}
             </p>
           </div>
 
-          {/* Nav column */}
           <div>
             <p className="text-[11px] tracking-[0.22em] uppercase text-muted mb-4">
-              Ontdek
+              {tr(DICT.footer.discover, locale)}
             </p>
             <ul className="space-y-2.5 text-sm">
               <li>
@@ -60,7 +60,7 @@ export default function SiteFooter() {
                   href="/pakket/ikigai"
                   className="text-ink-soft hover:text-tan transition"
                 >
-                  The Ikigai Story
+                  {tr(DICT.packages.name.ikigai, locale)}
                 </Link>
               </li>
               <li>
@@ -68,7 +68,7 @@ export default function SiteFooter() {
                   href="/pakket/alignment"
                   className="text-ink-soft hover:text-tan transition"
                 >
-                  From Insight to Alignment
+                  {tr(DICT.packages.name.alignment, locale)}
                 </Link>
               </li>
               <li>
@@ -76,7 +76,7 @@ export default function SiteFooter() {
                   href="/pakket/experience"
                   className="text-ink-soft hover:text-tan transition"
                 >
-                  The Beautiful Life Experience
+                  {tr(DICT.packages.name.experience, locale)}
                 </Link>
               </li>
               <li className="pt-3 mt-3 border-t border-line/40">
@@ -84,16 +84,15 @@ export default function SiteFooter() {
                   href="/mijn-pad"
                   className="text-ink-soft hover:text-tan transition"
                 >
-                  Mijn pad
+                  {tr(DICT.nav.myPath, locale)}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact column */}
           <div>
             <p className="text-[11px] tracking-[0.22em] uppercase text-muted mb-4">
-              Contact
+              {tr(DICT.footer.contact, locale)}
             </p>
             <ul className="space-y-3 text-sm">
               <li>
@@ -112,27 +111,28 @@ export default function SiteFooter() {
                   rel="noopener noreferrer"
                   className="text-ink-soft hover:text-tan transition flex items-center gap-2"
                 >
-                  <span className="text-tan"><InstagramIcon /></span>
+                  <span className="text-tan">
+                    <InstagramIcon />
+                  </span>
                   @thebeautifullife
                 </a>
               </li>
             </ul>
 
-            <p className="font-script text-tan text-xl mt-6">liefs, Marion</p>
+            <p className="font-script text-tan text-xl mt-6">
+              {tr(DICT.footer.signoff, locale)}
+            </p>
           </div>
         </div>
 
-        {/* Bottom strip */}
         <div className="mt-12 pt-6 border-t border-line/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-[11px] text-muted">
           <p>© {year} The Beautiful Life · Marion Lubach</p>
           <div className="flex items-center gap-5">
             <Link href="/privacy" className="hover:text-tan transition">
-              Privacy
+              {tr(DICT.footer.privacy, locale)}
             </Link>
             <span className="text-muted/40">·</span>
-            <span className="tracking-[0.22em] uppercase">
-              NL <span className="text-tan/40">·</span> EN
-            </span>
+            <LanguageSwitcher current={locale} variant="footer" />
           </div>
         </div>
       </div>

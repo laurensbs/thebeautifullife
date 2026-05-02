@@ -1,25 +1,20 @@
-"use client";
-
-import { usePathname } from "next/navigation";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
+import ChromeRouter from "./ChromeRouter";
+import { getLocale } from "@/lib/i18n/server";
 
-// Pagina's met eigen chrome (admin paneel, werkboek-renderer, vragenlijst)
-// krijgen geen site-header/footer.
-const HIDE_PREFIXES = ["/admin", "/werkboek/", "/vragenlijst"];
-
-export default function ChromeGate({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname() || "/";
-  const hide = HIDE_PREFIXES.some(
-    (p) => pathname === p || pathname.startsWith(p)
-  );
-  if (hide) return <>{children}</>;
-
+export default async function ChromeGate({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const locale = await getLocale();
   return (
-    <>
-      <SiteHeader />
-      <div className="flex-1 flex flex-col">{children}</div>
-      <SiteFooter />
-    </>
+    <ChromeRouter
+      header={<SiteHeader locale={locale} />}
+      footer={<SiteFooter locale={locale} />}
+    >
+      {children}
+    </ChromeRouter>
   );
 }

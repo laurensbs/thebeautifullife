@@ -31,12 +31,25 @@ export default function IntakeForm({
   baseFields,
   packageFields,
   submitLabel,
+  consentText,
+  errorPrefix,
+  submittingLabel,
+  scaleLow,
+  scaleHigh,
+  chooseLabel,
 }: {
   pkgSlug: PackageSlug;
   accent: "sage" | "tan" | "gold";
   baseFields: IntakeField[];
   packageFields: IntakeField[];
   submitLabel: string;
+  consentText: string;
+  errorPrefix: string;
+  submittingLabel: string;
+  scaleLow: string;
+  scaleHigh: string;
+  chooseLabel: string;
+  requiredAffix?: string;
 }) {
   const router = useRouter();
   const [values, setValues] = useState<Record<string, string | number>>({});
@@ -54,7 +67,7 @@ export default function IntakeForm({
 
     for (const f of allFields) {
       if (f.required && !String(values[f.name] ?? "").trim()) {
-        setError(`Vul "${f.label}" in om door te gaan.`);
+        setError(`${errorPrefix} (${f.label})`);
         return;
       }
     }
@@ -80,11 +93,11 @@ export default function IntakeForm({
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Er ging iets mis.");
+        throw new Error(data.error || "Error");
       }
       router.push(`/bedankt?pkg=${pkgSlug}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Er ging iets mis.");
+      setError(err instanceof Error ? err.message : "Error");
       setSubmitting(false);
     }
   };
@@ -98,6 +111,9 @@ export default function IntakeForm({
           value={values[f.name] ?? ""}
           onChange={(v) => setField(f.name, v)}
           accent={accent}
+          scaleLow={scaleLow}
+          scaleHigh={scaleHigh}
+          chooseLabel={chooseLabel}
         />
       ))}
 
@@ -117,12 +133,11 @@ export default function IntakeForm({
         className={`w-full mt-2 px-6 py-4 rounded-[3px] text-white font-serif text-lg tracking-[0.06em] shadow-[0_6px_18px_rgba(60,50,30,0.12)] hover:shadow-[0_12px_26px_rgba(60,50,30,0.18)] transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${ACCENT[accent]}`}
       >
         {submitting && <Loader2 size={18} className="animate-spin" />}
-        {submitting ? "Bezig met verzenden…" : submitLabel}
+        {submitting ? submittingLabel : submitLabel}
       </button>
 
       <p className="text-[11px] text-muted text-center mt-3 leading-relaxed">
-        Door te versturen ga je akkoord dat Marion contact met je opneemt over
-        dit pakket. Je gegevens worden niet gedeeld met derden.
+        {consentText}
       </p>
     </form>
   );
@@ -133,11 +148,17 @@ function Field({
   value,
   onChange,
   accent,
+  scaleLow,
+  scaleHigh,
+  chooseLabel,
 }: {
   field: IntakeField;
   value: string | number;
   onChange: (v: string | number) => void;
   accent: "sage" | "tan" | "gold";
+  scaleLow: string;
+  scaleHigh: string;
+  chooseLabel: string;
 }) {
   const accentBar =
     accent === "sage" ? "bg-sage" : accent === "tan" ? "bg-tan" : "bg-gold";
@@ -168,7 +189,7 @@ function Field({
           onChange={(e) => onChange(e.target.value)}
           className={baseInput}
         >
-          <option value="">— kies —</option>
+          <option value="">{chooseLabel}</option>
           {field.options?.map((o) => (
             <option key={o} value={o}>
               {o}
@@ -179,7 +200,7 @@ function Field({
 
       {field.type === "scale" && (
         <div>
-          <div className="flex gap-1.5 mt-1">
+          <div className="flex gap-1 sm:gap-1.5 mt-1">
             {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => {
               const active = Number(value) === n;
               return (
@@ -199,8 +220,8 @@ function Field({
             })}
           </div>
           <div className="flex justify-between text-[10px] text-muted mt-1.5 px-0.5">
-            <span>helemaal niet</span>
-            <span>helemaal wel</span>
+            <span>{scaleLow}</span>
+            <span>{scaleHigh}</span>
           </div>
         </div>
       )}
@@ -219,7 +240,9 @@ function Field({
       )}
 
       {field.hint && (
-        <p className="text-[11px] text-muted mt-1.5 leading-snug">{field.hint}</p>
+        <p className="text-[11px] text-muted mt-1.5 leading-snug">
+          {field.hint}
+        </p>
       )}
     </div>
   );

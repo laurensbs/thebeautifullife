@@ -3,6 +3,8 @@ import { sql } from "./db";
 import { PACKAGE_WORKBOOKS, getWorkbook } from "./workbooks";
 import { sendWorkbookInvite } from "./email";
 import type { PackageSlug } from "./packages";
+import { tx } from "./workbooks/types";
+import type { Locale } from "./i18n/types";
 
 export type GrantedWorkbook = {
   slug: string;
@@ -16,7 +18,8 @@ export async function grantWorkbooksForPackage(
   pkg: PackageSlug,
   email: string,
   firstName: string,
-  siteUrl: string
+  siteUrl: string,
+  locale: Locale = "nl"
 ): Promise<GrantedWorkbook[]> {
   const slugs = PACKAGE_WORKBOOKS[pkg] ?? [];
   const granted: GrantedWorkbook[] = [];
@@ -45,11 +48,12 @@ export async function grantWorkbooksForPackage(
     }
 
     const url = `${siteUrl}/werkboek/${slug}?token=${token}`;
-    granted.push({ slug, title: workbook.title, url, isNew });
+    const title = tx(workbook.title, locale);
+    granted.push({ slug, title, url, isNew });
 
     if (isNew) {
       try {
-        await sendWorkbookInvite(email, firstName, workbook.title, url);
+        await sendWorkbookInvite(email, firstName, title, url, locale);
       } catch (err) {
         console.error("sendWorkbookInvite failed:", err);
       }

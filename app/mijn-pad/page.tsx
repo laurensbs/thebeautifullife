@@ -4,12 +4,15 @@ import { sql } from "@/lib/db";
 import { getClientSession } from "@/lib/client-auth";
 import {
   PACKAGES,
-  STATUS_LABELS,
   isPackageSlug,
   type PackageStatus,
   type PackageSlug,
 } from "@/lib/packages";
 import { getWorkbook, workbookFieldKeys, PACKAGE_WORKBOOKS } from "@/lib/workbooks";
+import { getLocale } from "@/lib/i18n/server";
+import { DICT } from "@/lib/i18n/dict";
+import { tr, type Locale } from "@/lib/i18n/types";
+import { tx } from "@/lib/workbooks/types";
 import {
   Heart,
   CheckCircle,
@@ -78,6 +81,25 @@ const euros = (cents: number | null) =>
 export default async function MijnPad() {
   const session = await getClientSession();
   if (!session) redirect("/mijn-pad/login");
+  const locale = await getLocale();
+  const fmtDateLocale = (s: string | null) =>
+    s
+      ? new Date(s).toLocaleDateString(locale === "en" ? "en-GB" : "nl-NL", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
+      : "—";
+  const fmtDateTimeLocale = (s: string | null) =>
+    s
+      ? new Date(s).toLocaleDateString(locale === "en" ? "en-GB" : "nl-NL", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "—";
 
   const subs = (await sql`
     SELECT id, first_name, contact, phone, package, status, created_at, paid_at,
@@ -114,18 +136,18 @@ export default async function MijnPad() {
         <div className="absolute top-6 right-6 flex items-center gap-2">
           {isTestMode && (
             <span className="text-[10px] tracking-[0.18em] uppercase bg-amber-100 text-amber-800 border border-amber-300 px-2 py-1 rounded">
-              Test-modus
+              {tr(DICT.common.testMode, locale)}
             </span>
           )}
           <a
             href="/api/client/logout"
             className="flex items-center gap-1.5 text-[11px] tracking-[0.18em] uppercase text-ink-soft hover:text-tan transition px-2 py-1"
           >
-            <LogOut size={12} /> Uit
+            <LogOut size={12} /> {tr(DICT.common.logout, locale)}
           </a>
         </div>
 
-        <p className="font-script text-tan text-3xl">welkom terug,</p>
+        <p className="font-script text-tan text-3xl">{tr(DICT.portal.welcomeBack, locale)}</p>
         <h1 className="font-serif font-medium text-3xl sm:text-4xl tracking-[0.06em] uppercase mt-1 text-ink">
           {session.firstName}
         </h1>
@@ -137,27 +159,24 @@ export default async function MijnPad() {
         </div>
 
         <p className="text-ink-soft text-[15px] leading-[1.85] max-w-md">
-          Hier vind je jouw pad — de pakketten waarop je bent ingeschreven, je
-          werkboeken, en alles wat we samen gaande hebben.
+          {tr(DICT.portal.intro, locale)}
         </p>
       </div>
 
       <div className="grid lg:grid-cols-[1.7fr_1fr] gap-6 sm:gap-7 items-start">
-        {/* Left column — paths */}
         <div className="space-y-5">
           <h2 className="font-serif font-medium tracking-[0.22em] uppercase text-sm text-ink mb-1">
-            Mijn pad
+            {tr(DICT.portal.myPath, locale)}
           </h2>
 
           {subs.length === 0 && (
             <div className="bg-page-soft rounded-[6px] px-8 py-10 text-center text-ink-soft">
               <Sparkles className="text-tan mx-auto mb-3" size={22} />
-              <p className="font-script text-tan text-2xl">Nog geen pakket gestart.</p>
+              <p className="font-script text-tan text-2xl">{tr(DICT.portal.noPackagesYet, locale)}</p>
               <p className="mt-2 text-sm">
                 <Link href="/" className="underline hover:text-tan">
-                  Bekijk de drie paden
-                </Link>{" "}
-                en kies wanneer jij eraan toe bent.
+                  {tr(DICT.portal.seeThreePaths, locale)}
+                </Link>
               </p>
             </div>
           )}
@@ -209,13 +228,24 @@ export default async function MijnPad() {
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <p className="font-script text-tan text-xl">
-                        {pkg?.kicker ?? "Aanmelding"}
+                        {pkg
+                          ? tr(
+                              DICT.packages[
+                                pkg.slug === "ikigai"
+                                  ? "kicker1"
+                                  : pkg.slug === "alignment"
+                                    ? "kicker2"
+                                    : "kicker3"
+                              ] as { nl: string; en: string },
+                              locale
+                            )
+                          : tr(DICT.portal.enrolled, locale)}
                       </p>
                       <h3 className="font-serif font-medium text-xl sm:text-2xl tracking-[0.08em] uppercase text-ink mt-1">
-                        {pkg?.name ?? "—"}
+                        {pkg ? tr(DICT.packages.name[pkg.slug], locale) : "—"}
                       </h3>
                       <p className="text-[11px] tracking-[0.18em] uppercase text-muted mt-2">
-                        Aangemeld {fmtDate(sub.created_at)}
+                        {tr(DICT.portal.enrolled, locale)} {fmtDateLocale(sub.created_at)}
                       </p>
                     </div>
                     <div className="text-right">
@@ -230,8 +260,8 @@ export default async function MijnPad() {
                         }`}
                       >
                         {sub.paid_at || effectiveStatus === "betaald"
-                          ? "Voldaan"
-                          : "Open"}
+                          ? tr(DICT.portal.paid, locale)
+                          : tr(DICT.portal.open, locale)}
                         {isTestMode &&
                           (sub.paid_at || effectiveStatus === "betaald") && (
                             <span className="ml-1 normal-case tracking-normal text-amber-700">
@@ -246,7 +276,7 @@ export default async function MijnPad() {
                   {pkg && (
                     <div className="mt-7">
                       <p className="text-[10px] tracking-[0.22em] uppercase text-muted mb-3">
-                        Voortgang
+                        {tr(DICT.portal.progress, locale)}
                       </p>
                       <ol className="flex flex-wrap items-center gap-x-1 gap-y-3">
                         {flow.map((step, i) => {
@@ -285,7 +315,10 @@ export default async function MijnPad() {
                               <span
                                 className={`text-[11px] ${current ? "text-ink font-medium" : reached ? "text-ink-soft" : "text-muted"}`}
                               >
-                                {STATUS_LABELS[step]}
+                                {tr(
+                                  DICT.status[step] as { nl: string; en: string },
+                                  locale
+                                )}
                               </span>
                               {i < flow.length - 1 && (
                                 <span className="hidden sm:inline-block w-5 h-px bg-line mx-1" />
@@ -303,14 +336,14 @@ export default async function MijnPad() {
                       {sub.scheduled_at && (
                         <InfoRow
                           icon={<CalendarClock size={14} className="text-tan" />}
-                          label="Geplande call"
-                          value={fmtDateTime(sub.scheduled_at)}
+                          label={tr(DICT.portal.scheduledCall, locale)}
+                          value={fmtDateTimeLocale(sub.scheduled_at)}
                         />
                       )}
                       {sub.zoom_meeting_url && (
                         <InfoRow
                           icon={<Video size={14} className="text-tan" />}
-                          label="Zoom-link"
+                          label={tr(DICT.portal.zoomLink, locale)}
                           value={
                             <a
                               href={sub.zoom_meeting_url}
@@ -332,6 +365,7 @@ export default async function MijnPad() {
                     workbookRows={wbRows.filter(
                       (w) => session.submissionIds.includes(sub.id)
                     )}
+                    locale={locale}
                   />
 
                   {/* Vragenlijst (alleen pakket 1) */}
@@ -340,7 +374,7 @@ export default async function MijnPad() {
                       href={`/vragenlijst`}
                       className="mt-5 inline-flex items-center gap-1.5 text-tan hover:text-tan/80 text-sm group"
                     >
-                      Vul je reflectievragenlijst in
+                      {tr(DICT.portal.fillQuestionnaire, locale)}
                       <ArrowRight
                         size={14}
                         className="group-hover:translate-x-0.5 transition"
@@ -356,26 +390,26 @@ export default async function MijnPad() {
         {/* Right column — profile */}
         <aside className="space-y-5">
           <h2 className="font-serif font-medium tracking-[0.22em] uppercase text-sm text-ink mb-1">
-            Mijn gegevens
+            {tr(DICT.portal.myDetails, locale)}
           </h2>
           <div className="bg-page-soft rounded-[6px] px-5 py-6 sm:px-7 sm:py-7 shadow-[0_18px_48px_rgba(60,50,30,0.08)] space-y-4">
             <p className="font-script text-tan text-2xl">{session.firstName}</p>
             <div className="space-y-3">
               <InfoRow
                 icon={<Mail size={13} className="text-tan" />}
-                label="E-mail"
+                label={tr(DICT.portal.email, locale)}
                 value={session.email}
               />
               {profile?.phone && (
                 <InfoRow
                   icon={<Phone size={13} className="text-tan" />}
-                  label="Telefoon"
+                  label={tr(DICT.portal.phone, locale)}
                   value={profile.phone}
                 />
               )}
             </div>
             <p className="text-[11px] text-muted leading-relaxed pt-3 border-t border-line/40">
-              Wijzigingen doorgeven? Mail{" "}
+              {tr(DICT.portal.detailsHint, locale)}{" "}
               <a
                 href="mailto:contact@thebeautifullife.nl"
                 className="text-tan underline"
@@ -391,14 +425,13 @@ export default async function MijnPad() {
               ✿ The Beautiful Life
             </p>
             <p className="text-ink-soft text-sm leading-[1.85]">
-              Wil je een ander pad starten? Bekijk de drie pakketten en kies wanneer
-              jij eraan toe bent.
+              {tr(DICT.portal.askAnotherPath, locale)}
             </p>
             <Link
               href="/"
               className="inline-flex items-center gap-1.5 mt-4 text-tan hover:text-tan/80 text-sm group"
             >
-              Bekijk de pakketten
+              {tr(DICT.portal.seePackages, locale)}
               <ArrowRight
                 size={14}
                 className="group-hover:translate-x-0.5 transition"
@@ -436,9 +469,11 @@ function InfoRow({
 function PackageWorkbooks({
   pkgSlug,
   workbookRows,
+  locale,
 }: {
   pkgSlug: PackageSlug | null;
   workbookRows: WorkbookRow[];
+  locale: Locale;
 }) {
   if (!pkgSlug) return null;
   const slugs = PACKAGE_WORKBOOKS[pkgSlug] ?? [];
@@ -447,7 +482,7 @@ function PackageWorkbooks({
   return (
     <div className="mt-6">
       <p className="text-[10px] tracking-[0.22em] uppercase text-muted mb-2 flex items-center gap-1.5">
-        <BookOpen size={11} /> Werkboek
+        <BookOpen size={11} /> {tr(DICT.portal.workbook, locale)}
       </p>
       <div className="space-y-2">
         {slugs.map((s) => {
@@ -463,7 +498,7 @@ function PackageWorkbooks({
               className="bg-page rounded-md px-4 py-3 flex items-center gap-4"
             >
               <div className="flex-1 min-w-0">
-                <p className="font-serif text-ink text-[15px]">{wb.title}</p>
+                <p className="font-serif text-ink text-[15px]">{tx(wb.title, locale)}</p>
                 <div className="flex items-center gap-2 mt-1.5">
                   <div className="flex-1 h-1.5 bg-line/40 rounded-full overflow-hidden">
                     <div
@@ -472,7 +507,7 @@ function PackageWorkbooks({
                     />
                   </div>
                   <span className="text-[11px] text-tan w-20 text-right font-medium">
-                    {filled}/{total} velden
+                    {filled}/{total} {tr(DICT.portal.fields, locale)}
                   </span>
                 </div>
               </div>
@@ -484,7 +519,7 @@ function PackageWorkbooks({
                 }
                 className="text-[11px] tracking-[0.18em] uppercase bg-ink hover:brightness-110 text-white px-3 py-2 rounded transition"
               >
-                Open
+                {tr(DICT.portal.open, locale)}
               </Link>
             </div>
           );

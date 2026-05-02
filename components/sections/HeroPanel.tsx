@@ -3,18 +3,19 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Sun, Leaf, Heart, Sparkles } from "lucide-react";
+import { DICT } from "@/lib/i18n/dict";
+import { tr, type Locale } from "@/lib/i18n/types";
 
-const FEATURES = [
-  { icon: Sun, label: "More Clarity" },
-  { icon: Leaf, label: "More Balance" },
-  { icon: Heart, label: "More Freedom" },
-  { icon: Sparkles, label: "More You" },
-];
+export default function HeroPanel({ locale }: { locale: Locale }) {
+  const FEATURES = [
+    { icon: Sun, label: tr(DICT.hero.feat.clarity, locale) },
+    { icon: Leaf, label: tr(DICT.hero.feat.balance, locale) },
+    { icon: Heart, label: tr(DICT.hero.feat.freedom, locale) },
+    { icon: Sparkles, label: tr(DICT.hero.feat.you, locale) },
+  ];
 
-export default function HeroPanel() {
   return (
     <section className="relative bg-page-soft rounded-[6px] overflow-hidden shadow-[0_12px_40px_rgba(60,50,30,0.08)] grid lg:grid-cols-[1fr_1.05fr]">
-      {/* Text */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -39,22 +40,17 @@ export default function HeroPanel() {
         </div>
 
         <p className="font-sans text-[12px] sm:text-[13px] tracking-[0.28em] sm:tracking-[0.32em] uppercase text-ink">
-          3 Paths. One Goal.
+          {tr(DICT.hero.threePaths, locale)}
           <strong className="block font-medium text-tan tracking-[0.28em] sm:tracking-[0.32em] mt-1.5">
-            Your Ideal Life.
+            {tr(DICT.hero.yourIdealLife, locale)}
           </strong>
         </p>
 
         <p className="mt-6 max-w-[360px] text-ink-soft text-[14px] sm:text-[15px] leading-[1.7] pb-8 lg:pb-16">
-          Van helderheid tot transformatie.
-          <br className="hidden sm:block" />
-          {" "}Ik help je een leven te ontwerpen
-          <br className="hidden sm:block" />
-          {" "}dat aanvoelt als jouw thuis.
+          {tr(DICT.hero.lead, locale)}
         </p>
       </motion.div>
 
-      {/* Image */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -63,7 +59,7 @@ export default function HeroPanel() {
       >
         <Image
           src="https://u.cubeupload.com/laurensbos/beautifullife.png"
-          alt="The Beautiful Life — een vrouw in rust en balans"
+          alt={tr(DICT.hero.imageAlt, locale)}
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 55vw"
@@ -71,7 +67,6 @@ export default function HeroPanel() {
         />
       </motion.div>
 
-      {/* Sage feature bar */}
       <div className="lg:absolute lg:left-[46%] lg:right-0 lg:bottom-0 bg-sage text-white grid grid-cols-2 sm:grid-cols-4 gap-y-3 px-4 sm:px-6 lg:px-8 py-4 lg:rounded-tl-[4px]">
         {FEATURES.map(({ icon: Icon, label }) => (
           <div

@@ -5,8 +5,10 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import "@/components/workbook/workbook.css";
+import { DICT } from "@/lib/i18n/dict";
+import { tr, type Locale } from "@/lib/i18n/types";
 
-export default function LoginForm() {
+export default function LoginForm({ locale }: { locale: Locale }) {
   const params = useSearchParams();
   const slug = params.get("slug");
   const errorParam = params.get("error");
@@ -27,22 +29,22 @@ export default function LoginForm() {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Er ging iets mis.");
+        throw new Error(data.error || "Error");
       }
       setSent(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Er ging iets mis.");
+      setError(err instanceof Error ? err.message : "Error");
     }
     setSubmitting(false);
   };
 
   const errorMessage =
     errorParam === "expired"
-      ? "Deze link is verlopen. Vraag een nieuwe aan."
+      ? tr(DICT.workbook.loginErrorExpired, locale)
       : errorParam === "invalid"
-        ? "Deze link is niet meer geldig."
+        ? tr(DICT.workbook.loginErrorInvalid, locale)
         : errorParam === "noaccess"
-          ? "Geen werkboek gevonden bij dit e-mailadres."
+          ? tr(DICT.workbook.loginErrorNoAccess, locale)
           : null;
 
   return (
@@ -58,9 +60,9 @@ export default function LoginForm() {
           textAlign: "center",
         }}
       >
-        <p className="wb-kicker">welkom terug</p>
+        <p className="wb-kicker">{tr(DICT.workbook.loginKicker, locale)}</p>
         <h1 className="wb-title wb-title--md" style={{ marginTop: 6 }}>
-          Open jouw werkboek
+          {tr(DICT.workbook.loginTitle, locale)}
         </h1>
 
         <div className="wb-rule wb-rule--center">
@@ -76,18 +78,16 @@ export default function LoginForm() {
             transition={{ duration: 0.6 }}
           >
             <p className="wb-script" style={{ fontSize: 28, marginTop: 18 }}>
-              Check je inbox.
+              {tr(DICT.workbook.loginInbox, locale)}
             </p>
             <p
               className="wb-lead wb-lead--center"
               style={{ marginTop: 16, fontSize: 14 }}
             >
-              Als dit e-mailadres bekend is, hebben we
-              <br />
-              je een persoonlijke link gestuurd.
+              {tr(DICT.workbook.loginInboxBody, locale)}
               <br />
               <br />
-              <em>De link blijft 30 minuten geldig.</em>
+              <em>{tr(DICT.workbook.loginValid, locale)}</em>
             </p>
           </motion.div>
         ) : (
@@ -119,7 +119,7 @@ export default function LoginForm() {
                 fontWeight: 500,
               }}
             >
-              Je e-mailadres
+              {tr(DICT.common.yourEmail, locale)}
             </label>
             <input
               type="email"
@@ -158,15 +158,14 @@ export default function LoginForm() {
                   style={{ marginRight: 8, verticalAlign: -2 }}
                 />
               )}
-              Stuur mij de link
+              {tr(DICT.workbook.loginCta, locale)}
             </button>
 
             <p
               className="wb-lead wb-lead--center"
               style={{ marginTop: 18, fontSize: 12, color: "var(--color-muted)" }}
             >
-              We sturen je een veilige link.<br />
-              Geen wachtwoord, geen gedoe.
+              {tr(DICT.workbook.loginNoPassword, locale)}
             </p>
           </form>
         )}

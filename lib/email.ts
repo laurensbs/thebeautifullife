@@ -123,8 +123,23 @@ export async function sendWorkbookInvite(
   to: string,
   firstName: string,
   workbookTitle: string,
-  workbookUrl: string
+  workbookUrl: string,
+  locale: "nl" | "en" = "nl"
 ) {
+  const isEn = locale === "en";
+  const subj = isEn
+    ? `${firstName}, your workbook "${workbookTitle}" is ready ♡`
+    : `${firstName}, jouw werkboek "${workbookTitle}" staat klaar ♡`;
+  const intro = isEn ? `for you, ${firstName}` : `voor jou, ${firstName}`;
+  const body = isEn
+    ? `Your workbook is ready.<br/>Take your time. Fill it in at your own pace.<br/>Everything is saved automatically.`
+    : `Je werkboek staat voor je klaar.<br/>Neem de tijd. Vul in jouw tempo in.<br/>Alles wordt automatisch bewaard.`;
+  const cta = isEn ? "OPEN MY WORKBOOK" : "OPEN MIJN WERKBOEK";
+  const note = isEn
+    ? `Save this email. The link keeps working so you can return<br/>where you left off.`
+    : `Bewaar deze e-mail. De link blijft werken zodat je later<br/>verder kunt waar je was gebleven.`;
+  const sign = isEn ? "with love, Marion" : "liefs, Marion";
+
   const html = `
     <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; background: #f6f1e7; padding: 40px 30px; border-radius: 16px;">
       <div style="text-align: center; margin-bottom: 24px;">
@@ -133,30 +148,21 @@ export async function sendWorkbookInvite(
       <h1 style="font-family: Georgia, serif; color: #2a2a28; font-weight: 400; font-size: 28px; text-align: center; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px;">
         ${workbookTitle}
       </h1>
-      <p style="text-align: center; color: #b6906a; font-family: cursive; font-size: 22px; margin-top: 0;">voor jou, ${firstName}</p>
-      <p style="color: #4a4a45; font-size: 15px; line-height: 1.85; text-align: center; margin: 28px 0;">
-        Je werkboek staat voor je klaar.<br/>
-        Neem de tijd. Vul in jouw tempo in.<br/>
-        Alles wordt automatisch bewaard.
-      </p>
+      <p style="text-align: center; color: #b6906a; font-family: cursive; font-size: 22px; margin-top: 0;">${intro}</p>
+      <p style="color: #4a4a45; font-size: 15px; line-height: 1.85; text-align: center; margin: 28px 0;">${body}</p>
       <div style="text-align: center; margin: 32px 0;">
         <a href="${workbookUrl}" style="display: inline-block; background: #2a2a28; color: white; padding: 14px 36px; border-radius: 3px; text-decoration: none; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;">
-          OPEN MIJN WERKBOEK
+          ${cta}
         </a>
       </div>
-      <p style="color: #8a8270; font-size: 12px; text-align: center; line-height: 1.6;">
-        Bewaar deze e-mail. De link blijft werken zodat je later<br/>
-        verder kunt waar je was gebleven.
-      </p>
-      <p style="text-align: center; font-family: cursive; color: #b6906a; font-size: 22px; margin-top: 24px;">
-        liefs, Marion
-      </p>
+      <p style="color: #8a8270; font-size: 12px; text-align: center; line-height: 1.6;">${note}</p>
+      <p style="text-align: center; font-family: cursive; color: #b6906a; font-size: 22px; margin-top: 24px;">${sign}</p>
     </div>
   `;
   await transporter.sendMail({
     from: `"The Beautiful Life" <${process.env.SMTP_FROM}>`,
     to,
-    subject: `${firstName}, jouw werkboek "${workbookTitle}" staat klaar ♡`,
+    subject: subj,
     html,
   });
 }

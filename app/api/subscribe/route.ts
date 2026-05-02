@@ -6,6 +6,7 @@ import {
 } from "@/lib/email";
 import { PACKAGES, isPackageSlug } from "@/lib/packages";
 import { grantWorkbooksForPackage } from "@/lib/workbook-grants";
+import { getLocale } from "@/lib/i18n/server";
 import crypto from "crypto";
 
 export async function POST(request: NextRequest) {
@@ -75,12 +76,14 @@ export async function POST(request: NextRequest) {
     // Grant access to the workbook(s) belonging to this package + send invite mail.
     if (slug) {
       try {
+        const locale = await getLocale();
         await grantWorkbooksForPackage(
           Number(result[0].id),
           slug,
           email,
           name,
-          siteUrl
+          siteUrl,
+          locale
         );
       } catch (err) {
         console.error("grantWorkbooksForPackage failed:", err);

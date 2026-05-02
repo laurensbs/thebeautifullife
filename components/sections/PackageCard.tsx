@@ -4,6 +4,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import type { PACKAGES } from "@/lib/packages";
+import { DICT } from "@/lib/i18n/dict";
+import { tr, type Locale } from "@/lib/i18n/types";
 
 type Pkg = (typeof PACKAGES)[keyof typeof PACKAGES];
 
@@ -13,13 +15,29 @@ const ACCENT_BG: Record<Pkg["accent"], string> = {
   gold: "bg-gold hover:brightness-95",
 };
 
+const KICKER: Record<Pkg["slug"], keyof typeof DICT.packages> = {
+  ikigai: "kicker1",
+  alignment: "kicker2",
+  experience: "kicker3",
+};
+
 export default function PackageCard({
   pkg,
   index,
+  locale,
 }: {
   pkg: Pkg;
   index: number;
+  locale: Locale;
 }) {
+  const slug = pkg.slug;
+  const nameLines = DICT.packages.nameLines[slug][locale];
+  const tagline = tr(DICT.packages.tagline[slug], locale);
+  const quote = tr(DICT.packages.quote[slug], locale);
+  const features = DICT.packages.features[slug][locale];
+  const kickerKey = KICKER[slug];
+  const kicker = tr(DICT.packages[kickerKey] as { nl: string; en: string }, locale);
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
@@ -33,12 +51,10 @@ export default function PackageCard({
       whileHover={{ y: -6 }}
       className="relative bg-page-soft rounded-[6px] overflow-hidden shadow-[0_12px_40px_rgba(60,50,30,0.08)] hover:shadow-[0_22px_50px_rgba(60,50,30,0.14)] transition-shadow duration-500 flex flex-col"
     >
-      {/* Number badge */}
       <span className="absolute top-3.5 left-1/2 -translate-x-1/2 z-10 w-9 h-9 rounded-full bg-page-soft border border-tan text-tan font-serif text-lg font-medium flex items-center justify-center">
         {pkg.number}
       </span>
 
-      {/* Image */}
       <div
         className={`h-[200px] sm:h-[240px] lg:h-[260px] flex items-center justify-center text-white/70 font-serif tracking-[0.2em] text-sm bg-gradient-to-br from-page-dark to-line ${
           pkg.number === 3 ? "rounded-bl-[60px] rounded-br-[60px]" : ""
@@ -47,22 +63,21 @@ export default function PackageCard({
         PACKAGE {pkg.number} IMAGE
       </div>
 
-      {/* Body */}
       <div className="px-6 sm:px-8 lg:px-9 py-7 sm:py-8 lg:py-9 text-center flex flex-col flex-1">
         <p className="font-script text-tan text-2xl font-normal mb-2.5">
-          {pkg.kicker}
+          {kicker}
         </p>
         <h3 className="font-serif font-medium text-[22px] tracking-[0.18em] uppercase leading-tight text-ink">
-          {pkg.nameLines[0]}
-          {pkg.nameLines[1] && (
+          {nameLines[0]}
+          {nameLines[1] && (
             <>
               <br />
-              {pkg.nameLines[1]}
+              {nameLines[1]}
             </>
           )}
         </h3>
         <p className="mt-3.5 text-[11px] tracking-[0.18em] uppercase text-ink-soft leading-[1.7]">
-          {pkg.tagline}
+          {tagline}
         </p>
 
         <div className="my-5 flex items-center justify-center gap-2 text-tan">
@@ -72,7 +87,7 @@ export default function PackageCard({
         </div>
 
         <ul className="mx-auto max-w-[280px] text-left flex flex-col gap-2.5 text-[14px] text-ink">
-          {pkg.features.map((f) => (
+          {features.map((f) => (
             <li key={f} className="flex gap-2.5 leading-snug">
               <span className="flex-none w-4 h-4 rounded-full border border-tan inline-flex items-center justify-center mt-0.5">
                 <Check size={9} strokeWidth={2.2} className="text-tan" />
@@ -90,7 +105,7 @@ export default function PackageCard({
         </Link>
 
         <p className="mt-5 font-script text-tan text-xl leading-snug">
-          {pkg.quote}
+          {quote}
         </p>
       </div>
     </motion.article>

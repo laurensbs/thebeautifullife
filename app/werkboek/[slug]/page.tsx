@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { sql } from "@/lib/db";
 import { getSessionByToken, getWorkbookSession, setWorkbookCookie } from "@/lib/workbook-auth";
 import { getWorkbook } from "@/lib/workbooks";
+import { getLocale } from "@/lib/i18n/server";
 import WorkbookView from "@/components/workbook/WorkbookView";
 
 export const dynamic = "force-dynamic";
@@ -39,11 +40,14 @@ export default async function WorkbookPage({
   const answers: Record<string, string> = {};
   for (const r of rows) answers[String(r.field_key)] = String(r.value ?? "");
 
+  const locale = await getLocale();
+
   return (
     <WorkbookView
       workbook={workbook}
       firstName={session.firstName}
       initialAnswers={answers}
+      initialLocale={locale}
     />
   );
 }

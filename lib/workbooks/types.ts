@@ -1,46 +1,65 @@
 // Each workbook page is a small DSL of blocks.
-// The renderer turns this into JSX in components/workbook/WorkbookRenderer.tsx.
+// Strings are Translatable so the renderer can pick the locale at render time.
+
+import type { Locale } from "@/lib/i18n/types";
+
+export type Translatable<T = string> = { nl: T; en: T };
+
+export const tx = <T,>(value: Translatable<T>, locale: Locale): T =>
+  value[locale] ?? value.nl;
 
 export type Block =
-  | { type: "kicker"; text: string } // Pinyon script word in tan
-  | { type: "eyebrow"; text: string } // small uppercase tracking label
-  | { type: "title"; text: string; size?: "xl" | "lg" | "md" | "sm"; lines?: string[] }
+  | { type: "kicker"; text: Translatable }
+  | { type: "eyebrow"; text: Translatable }
+  | {
+      type: "title";
+      text: Translatable;
+      size?: "xl" | "lg" | "md" | "sm";
+      lines?: Translatable<string[]>;
+    }
   | { type: "rule"; align?: "center" | "left"; long?: boolean }
-  | { type: "audioCue"; text: string }
-  | { type: "lead"; paragraphs: string[]; center?: boolean; airy?: boolean }
-  | { type: "scriptLine"; text: string; size?: number } // Pinyon line within prose
-  | { type: "breath"; text: string } // big script "adem in. adem uit."
-  | { type: "questions"; items: string[] }
+  | { type: "audioCue"; text: Translatable }
+  | { type: "lead"; paragraphs: Translatable<string[]>; center?: boolean; airy?: boolean }
+  | { type: "scriptLine"; text: Translatable; size?: number }
+  | { type: "breath"; text: Translatable }
+  | { type: "questions"; items: Translatable<string[]> }
   | {
       type: "field";
-      key: string; // unique within page
-      placeholder?: string;
+      key: string;
+      placeholder?: Translatable;
       size?: "sm" | "md" | "lg" | "xl";
     }
   | { type: "spacer"; height?: number }
-  | { type: "ctaCard"; eyebrow: string; title: string; body: string }
-  | { type: "signature"; name: string; role: string };
+  | {
+      type: "ctaCard";
+      eyebrow: Translatable;
+      title: Translatable;
+      body: Translatable;
+    }
+  | { type: "signature"; name: string; role: Translatable };
 
 export type WorkbookPage = {
-  number: number; // page number printed
+  number: number;
   layout?: "default" | "centered" | "cover";
-  brand?: string; // override "Return to Calm" if needed
+  brand?: Translatable;
   blocks: Block[];
 };
 
 export type Workbook = {
   slug: string;
-  title: string;
-  scriptTitle: string; // the Pinyon-script word/phrase under the title
-  brand: string; // small top-right brand label per page
+  title: Translatable;
+  scriptTitle: Translatable;
+  brand: Translatable;
+  imageUrl?: string; // optional cover imagery
+  imageAlt?: Translatable;
   cover: {
-    eyebrow: string;
-    title: string[]; // ["Return to", "Calm"]
-    script: string; // "the calm within"
-    sub: string;
-    scriptSub: string;
+    eyebrow: Translatable;
+    title: Translatable<string[]>;
+    script: Translatable;
+    sub: Translatable;
+    scriptSub: Translatable;
     author: string;
-    role: string;
+    role: Translatable;
   };
   pages: WorkbookPage[];
 };
