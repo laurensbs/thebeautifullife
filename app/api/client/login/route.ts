@@ -1,0 +1,55 @@
+import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
+import { sql } from "@/lib/db";
+import { sendWorkbookMagicLink } from "@/lib/email";
+
+// Magic link to enter /mijn-pad. Reuses workbook_magic_links table
+// with a "client:" prefix on the token to distinguish purpose.
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const email = String(body.email ?? "").trim().toLowerCase();
+
+    if (!email.includes("@") || !email.includes(".")) {
+      return NextResponse.json(
+        { error: "Vul een geldig e-mailadres in." },
+        { status: 400 }
+      );
+    }
+
+    const subs = await sql`
+      SELECT first_name FROM submissions
+      WHERE LOWER(contact) = ${email}
+      ORDER BY created_at DESC
+      LIMIT 1
+    `;
+
+    // Always pretend success
+    if (subs.length === 0) {
+      return NextResponse.json({ ok: true });
+    }
+
+    const linkToken = "client:" + crypto.randomBytes(32).toString("hex");
+    const expires = new Date(Date.now() + 30 * 60 * 1000);
+
+    await sql`
+      INSERT INTO workbook_magic_links (email, token, expires_at)
+      VALUES (${email}, ${linkToken}, ${expires})
+    `;
+
+    const protocol = request.headers.get("x-forwarded-proto") || "https";
+    const host = request.headers.get("host") || "thebeautifullife.nl";
+    const url = `${protocol}://${host}/api/client/login/consume?token=${linkToken}`;
+
+    try {
+      await sendWorkbookMagicLink(email, String(subs[0].first_name), url);
+    } catch (err) {
+      console.error("Client magic link email failed:", err);
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("Client login error:", err);
+    return NextResponse.json({ error: "Er ging iets mis." }, { status: 500 });
+  }
+}

@@ -53,7 +53,9 @@ export async function sendQuestionnaireEmail(
 export async function sendNewSubmissionNotification(
   name: string,
   email: string,
-  dashboardUrl: string
+  dashboardUrl: string,
+  packageName?: string,
+  priceLabel?: string
 ) {
   const now = new Date().toLocaleDateString("nl-NL", {
     day: "numeric",
@@ -69,8 +71,13 @@ export async function sendNewSubmissionNotification(
         <span style="font-style: italic; color: #3d2b22; font-size: 15px;">the beautiful life coaching collective</span>
       </div>
       <h1 style="font-family: Georgia, serif; color: #3d2b22; font-weight: 300; font-size: 24px; text-align: center; margin-bottom: 6px;">
-        Nieuwe inzending ♥
+        Nieuwe aanmelding ♥
       </h1>
+      ${
+        packageName
+          ? `<p style="text-align:center; color:#7c8867; font-size:13px; letter-spacing:2px; text-transform:uppercase; margin:0 0 6px;">${packageName}${priceLabel ? ` — ${priceLabel}` : ""}</p>`
+          : ""
+      }
       <p style="color: #cab7a5; font-size: 12px; text-align: center; margin-bottom: 28px;">
         ${now}
       </p>
@@ -108,6 +115,83 @@ export async function sendNewSubmissionNotification(
     from: `"The Beautiful Life" <${process.env.SMTP_FROM}>`,
     to: "contact@thebeautifullife.nl",
     subject: `Nieuwe inzending: ${name}`,
+    html,
+  });
+}
+
+export async function sendWorkbookInvite(
+  to: string,
+  firstName: string,
+  workbookTitle: string,
+  workbookUrl: string
+) {
+  const html = `
+    <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; background: #f6f1e7; padding: 40px 30px; border-radius: 16px;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <span style="font-family: cursive; color: #b6906a; font-size: 24px;">the beautiful life</span>
+      </div>
+      <h1 style="font-family: Georgia, serif; color: #2a2a28; font-weight: 400; font-size: 28px; text-align: center; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px;">
+        ${workbookTitle}
+      </h1>
+      <p style="text-align: center; color: #b6906a; font-family: cursive; font-size: 22px; margin-top: 0;">voor jou, ${firstName}</p>
+      <p style="color: #4a4a45; font-size: 15px; line-height: 1.85; text-align: center; margin: 28px 0;">
+        Je werkboek staat voor je klaar.<br/>
+        Neem de tijd. Vul in jouw tempo in.<br/>
+        Alles wordt automatisch bewaard.
+      </p>
+      <div style="text-align: center; margin: 32px 0;">
+        <a href="${workbookUrl}" style="display: inline-block; background: #2a2a28; color: white; padding: 14px 36px; border-radius: 3px; text-decoration: none; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;">
+          OPEN MIJN WERKBOEK
+        </a>
+      </div>
+      <p style="color: #8a8270; font-size: 12px; text-align: center; line-height: 1.6;">
+        Bewaar deze e-mail. De link blijft werken zodat je later<br/>
+        verder kunt waar je was gebleven.
+      </p>
+      <p style="text-align: center; font-family: cursive; color: #b6906a; font-size: 22px; margin-top: 24px;">
+        liefs, Marion
+      </p>
+    </div>
+  `;
+  await transporter.sendMail({
+    from: `"The Beautiful Life" <${process.env.SMTP_FROM}>`,
+    to,
+    subject: `${firstName}, jouw werkboek "${workbookTitle}" staat klaar ♡`,
+    html,
+  });
+}
+
+export async function sendWorkbookMagicLink(
+  to: string,
+  firstName: string,
+  loginUrl: string
+) {
+  const html = `
+    <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; background: #f6f1e7; padding: 40px 30px; border-radius: 16px;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <span style="font-family: cursive; color: #b6906a; font-size: 24px;">the beautiful life</span>
+      </div>
+      <h1 style="font-family: Georgia, serif; color: #2a2a28; font-weight: 400; font-size: 22px; text-align: center; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px;">
+        Inloggen op je werkboek
+      </h1>
+      <p style="color: #4a4a45; font-size: 15px; line-height: 1.85; text-align: center;">
+        Lieve ${firstName}, klik op de knop om je werkboek te openen.
+      </p>
+      <div style="text-align: center; margin: 28px 0;">
+        <a href="${loginUrl}" style="display: inline-block; background: #2a2a28; color: white; padding: 14px 36px; border-radius: 3px; text-decoration: none; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;">
+          Ga naar mijn werkboek
+        </a>
+      </div>
+      <p style="color: #8a8270; font-size: 12px; text-align: center; line-height: 1.6;">
+        Deze link blijft 30 minuten geldig.<br/>
+        Heb je 'm niet aangevraagd? Dan kun je deze mail negeren.
+      </p>
+    </div>
+  `;
+  await transporter.sendMail({
+    from: `"The Beautiful Life" <${process.env.SMTP_FROM}>`,
+    to,
+    subject: `Jouw werkboek-link ♡`,
     html,
   });
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Manrope, Great_Vibes } from "next/font/google";
+import { Cormorant_Garamond, Montserrat, Pinyon_Script } from "next/font/google";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -9,41 +9,39 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
-const greatVibes = Great_Vibes({
-  variable: "--font-great-vibes",
+const pinyon = Pinyon_Script({
+  variable: "--font-pinyon",
   subsets: ["latin"],
   weight: ["400"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "The Beautiful Life Coaching Collective",
+  title: "The Beautiful Life — 3 Paths. One Goal. Your Ideal Life.",
   description:
-    "Voor vrouwen en meisjes die verlangen naar rust, balans en een leven dat goed voelt en moeiteloos begint te stromen.",
+    "Van helderheid tot transformatie. Drie pakketten om een leven te ontwerpen dat aansluit bij wie je bent.",
   openGraph: {
-    title: "The Beautiful Life Coaching Collective",
+    title: "The Beautiful Life",
     description:
-      "Voor vrouwen en meisjes die verlangen naar rust, balans en een leven dat goed voelt en moeiteloos begint te stromen.",
+      "Van helderheid tot transformatie. Drie pakketten om een leven te ontwerpen dat aansluit bij wie je bent.",
     type: "website",
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="nl"
-      className={`${cormorant.variable} ${manrope.variable} ${greatVibes.variable} antialiased`}
+      className={`${cormorant.variable} ${montserrat.variable} ${pinyon.variable} antialiased`}
     >
       <body className="min-h-screen font-sans">{children}</body>
     </html>

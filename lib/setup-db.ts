@@ -15,7 +15,7 @@ export async function setupDatabase() {
     )
   `;
 
-  // Submissions table
+  // Submissions table (base)
   await sql`
     CREATE TABLE IF NOT EXISTS submissions (
       id SERIAL PRIMARY KEY,
@@ -29,10 +29,59 @@ export async function setupDatabase() {
     )
   `;
 
-  // Add phone column if missing (for existing databases)
+  // Incremental columns
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS phone VARCHAR(20)`;
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS package VARCHAR(20)`;
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS status VARCHAR(40) NOT NULL DEFAULT 'aangemeld'`;
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS intake_data JSONB`;
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS notes TEXT`;
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS scheduled_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS amount_cents INT`;
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS mollie_payment_id VARCHAR(100)`;
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS zoom_meeting_url TEXT`;
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`;
+
+  // Workbook access (one row per submission per workbook)
   await sql`
-    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS phone VARCHAR(20)
+    CREATE TABLE IF NOT EXISTS workbook_access (
+      id SERIAL PRIMARY KEY,
+      submission_id INT NOT NULL REFERENCES submissions(id) ON DELETE CASCADE,
+      workbook_slug VARCHAR(60) NOT NULL,
+      access_token VARCHAR(120) NOT NULL UNIQUE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      last_seen_at TIMESTAMPTZ,
+      UNIQUE (submission_id, workbook_slug)
+    )
   `;
+
+  await sql`CREATE INDEX IF NOT EXISTS workbook_access_token_idx ON workbook_access(access_token)`;
+
+  // Workbook answers (one row per filled field, per access)
+  await sql`
+    CREATE TABLE IF NOT EXISTS workbook_answers (
+      id SERIAL PRIMARY KEY,
+      access_id INT NOT NULL REFERENCES workbook_access(id) ON DELETE CASCADE,
+      field_key VARCHAR(80) NOT NULL,
+      value TEXT,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (access_id, field_key)
+    )
+  `;
+
+  // Magic-link tokens for client login
+  await sql`
+    CREATE TABLE IF NOT EXISTS workbook_magic_links (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(200) NOT NULL,
+      token VARCHAR(120) NOT NULL UNIQUE,
+      expires_at TIMESTAMPTZ NOT NULL,
+      consumed_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS workbook_magic_links_token_idx ON workbook_magic_links(token)`;
 
   // Answers table
   await sql`

@@ -1,19 +1,31 @@
 @import "tailwindcss";
 
 @theme {
-  --color-page: #f5efe7;
+  --color-page: #f1ebe0;
+  --color-page-soft: #f6f1e7;
+  --color-page-dark: #eae2d2;
+  --color-card: #f6f1e7;
+  --color-ink: #2a2a28;
+  --color-ink-soft: #4a4a45;
+  --color-muted: #8a8270;
+  --color-line: #d9cfbe;
+  --color-sage: #7c8867;
+  --color-sage-deep: #6b7657;
+  --color-tan: #b6906a;
+  --color-gold: #ae8a4e;
+
+  /* legacy aliases — keep old admin/vragenlijst working until rewritten */
   --color-page-alt: #efe4d8;
-  --color-card: #f3ece4;
-  --color-dark: #3d2b22;
-  --color-brown: #7b5d49;
-  --color-accent: #b4875c;
-  --color-border: #d8c7b6;
-  --color-taupe: #cab7a5;
-  --color-blush: #eadfd4;
+  --color-dark: #2a2a28;
+  --color-brown: #4a4a45;
+  --color-accent: #b6906a;
+  --color-border: #d9cfbe;
+  --color-taupe: #8a8270;
+  --color-blush: #eae2d2;
 
   --font-serif: var(--font-cormorant);
-  --font-sans: var(--font-manrope);
-  --font-script: var(--font-great-vibes);
+  --font-sans: var(--font-montserrat);
+  --font-script: var(--font-pinyon);
 }
 
 html {
@@ -22,39 +34,43 @@ html {
 
 body {
   background-color: var(--color-page);
-  color: var(--color-dark);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background-color: var(--color-taupe);
-  color: var(--color-dark);
+  background-color: var(--color-line);
+  color: var(--color-ink);
 }
 
 *:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-tan);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-input::placeholder {
-  color: var(--color-taupe);
-  font-style: italic;
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-muted);
   font-weight: 300;
 }
 
 ::-webkit-scrollbar {
   width: 8px;
 }
-
 ::-webkit-scrollbar-track {
   background: var(--color-page);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--color-line);
   border-radius: 4px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-taupe);
+  background: var(--color-muted);
 }
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-floaty { animation: floaty 7s ease-in-out infinite; }
