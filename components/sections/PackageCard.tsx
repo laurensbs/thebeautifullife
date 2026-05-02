@@ -51,14 +51,14 @@ export default function PackageCard({
         ease: [0.16, 1, 0.3, 1],
       }}
       whileHover={{ y: -6 }}
-      className="group relative bg-page-soft rounded-[6px] overflow-hidden shadow-[0_12px_40px_rgba(60,50,30,0.08)] hover:shadow-[0_22px_50px_rgba(60,50,30,0.14)] transition-shadow duration-500 flex flex-col"
+      className="group relative bg-page-soft rounded-tl-[40px] rounded-tr-[40px] rounded-bl-[6px] rounded-br-[6px] overflow-hidden shadow-[0_12px_40px_rgba(60,50,30,0.08)] hover:shadow-[0_22px_50px_rgba(60,50,30,0.14)] transition-shadow duration-500 flex flex-col h-full"
     >
       <span className="absolute top-3.5 left-1/2 -translate-x-1/2 z-10 w-9 h-9 rounded-full bg-page-soft border border-tan text-tan font-serif text-lg font-medium flex items-center justify-center">
         {pkg.number}
       </span>
 
       <div
-        className="relative h-[200px] sm:h-[240px] lg:h-[260px] overflow-hidden bg-gradient-to-br from-page-dark to-line rounded-tl-[40px] rounded-tr-[40px]"
+        className="relative h-[200px] sm:h-[240px] lg:h-[260px] overflow-hidden bg-gradient-to-br from-page-dark to-line"
       >
         {pkg.imageUrl ? (
           <Image
@@ -112,6 +112,10 @@ export default function PackageCard({
           ))}
         </ul>
 
+        {/* Spacer pusht knop + quote naar onderen zodat alle 3 cards
+            de knop op dezelfde hoogte hebben, ongeacht features-aantal */}
+        <div className="flex-1" />
+
         <Link
           href={`/pakket/${pkg.slug}`}
           className={`mt-7 mx-auto block w-full max-w-[240px] text-center px-5 py-3.5 rounded-[3px] text-white font-serif text-[22px] tracking-[0.06em] shadow-[0_6px_18px_rgba(60,50,30,0.12)] hover:shadow-[0_12px_26px_rgba(60,50,30,0.18)] hover:-translate-y-0.5 transition ${ACCENT_BG[pkg.accent]}`}
@@ -121,7 +125,7 @@ export default function PackageCard({
 
         <Calligraphy
           as="p"
-          className="mt-5 font-script text-tan text-xl leading-snug"
+          className="mt-5 font-script text-tan text-xl leading-snug min-h-[3.5rem] flex items-center justify-center"
           text={quote}
           durationPerChar={0.04}
           delay={0.2}
