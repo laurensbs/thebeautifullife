@@ -83,7 +83,9 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
             key={label}
             className="flex items-center justify-center gap-2 text-[10px] sm:text-[11px] tracking-[0.16em] sm:tracking-[0.22em] uppercase font-medium"
           >
-            <Icon size={15} strokeWidth={1.5} />
+            <span className="inline-flex items-center justify-center w-4 h-4 flex-none">
+              <Icon className="w-4 h-4" strokeWidth={1.5} />
+            </span>
             <span className="whitespace-nowrap">{label}</span>
           </div>
         ))}
