@@ -77,14 +77,14 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
         />
       </motion.div>
 
-      <div className="lg:absolute lg:left-[46%] lg:right-0 lg:bottom-0 bg-sage text-white grid grid-cols-2 sm:grid-cols-4 gap-y-3 px-4 sm:px-6 lg:px-8 py-4 lg:rounded-tl-[4px]">
+      <div className="lg:absolute lg:left-[46%] lg:right-0 lg:bottom-0 bg-sage text-white grid grid-cols-2 sm:grid-cols-4 gap-x-3 gap-y-3 px-3 sm:px-4 lg:px-5 py-4 lg:rounded-tl-[4px]">
         {FEATURES.map(({ icon: Icon, label }) => (
           <div
             key={label}
-            className="flex items-center justify-center gap-2 text-[10px] sm:text-[11px] tracking-[0.16em] sm:tracking-[0.22em] uppercase font-medium"
+            className="flex items-center justify-center gap-1.5 text-[9px] sm:text-[10px] lg:text-[10.5px] tracking-[0.1em] sm:tracking-[0.12em] lg:tracking-[0.14em] uppercase font-medium"
           >
-            <span className="inline-flex items-center justify-center w-4 h-4 flex-none">
-              <Icon className="w-4 h-4" strokeWidth={1.5} />
+            <span className="inline-flex items-center justify-center w-3.5 h-3.5 flex-none">
+              <Icon className="w-3.5 h-3.5" strokeWidth={1.5} />
             </span>
             <span className="whitespace-nowrap">{label}</span>
           </div>
