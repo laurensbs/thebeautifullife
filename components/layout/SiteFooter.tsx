@@ -4,6 +4,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
 import Calligraphy from "@/components/ui/Calligraphy";
+import HeartDivider from "@/components/ui/HeartDivider";
 
 function InstagramIcon({ size = 14 }: { size?: number }) {
   return (
@@ -29,117 +30,129 @@ function InstagramIcon({ size = 14 }: { size?: number }) {
 export default function SiteFooter({ locale }: { locale: Locale }) {
   const year = new Date().getFullYear();
   return (
-    <footer className="mt-16 sm:mt-24 bg-page-dark border-t border-line/40">
-      <div className="max-w-[1180px] mx-auto px-6 py-12 sm:py-16">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12">
-          <div className="sm:col-span-2 lg:col-span-2 max-w-sm">
-            <div className="flex items-center gap-2.5 mb-4">
-              <span className="w-8 h-8 rounded-full bg-sage flex items-center justify-center">
-                <span className="font-script text-white text-lg leading-none -mt-0.5">
-                  B
-                </span>
-              </span>
-              <span className="font-serif text-ink text-[14px] tracking-wide">
-                The Beautiful Life
-              </span>
-            </div>
+    <footer className="mt-16 sm:mt-20 lg:mt-24 px-5 sm:px-6 pb-8">
+      <div className="max-w-[1180px] mx-auto">
+        {/* Cream-card met afgeronde bovenhoeken — matcht portaal/landing stijl */}
+        <div className="bg-page-soft rounded-tl-[40px] rounded-tr-[40px] rounded-b-[6px] shadow-[0_18px_48px_rgba(60,50,30,0.08)] overflow-hidden">
+          {/* Brand / tagline — centered op mobiel + tablet, links op desktop */}
+          <div className="px-6 py-10 sm:px-12 sm:py-12 text-center lg:text-left">
+            <p className="font-serif text-ink text-[14px] tracking-[0.18em] uppercase">
+              The Beautiful Life
+            </p>
             <Calligraphy
               as="p"
-              className="font-script text-tan text-2xl mb-2"
+              className="font-script text-tan text-2xl sm:text-3xl mt-2"
               text={tr(DICT.footer.tagline, locale)}
               durationPerChar={0.04}
             />
-            <p className="text-ink-soft text-sm leading-[1.85]">
+
+            <HeartDivider
+              className="mt-5 mb-6 lg:!justify-start"
+            />
+
+            <p className="text-ink-soft text-sm leading-[1.85] max-w-md mx-auto lg:mx-0">
               {tr(DICT.footer.intro, locale)}
             </p>
           </div>
 
-          <div>
-            <p className="text-[11px] tracking-[0.22em] uppercase text-muted mb-4">
-              {tr(DICT.footer.discover, locale)}
-            </p>
-            <ul className="space-y-2.5 text-sm">
-              <li>
-                <Link
-                  href="/pakket/ikigai"
-                  className="text-ink-soft hover:text-tan transition"
-                >
-                  {tr(DICT.packages.name.ikigai, locale)}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/pakket/alignment"
-                  className="text-ink-soft hover:text-tan transition"
-                >
-                  {tr(DICT.packages.name.alignment, locale)}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/pakket/experience"
-                  className="text-ink-soft hover:text-tan transition"
-                >
-                  {tr(DICT.packages.name.experience, locale)}
-                </Link>
-              </li>
-              <li className="pt-3 mt-3 border-t border-line/40">
-                <Link
-                  href="/mijn-pad"
-                  className="text-ink-soft hover:text-tan transition"
-                >
-                  {tr(DICT.nav.myPath, locale)}
-                </Link>
-              </li>
-            </ul>
+          {/* Navigation columns */}
+          <div className="border-t border-line/40 px-6 py-9 sm:px-12 sm:py-10 grid grid-cols-1 sm:grid-cols-2 gap-9 sm:gap-12 text-center sm:text-left">
+            <div>
+              <p className="text-[11px] tracking-[0.22em] uppercase text-muted mb-4">
+                {tr(DICT.footer.discover, locale)}
+              </p>
+              <ul className="space-y-2.5 text-sm">
+                <li>
+                  <Link
+                    href="/pakket/ikigai"
+                    className="text-ink-soft hover:text-tan transition"
+                  >
+                    {tr(DICT.packages.name.ikigai, locale)}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/pakket/alignment"
+                    className="text-ink-soft hover:text-tan transition"
+                  >
+                    {tr(DICT.packages.name.alignment, locale)}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/pakket/experience"
+                    className="text-ink-soft hover:text-tan transition"
+                  >
+                    {tr(DICT.packages.name.experience, locale)}
+                  </Link>
+                </li>
+                <li className="pt-3 mt-3 border-t border-line/40">
+                  <Link
+                    href="/mijn-pad"
+                    className="text-ink-soft hover:text-tan transition"
+                  >
+                    {tr(DICT.nav.myPath, locale)}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/gratis"
+                    className="text-sage-deep hover:text-tan transition"
+                  >
+                    {tr(DICT.free.title, locale)}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-[11px] tracking-[0.22em] uppercase text-muted mb-4">
+                {tr(DICT.footer.contact, locale)}
+              </p>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a
+                    href="mailto:contact@thebeautifullife.nl"
+                    className="text-ink-soft hover:text-tan transition inline-flex items-center gap-2"
+                  >
+                    <Mail size={14} className="text-tan" />
+                    contact@thebeautifullife.nl
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://instagram.com/thebeautifullife"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink-soft hover:text-tan transition inline-flex items-center gap-2"
+                  >
+                    <span className="text-tan">
+                      <InstagramIcon />
+                    </span>
+                    @thebeautifullife
+                  </a>
+                </li>
+              </ul>
+
+              <Calligraphy
+                as="p"
+                className="font-script text-tan text-xl mt-7"
+                text={tr(DICT.footer.signoff, locale)}
+                durationPerChar={0.07}
+              />
+            </div>
           </div>
 
-          <div>
-            <p className="text-[11px] tracking-[0.22em] uppercase text-muted mb-4">
-              {tr(DICT.footer.contact, locale)}
-            </p>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <a
-                  href="mailto:contact@thebeautifullife.nl"
-                  className="text-ink-soft hover:text-tan transition flex items-center gap-2"
-                >
-                  <Mail size={14} className="text-tan" />
-                  contact@thebeautifullife.nl
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://instagram.com/thebeautifullife"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-ink-soft hover:text-tan transition flex items-center gap-2"
-                >
-                  <span className="text-tan">
-                    <InstagramIcon />
-                  </span>
-                  @thebeautifullife
-                </a>
-              </li>
-            </ul>
-
-            <Calligraphy
-              as="p"
-              className="font-script text-tan text-xl mt-6"
-              text={tr(DICT.footer.signoff, locale)}
-              durationPerChar={0.07}
-            />
-          </div>
-        </div>
-
-        <div className="mt-12 pt-6 border-t border-line/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-[11px] text-muted">
-          <p>© {year} The Beautiful Life · Marion Lubach</p>
-          <div className="flex items-center gap-5">
-            <Link href="/privacy" className="hover:text-tan transition">
-              {tr(DICT.footer.privacy, locale)}
-            </Link>
-            <span className="text-muted/40">·</span>
-            <LanguageSwitcher current={locale} variant="footer" />
+          {/* Bottom strip */}
+          <div className="bg-page-dark/40 border-t border-line/40 px-6 py-5 sm:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-muted text-center sm:text-left">
+            <p>© {year} The Beautiful Life · Marion Lubach</p>
+            <div className="flex items-center gap-4 sm:gap-5">
+              <Link href="/privacy" className="hover:text-tan transition">
+                {tr(DICT.footer.privacy, locale)}
+              </Link>
+              <span className="text-muted/40">·</span>
+              <LanguageSwitcher current={locale} variant="footer" />
+            </div>
           </div>
         </div>
       </div>

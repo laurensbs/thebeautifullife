@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
-import { setWorkbookCookie } from "@/lib/workbook-auth";
+import { setWorkbookCookie, WORKBOOK_COOKIE } from "@/lib/workbook-auth";
+
+// Zelfde prefetch-tolerantie als /api/client/login/consume.
+const REUSE_WINDOW_MS = 5 * 60_000;
 
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get("token");
@@ -20,8 +23,20 @@ export async function GET(request: NextRequest) {
   }
   const link = rows[0];
 
-  if (link.consumed_at || new Date(link.expires_at) < new Date()) {
+  // Hard expiry
+  const expiresAt = new Date(link.expires_at).getTime();
+  if (expiresAt < Date.now()) {
     return NextResponse.redirect(`${origin}/werkboek/login?error=expired`);
+  }
+
+  // Soft consume — prefetch-tolerant
+  if (link.consumed_at) {
+    const consumedAt = new Date(link.consumed_at).getTime();
+    if (Date.now() - consumedAt > REUSE_WINDOW_MS) {
+      return NextResponse.redirect(`${origin}/werkboek/login?error=expired`);
+    }
+  } else {
+    await sql`UPDATE workbook_magic_links SET consumed_at = NOW() WHERE id = ${link.id}`;
   }
 
   // Find the most recent workbook access for this email.
@@ -37,8 +52,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${origin}/werkboek/login?error=noaccess`);
   }
 
-  await sql`UPDATE workbook_magic_links SET consumed_at = NOW() WHERE id = ${link.id}`;
   await setWorkbookCookie(String(access[0].access_token));
 
-  return NextResponse.redirect(`${origin}/werkboek/${access[0].workbook_slug}`);
+  // Cookie ook in redirect-jar voor consistentie.
+  const res = NextResponse.redirect(`${origin}/werkboek/${access[0].workbook_slug}`);
+  res.cookies.set(WORKBOOK_COOKIE, String(access[0].access_token), {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+  });
+  return res;
 }
