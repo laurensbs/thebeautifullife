@@ -43,21 +43,14 @@ export default function SiteHeader({ locale }: { locale: Locale }) {
       <div className="max-w-[1180px] mx-auto px-5 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
         <Link
           href="/"
-          className="flex items-center gap-2.5 group"
+          className="flex flex-col leading-none group"
           aria-label="The Beautiful Life — home"
         >
-          <span className="w-8 h-8 rounded-full bg-sage flex items-center justify-center transition group-hover:bg-sage-deep">
-            <span className="font-script text-white text-lg leading-none -mt-0.5">
-              B
-            </span>
+          <span className="font-serif text-ink text-[14px] tracking-[0.18em] uppercase group-hover:text-tan transition-colors">
+            The Beautiful Life
           </span>
-          <span className="hidden sm:flex flex-col leading-none">
-            <span className="font-serif text-ink text-[14px] tracking-wide">
-              The Beautiful Life
-            </span>
-            <span className="font-script text-tan text-[15px] -mt-0.5">
-              coaching collective
-            </span>
+          <span className="font-script text-tan text-[15px] -mt-0.5">
+            coaching collective
           </span>
         </Link>
 

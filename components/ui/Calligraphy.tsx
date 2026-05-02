@@ -3,15 +3,17 @@
 import { motion } from "framer-motion";
 
 /**
- * Calligraphy — geeft script-tekst een geschreven-wordt-effect.
+ * Calligraphy — script-tekst die zichzelf "schrijft".
  *
- * Hoe: tekst wordt normaal gerenderd (Pinyon Script blijft Pinyon
- * Script), maar zit onder een wipe-mask die langzaam van links naar
- * rechts opent. Dat geeft het visuele effect van een pen die de
- * letters tekent — zonder dat we per-letter SVG-paden nodig hebben.
- *
- * Een fijn detail: een zachte tan-onderlijn die mee-tekent terwijl
- * de mask opent. Voelt als een pen die over papier glijdt.
+ * Hoe:
+ * 1. Tekst staat normaal in DOM (Pinyon Script blijft Pinyon Script).
+ * 2. Een clipPath wipe opent van links naar rechts — letters verschijnen
+ *    in dezelfde volgorde als hoe je ze zou schrijven.
+ * 3. Een meebewegende pen-marker (tan verticale streep) glijdt synchroon
+ *    aan de rechterrand van de wipe. Dat verandert het effect van "fade"
+ *    naar "geschreven worden": het oog volgt de pen.
+ * 4. Optionele zachte onderlijn die mee-tekent (alsof de pen het papier
+ *    raakt).
  *
  * Triggert via whileInView (one-shot).
  */
@@ -20,19 +22,19 @@ export default function Calligraphy({
   as = "span",
   className,
   duration,
-  durationPerChar = 0.08,
+  durationPerChar = 0.12,
   delay = 0,
   underline = false,
+  pen = true,
 }: {
   text: string;
   as?: "span" | "p" | "h1" | "h2" | "h3";
   className?: string;
-  /** Total duration. Als niet gezet: durationPerChar × text.length, min 0.8s. */
   duration?: number;
   durationPerChar?: number;
   delay?: number;
-  /** Zachte pen-onderlijn die mee-tekent. Default true. */
   underline?: boolean;
+  pen?: boolean;
 }) {
   const Tag =
     as === "p"
@@ -46,7 +48,7 @@ export default function Calligraphy({
             : motion.span;
 
   const totalDuration =
-    duration ?? Math.max(0.8, text.length * durationPerChar);
+    duration ?? Math.max(1.0, text.length * durationPerChar);
 
   return (
     <Tag
@@ -57,12 +59,12 @@ export default function Calligraphy({
       viewport={{ once: true, margin: "-10px" }}
       aria-label={text}
     >
-      {/* Onzichtbare ghost — bepaalt de breedte/hoogte zodat layout klopt */}
+      {/* Onzichtbare ghost — bepaalt breedte/hoogte voor layout */}
       <span aria-hidden style={{ visibility: "hidden", whiteSpace: "pre" }}>
         {text}
       </span>
 
-      {/* De zichtbare tekst, gemaskeerd door een wipe die opent van links naar rechts */}
+      {/* De zichtbare tekst, gemaskeerd door wipe */}
       <motion.span
         aria-hidden
         style={{
@@ -70,7 +72,6 @@ export default function Calligraphy({
           inset: 0,
           whiteSpace: "pre",
           display: "inline-block",
-          // Mask die zich naar rechts opent — geeft het "geschreven" effect
         }}
         variants={{
           hidden: { clipPath: "inset(0 100% 0 0)" },
@@ -79,13 +80,49 @@ export default function Calligraphy({
         transition={{
           duration: totalDuration,
           delay,
-          ease: [0.45, 0.05, 0.55, 0.95], // gelijkmatige pen-snelheid
+          ease: [0.55, 0.0, 0.45, 1.0], // bijna lineair — pen-snelheid
         }}
       >
         {text}
       </motion.span>
 
-      {/* Zachte pen-onderlijn die mee-tekent (subtle) */}
+      {/* Pen-marker — verticale tan streep die meeschuift langs de
+          rechterrand van de wipe. We animeren `left` van 0% → 100%. */}
+      {pen && (
+        <motion.span
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: "12%",
+            bottom: "12%",
+            width: "2px",
+            background: "currentColor",
+            opacity: 0,
+            borderRadius: "2px",
+            pointerEvents: "none",
+            boxShadow: "0 0 6px currentColor",
+            transform: "translateX(-1px)",
+          }}
+          variants={{
+            hidden: { left: "0%", opacity: 0 },
+            visible: { left: "100%", opacity: [0, 0.75, 0.75, 0] },
+          }}
+          transition={{
+            left: {
+              duration: totalDuration,
+              delay,
+              ease: [0.55, 0.0, 0.45, 1.0],
+            },
+            opacity: {
+              duration: totalDuration,
+              delay,
+              times: [0, 0.05, 0.92, 1],
+            },
+          }}
+        />
+      )}
+
+      {/* Zachte onderlijn die mee-tekent */}
       {underline && (
         <motion.span
           aria-hidden
@@ -94,11 +131,12 @@ export default function Calligraphy({
             left: 0,
             right: 0,
             bottom: "0.06em",
-            height: "1px",
+            height: "1.5px",
             background: "currentColor",
-            opacity: 0.18,
+            opacity: 0.22,
             transformOrigin: "left center",
             pointerEvents: "none",
+            borderRadius: "2px",
           }}
           variants={{
             hidden: { scaleX: 0 },
@@ -107,7 +145,7 @@ export default function Calligraphy({
           transition={{
             duration: totalDuration,
             delay,
-            ease: [0.45, 0.05, 0.55, 0.95],
+            ease: [0.55, 0.0, 0.45, 1.0],
           }}
         />
       )}
