@@ -1,6 +1,7 @@
 import HeroPanel from "@/components/sections/HeroPanel";
 import PackageCard from "@/components/sections/PackageCard";
 import WhatYouGet from "@/components/sections/WhatYouGet";
+import FreeReflectionCta from "@/components/sections/FreeReflectionCta";
 import Closing from "@/components/sections/Closing";
 import { PACKAGE_LIST } from "@/lib/packages";
 import { getLocale } from "@/lib/i18n/server";
@@ -23,6 +24,8 @@ export default async function Home() {
       <div className="mt-11">
         <WhatYouGet locale={locale} />
       </div>
+
+      <FreeReflectionCta locale={locale} />
 
       <Closing locale={locale} />
     </main>

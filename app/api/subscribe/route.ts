@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
-import {
-  sendQuestionnaireEmail,
-  sendNewSubmissionNotification,
-} from "@/lib/email";
+import { sendNewSubmissionNotification } from "@/lib/email";
 import { PACKAGES, isPackageSlug } from "@/lib/packages";
 import { grantWorkbooksForPackage } from "@/lib/workbook-grants";
 import { getLocale } from "@/lib/i18n/server";
@@ -69,17 +66,8 @@ export async function POST(request: NextRequest) {
     const host = request.headers.get("host") || "thebeautifullife.nl";
     const siteUrl = `${protocol}://${host}`;
 
-    // Pakket 1 (ikigai) krijgt direct de vragenlijst.
-    // Pakket 2/3: Marion neemt eerst contact op, dus geen automatische vragenlijst-mail.
-    if (slug === "ikigai" || slug === null) {
-      const questionnaireUrl = `${siteUrl}/vragenlijst?token=${token}`;
-      try {
-        await sendQuestionnaireEmail(email, name, questionnaireUrl);
-        await sql`UPDATE submissions SET email_sent = true WHERE id = ${result[0].id}`;
-      } catch (emailErr) {
-        console.error("Email send error:", emailErr);
-      }
-    }
+    // Vragenlijst is verplaatst naar de gratis upsell-CTA (/api/lead).
+    // Pakket-aanmeldingen krijgen nu alleen het werkboek + (later) Mollie.
 
     // Grant access to the workbook(s) belonging to this package + send invite mail.
     if (slug) {

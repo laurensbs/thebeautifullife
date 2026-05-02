@@ -17,10 +17,13 @@ export default function LoginForm({ locale }: { locale: Locale }) {
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // De url-error verdwijnt zodra de user iets typt of submit doet.
+  const [paramErrorDismissed, setParamErrorDismissed] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setParamErrorDismissed(true);
     setSubmitting(true);
     try {
       const res = await fetch("/api/client/login", {
@@ -40,11 +43,13 @@ export default function LoginForm({ locale }: { locale: Locale }) {
   };
 
   const errorMessage =
-    errorParam === "expired"
-      ? tr(DICT.portal.loginErrorExpired, locale)
-      : errorParam === "invalid"
-        ? tr(DICT.portal.loginErrorInvalid, locale)
-        : null;
+    paramErrorDismissed
+      ? null
+      : errorParam === "expired"
+        ? tr(DICT.portal.loginErrorExpired, locale)
+        : errorParam === "invalid"
+          ? tr(DICT.portal.loginErrorInvalid, locale)
+          : null;
 
   return (
     <main className="max-w-[520px] mx-auto px-5 sm:px-6 py-16 sm:py-20">
@@ -86,9 +91,16 @@ export default function LoginForm({ locale }: { locale: Locale }) {
         ) : (
           <form onSubmit={submit} className="space-y-4">
             {(errorMessage || error) && (
-              <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2 text-left">
-                {error ?? errorMessage}
-              </p>
+              <motion.div
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-left bg-page-dark/60 border border-tan/30 rounded-md px-4 py-3 flex items-start gap-2.5"
+              >
+                <span className="text-tan text-sm leading-none mt-0.5">♡</span>
+                <p className="text-[13px] text-ink-soft leading-snug">
+                  {error ?? errorMessage}
+                </p>
+              </motion.div>
             )}
 
             <div className="text-left">
@@ -99,7 +111,10 @@ export default function LoginForm({ locale }: { locale: Locale }) {
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (!paramErrorDismissed) setParamErrorDismissed(true);
+                }}
                 placeholder="naam@voorbeeld.nl"
                 className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
               />

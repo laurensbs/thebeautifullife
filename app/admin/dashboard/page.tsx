@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import {
   LogOut,
   Users,
-  MessageSquare,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -37,12 +36,10 @@ import {
   PACKAGES,
   PACKAGE_LIST,
   STATUS_LABELS,
-  isPackageSlug,
   type PackageSlug,
   type PackageStatus,
 } from "@/lib/packages";
 import {
-  PACKAGE_WORKBOOKS,
   WORKBOOKS,
   workbookFieldKeys,
 } from "@/lib/workbooks";
@@ -96,6 +93,7 @@ type DetailData = {
 
 type Stats = {
   total: number;
+  lead: number;
   ikigai: number;
   alignment: number;
   experience: number;
@@ -118,12 +116,6 @@ const PKG_ACCENT_BG: Record<PackageSlug, string> = {
   experience: "bg-gold text-white",
 };
 
-const PKG_ACCENT_SOFT: Record<PackageSlug, string> = {
-  ikigai: "bg-sage/10 text-sage-deep border-sage/30",
-  alignment: "bg-tan/10 text-tan border-tan/30",
-  experience: "bg-gold/10 text-gold border-gold/30",
-};
-
 export default function AdminDashboard() {
   const router = useRouter();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
@@ -133,7 +125,9 @@ export default function AdminDashboard() {
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pkgFilter, setPkgFilter] = useState<PackageSlug | "all">("all");
+  const [pkgFilter, setPkgFilter] = useState<PackageSlug | "all" | "lead">(
+    "all"
+  );
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [details, setDetails] = useState<Record<number, DetailData>>({});
   const [loadingDetail, setLoadingDetail] = useState<number | null>(null);
@@ -357,7 +351,16 @@ export default function AdminDashboard() {
         </div>
 
         {/* Per-pakket counts */}
-        <div className="grid grid-cols-3 gap-2 mb-6 text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6 text-center">
+          <PkgPill
+            color="sage"
+            label="Gratis lead"
+            value={stats?.lead ?? 0}
+            onClick={() => {
+              setPkgFilter("lead");
+              setPage(1);
+            }}
+          />
           <PkgPill
             color="sage"
             label="Ikigai"
@@ -409,6 +412,15 @@ export default function AdminDashboard() {
               }}
             />
           ))}
+          <FilterChip
+            label="Gratis lead"
+            active={pkgFilter === "lead"}
+            accent="sage"
+            onClick={() => {
+              setPkgFilter("lead");
+              setPage(1);
+            }}
+          />
 
           <div className="ml-auto flex items-center gap-1.5">
             <button
@@ -512,11 +524,15 @@ export default function AdminDashboard() {
                       <span className="font-serif text-ink text-[14px] md:text-[15px]">
                         {s.first_name}
                       </span>
-                      {s.package && (
+                      {s.package ? (
                         <span
                           className={`text-[9px] tracking-[0.18em] uppercase px-1.5 py-0.5 rounded ${PKG_ACCENT_BG[s.package]}`}
                         >
                           {PACKAGES[s.package].name.split(" ").slice(-1)[0] === "Story" ? "Ikigai" : s.package === "alignment" ? "Alignment" : "Experience"}
+                        </span>
+                      ) : (
+                        <span className="text-[9px] tracking-[0.18em] uppercase px-1.5 py-0.5 rounded bg-sage/15 text-sage-deep border border-sage/30">
+                          Gratis
                         </span>
                       )}
                       <span className="text-[10px] font-sans text-muted">

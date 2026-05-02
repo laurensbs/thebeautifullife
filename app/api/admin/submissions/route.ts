@@ -32,8 +32,18 @@ export async function GET(request: NextRequest) {
   const offset = (page - 1) * limit;
 
   const filterSlug = isPackageSlug(pkgFilter) ? pkgFilter : null;
+  const filterLead = pkgFilter === "lead";
 
-  const submissions = filterSlug
+  const submissions = filterLead
+    ? await sql`
+        SELECT s.*,
+          (SELECT COUNT(*) FROM answers a WHERE a.submission_id = s.id) as answer_count
+        FROM submissions s
+        WHERE s.package IS NULL
+        ORDER BY s.created_at DESC
+        LIMIT ${limit} OFFSET ${offset}
+      `
+    : filterSlug
     ? await sql`
         SELECT s.*,
           (SELECT COUNT(*) FROM answers a WHERE a.submission_id = s.id) as answer_count
@@ -50,7 +60,9 @@ export async function GET(request: NextRequest) {
         LIMIT ${limit} OFFSET ${offset}
       `;
 
-  const countResult = filterSlug
+  const countResult = filterLead
+    ? await sql`SELECT COUNT(*) as total FROM submissions WHERE package IS NULL`
+    : filterSlug
     ? await sql`SELECT COUNT(*) as total FROM submissions WHERE package = ${filterSlug}`
     : await sql`SELECT COUNT(*) as total FROM submissions`;
 
@@ -58,6 +70,7 @@ export async function GET(request: NextRequest) {
   const stats = await sql`
     SELECT
       COUNT(*)::int AS total,
+      COUNT(*) FILTER (WHERE package IS NULL)::int AS lead,
       COUNT(*) FILTER (WHERE package = 'ikigai')::int AS ikigai,
       COUNT(*) FILTER (WHERE package = 'alignment')::int AS alignment,
       COUNT(*) FILTER (WHERE package = 'experience')::int AS experience,

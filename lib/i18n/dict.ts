@@ -560,6 +560,32 @@ export const DICT = {
     ),
   },
 
+  // ============ FREE / LEAD CTA ============
+  free: {
+    eyebrow: t("liever eerst eventjes?", "rather start gently?"),
+    title: t(
+      "Gratis reflectievragenlijst",
+      "Free reflection questionnaire"
+    ),
+    intro: t(
+      "Niet klaar voor een pakket — maar wel voor een eerste stap. Vul de gratis reflectie in (~10 minuten) en krijg een eerlijk beeld van waar je nu staat.",
+      "Not ready for a package — but ready for a first step. Fill in the free reflection (~10 minutes) and get an honest picture of where you are now."
+    ),
+    cta: t("Begin gratis", "Start free — it's on us"),
+
+    formTitle: t("Begin met reflectie", "Begin with reflection"),
+    formIntro: t(
+      "Vul je naam en e-mail in. Je ontvangt direct een persoonlijke link naar de vragenlijst.",
+      "Fill in your name and email. You'll receive a personal link to the questionnaire right away."
+    ),
+    submitLabel: t("Stuur mij de link", "Send me the link"),
+    sentTitle: t("Check je inbox", "Check your inbox"),
+    sentBody: t(
+      "We hebben je een persoonlijke link gestuurd naar de vragenlijst. Neem rustig de tijd — er zijn geen goede of foute antwoorden.",
+      "We've sent you a personal link to the questionnaire. Take your time — there are no right or wrong answers."
+    ),
+  },
+
   // ============ STATUS LABELS ============
   status: {
     aangemeld: t("Aangemeld", "Enrolled"),

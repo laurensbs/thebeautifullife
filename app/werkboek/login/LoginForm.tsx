@@ -16,10 +16,12 @@ export default function LoginForm({ locale }: { locale: Locale }) {
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [paramErrorDismissed, setParamErrorDismissed] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setParamErrorDismissed(true);
     setSubmitting(true);
     try {
       const res = await fetch("/api/workbook/login", {
@@ -38,8 +40,9 @@ export default function LoginForm({ locale }: { locale: Locale }) {
     setSubmitting(false);
   };
 
-  const errorMessage =
-    errorParam === "expired"
+  const errorMessage = paramErrorDismissed
+    ? null
+    : errorParam === "expired"
       ? tr(DICT.workbook.loginErrorExpired, locale)
       : errorParam === "invalid"
         ? tr(DICT.workbook.loginErrorInvalid, locale)
@@ -93,19 +96,40 @@ export default function LoginForm({ locale }: { locale: Locale }) {
         ) : (
           <form onSubmit={submit} style={{ marginTop: 18 }}>
             {(errorMessage || error) && (
-              <p
+              <div
                 style={{
-                  color: "#b8585b",
-                  background: "#fbeeee",
-                  border: "1px solid #f1d9d9",
+                  background: "var(--color-page-dark)",
+                  border: "1px solid rgba(182,144,106,0.3)",
                   borderRadius: 4,
-                  padding: "10px 12px",
-                  fontSize: 12,
+                  padding: "12px 14px",
                   marginBottom: 14,
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 10,
+                  textAlign: "left",
                 }}
               >
-                {error ?? errorMessage}
-              </p>
+                <span
+                  style={{
+                    color: "var(--color-tan)",
+                    fontSize: 14,
+                    lineHeight: 1,
+                    marginTop: 2,
+                  }}
+                >
+                  ♡
+                </span>
+                <p
+                  style={{
+                    color: "var(--color-ink-soft)",
+                    fontSize: 13,
+                    lineHeight: 1.45,
+                    margin: 0,
+                  }}
+                >
+                  {error ?? errorMessage}
+                </p>
+              </div>
             )}
 
             <label
@@ -125,7 +149,10 @@ export default function LoginForm({ locale }: { locale: Locale }) {
               type="email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (!paramErrorDismissed) setParamErrorDismissed(true);
+              }}
               placeholder="naam@voorbeeld.nl"
               style={{
                 width: "100%",
