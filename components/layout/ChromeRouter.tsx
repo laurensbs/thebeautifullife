@@ -2,7 +2,20 @@
 
 import { usePathname } from "next/navigation";
 
-const HIDE_PREFIXES = ["/admin", "/werkboek/", "/vragenlijst"];
+// Routes met eigen chrome (admin paneel, werkboek-renderer, vragenlijst).
+// /werkboek/login krijgt wél header/footer (entry-point voor klanten).
+const HIDE_PREFIXES = ["/admin", "/vragenlijst"];
+
+function shouldHideChrome(pathname: string): boolean {
+  if (HIDE_PREFIXES.some((p) => pathname === p || pathname.startsWith(p))) {
+    return true;
+  }
+  // Werkboek renderer (slug-routes) is een immersieve flow; login niet.
+  if (pathname.startsWith("/werkboek/") && pathname !== "/werkboek/login") {
+    return true;
+  }
+  return false;
+}
 
 export default function ChromeRouter({
   header,
@@ -14,10 +27,7 @@ export default function ChromeRouter({
   children: React.ReactNode;
 }) {
   const pathname = usePathname() || "/";
-  const hide = HIDE_PREFIXES.some(
-    (p) => pathname === p || pathname.startsWith(p)
-  );
-  if (hide) return <>{children}</>;
+  if (shouldHideChrome(pathname)) return <>{children}</>;
   return (
     <>
       {header}

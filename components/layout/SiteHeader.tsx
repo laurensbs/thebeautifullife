@@ -15,7 +15,6 @@ export default function SiteHeader({ locale }: { locale: Locale }) {
   const NAV = [
     { href: "/#packages", label: tr(DICT.nav.packages, locale) },
     { href: "/mijn-pad", label: tr(DICT.nav.myPath, locale) },
-    { href: "/werkboek/login", label: tr(DICT.nav.workbook, locale) },
   ];
 
   useEffect(() => {

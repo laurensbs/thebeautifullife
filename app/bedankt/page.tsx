@@ -4,6 +4,7 @@ import { PACKAGES, isPackageSlug } from "@/lib/packages";
 import { getLocale } from "@/lib/i18n/server";
 import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
+import FadeIn from "@/components/ui/FadeIn";
 
 export const metadata = {
   robots: { index: false, follow: false },
@@ -26,7 +27,7 @@ export default async function Bedankt({
 
   return (
     <main className="max-w-[680px] mx-auto px-5 sm:px-6 py-16 sm:py-20 text-center">
-      <div className="bg-page-soft rounded-[6px] px-6 py-12 sm:px-14 sm:py-16 shadow-[0_12px_40px_rgba(60,50,30,0.08)]">
+      <FadeIn direction="up" scale className="bg-page-soft rounded-[6px] px-6 py-12 sm:px-14 sm:py-16 shadow-[0_12px_40px_rgba(60,50,30,0.08)]">
         <div className="flex justify-center mb-5">
           <div className="w-14 h-14 rounded-full bg-tan/10 border border-tan/40 flex items-center justify-center">
             <Heart size={22} className="text-tan fill-tan" strokeWidth={0} />
@@ -68,7 +69,7 @@ export default async function Bedankt({
         <p className="mt-7 text-[12px] text-muted leading-relaxed max-w-sm mx-auto">
           {tr(DICT.thanks.portalNote, locale)}
         </p>
-      </div>
+      </FadeIn>
     </main>
   );
 }

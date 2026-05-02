@@ -46,7 +46,12 @@ export default function LoginForm({ locale }: { locale: Locale }) {
 
   return (
     <main className="max-w-[520px] mx-auto px-5 sm:px-6 py-16 sm:py-20">
-      <div className="bg-page-soft rounded-[6px] px-6 py-12 sm:px-12 sm:py-16 shadow-[0_18px_48px_rgba(60,50,30,0.08)] text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        className="bg-page-soft rounded-[6px] px-6 py-12 sm:px-12 sm:py-16 shadow-[0_18px_48px_rgba(60,50,30,0.08)] text-center"
+      >
         <div className="flex justify-center mb-5">
           <div className="w-14 h-14 rounded-full bg-tan/10 border border-tan/40 flex items-center justify-center">
             <Heart size={20} className="text-tan fill-tan" strokeWidth={0} />
@@ -127,7 +132,7 @@ export default function LoginForm({ locale }: { locale: Locale }) {
             ← {tr(DICT.common.backToHome, locale)}
           </Link>
         </div>
-      </div>
+      </motion.div>
     </main>
   );
 }

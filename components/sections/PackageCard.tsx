@@ -50,7 +50,7 @@ export default function PackageCard({
         ease: [0.16, 1, 0.3, 1],
       }}
       whileHover={{ y: -6 }}
-      className="relative bg-page-soft rounded-[6px] overflow-hidden shadow-[0_12px_40px_rgba(60,50,30,0.08)] hover:shadow-[0_22px_50px_rgba(60,50,30,0.14)] transition-shadow duration-500 flex flex-col"
+      className="group relative bg-page-soft rounded-[6px] overflow-hidden shadow-[0_12px_40px_rgba(60,50,30,0.08)] hover:shadow-[0_22px_50px_rgba(60,50,30,0.14)] transition-shadow duration-500 flex flex-col"
     >
       <span className="absolute top-3.5 left-1/2 -translate-x-1/2 z-10 w-9 h-9 rounded-full bg-page-soft border border-tan text-tan font-serif text-lg font-medium flex items-center justify-center">
         {pkg.number}
@@ -67,7 +67,7 @@ export default function PackageCard({
             alt={pkg.name}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover object-center"
+            className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-white/70 font-serif tracking-[0.2em] text-sm">

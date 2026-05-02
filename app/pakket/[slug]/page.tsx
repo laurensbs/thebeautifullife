@@ -10,6 +10,7 @@ import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
 import { buildMetadata, serviceLd } from "@/lib/seo";
 import JsonLd from "@/components/seo/JsonLd";
+import FadeIn from "@/components/ui/FadeIn";
 
 export async function generateMetadata({
   params,
@@ -90,7 +91,7 @@ export default async function PackagePage({
       </Link>
 
       <div className="grid lg:grid-cols-[1.05fr_1fr] gap-8 lg:gap-14 items-start">
-        <div className="bg-page-soft rounded-[6px] p-6 sm:p-10 lg:p-12 shadow-[0_12px_40px_rgba(60,50,30,0.08)]">
+        <FadeIn direction="up" className="bg-page-soft rounded-[6px] p-6 sm:p-10 lg:p-12 shadow-[0_12px_40px_rgba(60,50,30,0.08)]">
           <div className={`flex items-center gap-2.5 ${accentText}`}>
             <span className={`h-px w-10 ${accentBar} opacity-60`} />
             <span className="font-script text-2xl">{kicker}</span>
@@ -149,9 +150,9 @@ export default async function PackagePage({
           <p className="mt-9 font-script text-tan text-2xl leading-snug">
             &ldquo;{quote}&rdquo;
           </p>
-        </div>
+        </FadeIn>
 
-        <div className="bg-page-soft rounded-[6px] p-6 sm:p-9 lg:p-10 shadow-[0_12px_40px_rgba(60,50,30,0.08)] lg:sticky lg:top-24">
+        <FadeIn direction="up" delay={0.15} className="bg-page-soft rounded-[6px] p-6 sm:p-9 lg:p-10 shadow-[0_12px_40px_rgba(60,50,30,0.08)] lg:sticky lg:top-24">
           <div className="text-center mb-6">
             <p className={`font-script text-2xl ${accentText}`}>
               {tr(DICT.pkgPage.enroll, locale)}
@@ -176,7 +177,7 @@ export default async function PackagePage({
             chooseLabel={tr(DICT.intake.fields.choose, locale)}
             requiredAffix="*"
           />
-        </div>
+        </FadeIn>
       </div>
     </main>
   );

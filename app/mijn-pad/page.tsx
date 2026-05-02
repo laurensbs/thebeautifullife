@@ -13,6 +13,7 @@ import { getLocale } from "@/lib/i18n/server";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
 import { tx } from "@/lib/workbooks/types";
+import FadeIn from "@/components/ui/FadeIn";
 import {
   Heart,
   CheckCircle,
@@ -137,7 +138,7 @@ export default async function MijnPad() {
   return (
     <main className="max-w-[1100px] mx-auto px-5 sm:px-6 pt-6 sm:pt-8 pb-16 sm:pb-20">
       {/* Header */}
-      <div className="bg-page-soft rounded-[6px] px-6 py-7 sm:px-12 sm:py-11 shadow-[0_18px_48px_rgba(60,50,30,0.08)] mb-7 sm:mb-8 relative overflow-hidden">
+      <FadeIn direction="up" className="bg-page-soft rounded-[6px] px-6 py-7 sm:px-12 sm:py-11 shadow-[0_18px_48px_rgba(60,50,30,0.08)] mb-7 sm:mb-8 relative overflow-hidden">
         <div className="absolute top-6 right-6 flex items-center gap-2">
           {isTestMode && (
             <span className="text-[10px] tracking-[0.18em] uppercase bg-amber-100 text-amber-800 border border-amber-300 px-2 py-1 rounded">
@@ -166,7 +167,7 @@ export default async function MijnPad() {
         <p className="text-ink-soft text-[15px] leading-[1.85] max-w-md">
           {tr(DICT.portal.intro, locale)}
         </p>
-      </div>
+      </FadeIn>
 
       <div className="grid lg:grid-cols-[1.7fr_1fr] gap-6 sm:gap-7 items-start">
         <div className="space-y-5">
@@ -186,7 +187,7 @@ export default async function MijnPad() {
             </div>
           )}
 
-          {subs.map((sub) => {
+          {subs.map((sub, subIdx) => {
             const slug = isPackageSlug(sub.package) ? sub.package : null;
             const pkg = slug ? PACKAGES[slug] : null;
 
@@ -212,9 +213,9 @@ export default async function MijnPad() {
               : [];
 
             return (
+              <FadeIn key={sub.id} direction="up" delay={subIdx * 0.08}>
               <article
-                key={sub.id}
-                className="bg-page-soft rounded-[6px] shadow-[0_18px_48px_rgba(60,50,30,0.08)] overflow-hidden"
+                className="bg-page-soft rounded-[6px] shadow-[0_18px_48px_rgba(60,50,30,0.08)] overflow-hidden hover:shadow-[0_22px_56px_rgba(60,50,30,0.12)] transition-shadow duration-500"
               >
                 {/* Top band, color-coded per package */}
                 <div
@@ -388,11 +389,13 @@ export default async function MijnPad() {
                   )}
                 </div>
               </article>
+              </FadeIn>
             );
           })}
         </div>
 
         {/* Right column — profile */}
+        <FadeIn direction="left" delay={0.2}>
         <aside className="space-y-5">
           <h2 className="font-serif font-medium tracking-[0.22em] uppercase text-sm text-ink mb-1">
             {tr(DICT.portal.myDetails, locale)}
@@ -444,6 +447,7 @@ export default async function MijnPad() {
             </Link>
           </div>
         </aside>
+        </FadeIn>
       </div>
     </main>
   );

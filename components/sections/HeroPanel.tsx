@@ -22,31 +22,32 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className="px-6 pt-10 pb-8 sm:px-12 sm:pt-14 sm:pb-10 lg:pb-0"
       >
-        <h1 className="font-serif text-ink leading-none tracking-[0.04em] font-medium">
-          <span className="block uppercase tracking-[0.18em] text-[clamp(36px,7vw,68px)] font-medium">
+        <h1 className="font-serif text-ink leading-none tracking-[0.04em] font-medium text-center lg:text-left lg:pl-2">
+          <span className="block uppercase tracking-[0.32em] text-[clamp(18px,2.4vw,26px)] font-medium text-ink-soft">
             The
-            <br />
+          </span>
+          <span className="block uppercase tracking-[0.18em] text-[clamp(40px,7vw,72px)] font-medium mt-1">
             Beautiful
           </span>
-          <span className="block font-script font-normal text-[clamp(50px,9vw,96px)] tracking-[0.02em] -mt-1.5 ml-[40px] sm:ml-[80px] lg:ml-[120px]">
+          <span className="block font-script font-normal text-[clamp(54px,9vw,96px)] tracking-[0.02em] -mt-2 lg:ml-[60px]">
             Life
           </span>
         </h1>
 
-        <div className="mt-6 mb-4 flex items-center gap-2.5 text-tan">
+        <div className="mt-6 mb-4 flex items-center gap-2.5 text-tan justify-center lg:justify-start">
           <span className="h-px w-12 sm:w-14 bg-tan/55" />
           <span className="text-sm">♡</span>
           <span className="h-px w-12 sm:w-14 bg-tan/55" />
         </div>
 
-        <p className="font-sans text-[12px] sm:text-[13px] tracking-[0.28em] sm:tracking-[0.32em] uppercase text-ink">
+        <p className="font-sans text-[12px] sm:text-[13px] tracking-[0.28em] sm:tracking-[0.32em] uppercase text-ink text-center lg:text-left">
           {tr(DICT.hero.threePaths, locale)}
           <strong className="block font-medium text-tan tracking-[0.28em] sm:tracking-[0.32em] mt-1.5">
             {tr(DICT.hero.yourIdealLife, locale)}
           </strong>
         </p>
 
-        <p className="mt-6 max-w-[360px] text-ink-soft text-[14px] sm:text-[15px] leading-[1.7] pb-8 lg:pb-16">
+        <p className="mt-6 max-w-[360px] mx-auto lg:mx-0 text-ink-soft text-[14px] sm:text-[15px] leading-[1.7] pb-8 lg:pb-16 text-center lg:text-left">
           {tr(DICT.hero.lead, locale)}
         </p>
       </motion.div>
