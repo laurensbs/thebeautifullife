@@ -22,8 +22,12 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className="px-6 pt-10 pb-8 sm:px-12 sm:pt-14 sm:pb-10 lg:pb-0"
       >
-        <h1 className="font-serif text-ink leading-none tracking-[0.04em] font-medium text-center lg:text-left lg:pl-2">
-          <span className="block uppercase tracking-[0.32em] text-[clamp(18px,2.4vw,26px)] font-medium text-ink-soft">
+        <h1 className="font-serif text-ink leading-none tracking-[0.04em] font-medium text-center lg:text-left">
+          {/* "The" wordt opzettelijk een eigen text-center block; zo blijft hij
+              gecentreerd boven Beautiful, óók op desktop wanneer de rest van
+              de h1 links uitlijnt. De negatieve margin-right compenseert de
+              optische uithang van letterspacing 0.32em. */}
+          <span className="block uppercase tracking-[0.32em] text-[clamp(18px,2.4vw,26px)] font-medium text-ink-soft text-center -mr-[0.32em]">
             The
           </span>
           <span className="block uppercase tracking-[0.18em] text-[clamp(40px,7vw,72px)] font-medium mt-1">
