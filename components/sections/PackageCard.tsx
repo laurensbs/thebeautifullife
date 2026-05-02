@@ -8,6 +8,7 @@ import type { PACKAGES } from "@/lib/packages";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
 import Calligraphy from "@/components/ui/Calligraphy";
+import HeartDraw from "@/components/ui/HeartDraw";
 
 type Pkg = (typeof PACKAGES)[keyof typeof PACKAGES];
 
@@ -93,7 +94,7 @@ export default function PackageCard({
 
         <div className="my-5 flex items-center justify-center gap-2 text-tan">
           <span className="h-px w-10 bg-tan/55" />
-          <span className="text-[11px]">♡</span>
+          <HeartDraw size={11} />
           <span className="h-px w-10 bg-tan/55" />
         </div>
 

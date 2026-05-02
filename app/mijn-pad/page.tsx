@@ -16,6 +16,7 @@ import { tx } from "@/lib/workbooks/types";
 import FadeIn from "@/components/ui/FadeIn";
 import Calligraphy from "@/components/ui/Calligraphy";
 import HeartDivider from "@/components/ui/HeartDivider";
+import BookingCard, { type PortalBooking } from "@/components/portal/BookingCard";
 import {
   Heart,
   CheckCircle,
@@ -116,6 +117,15 @@ export default async function MijnPad() {
     WHERE id = ANY(${session.submissionIds}::int[])
     ORDER BY created_at DESC
   `) as unknown as SubmissionRow[];
+
+  // Bookings van deze klant
+  const bookingRows = (await sql`
+    SELECT id, scheduled_at, duration_min, price_cents, status, paid_at, meeting_url
+    FROM bookings
+    WHERE LOWER(contact_email) = ${session.email}
+       OR submission_id = ANY(${session.submissionIds}::int[])
+    ORDER BY scheduled_at ASC
+  `) as unknown as PortalBooking[];
 
   const wbRows = (await sql`
     SELECT wa.workbook_slug, wa.access_token, wa.last_seen_at,
@@ -392,9 +402,11 @@ export default async function MijnPad() {
           })}
         </div>
 
-        {/* Right column — profile */}
+        {/* Right column — booking + profile */}
         <FadeIn direction="left" delay={0.2}>
         <aside className="space-y-5">
+          <BookingCard bookings={bookingRows} />
+
           <h2 className="font-serif font-medium tracking-[0.22em] uppercase text-sm text-ink mb-1">
             {tr(DICT.portal.myDetails, locale)}
           </h2>

@@ -9,6 +9,7 @@ import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
 import Calligraphy from "@/components/ui/Calligraphy";
 import HeartDivider from "@/components/ui/HeartDivider";
+import HeartDraw from "@/components/ui/HeartDraw";
 
 export default function LoginForm({ locale }: { locale: Locale }) {
   const params = useSearchParams();
@@ -96,7 +97,7 @@ export default function LoginForm({ locale }: { locale: Locale }) {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-left bg-page-dark/60 border border-tan/30 rounded-md px-4 py-3 flex items-start gap-2.5"
               >
-                <span className="text-tan text-sm leading-none mt-0.5">♡</span>
+                <span className="text-tan flex-none mt-0.5"><HeartDraw size={12} /></span>
                 <p className="text-[13px] text-ink-soft leading-snug">
                   {error ?? errorMessage}
                 </p>

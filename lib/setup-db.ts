@@ -43,6 +43,31 @@ export async function setupDatabase() {
   await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMPTZ`;
   await sql`ALTER TABLE submissions ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`;
 
+  // Bookings — 1-op-1 calls met Marion (€125 / 60 min Teams).
+  // Stripe + Teams worden later inplugbaar gemaakt.
+  await sql`
+    CREATE TABLE IF NOT EXISTS bookings (
+      id SERIAL PRIMARY KEY,
+      submission_id INT REFERENCES submissions(id) ON DELETE SET NULL,
+      contact_email VARCHAR(200) NOT NULL,
+      contact_name VARCHAR(100) NOT NULL,
+      contact_phone VARCHAR(20),
+      booking_type VARCHAR(40) NOT NULL DEFAULT 'one_on_one_60',
+      scheduled_at TIMESTAMPTZ NOT NULL,
+      duration_min INT NOT NULL DEFAULT 60,
+      price_cents INT NOT NULL DEFAULT 12500,
+      status VARCHAR(30) NOT NULL DEFAULT 'reserved',
+      paid_at TIMESTAMPTZ,
+      stripe_payment_id VARCHAR(120),
+      meeting_url TEXT,
+      notes TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS bookings_scheduled_idx ON bookings(scheduled_at)`;
+  await sql`CREATE INDEX IF NOT EXISTS bookings_email_idx ON bookings(contact_email)`;
+
   // Workbook access (one row per submission per workbook)
   await sql`
     CREATE TABLE IF NOT EXISTS workbook_access (

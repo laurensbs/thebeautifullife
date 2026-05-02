@@ -14,6 +14,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import PageLoader from "@/components/ui/PageLoader";
+import HeartDraw from "@/components/ui/HeartDraw";
 
 type Client = {
   access_id: number;
@@ -142,6 +143,12 @@ export default function WerkboekenPage() {
               Inzendingen
             </Link>
             <Link
+              href="/admin/calls"
+              className="text-[11px] tracking-[0.22em] uppercase text-ink-soft hover:text-tan transition-colors px-2 py-1.5"
+            >
+              Calls
+            </Link>
+            <Link
               href="/admin/werkboeken"
               className="text-[11px] tracking-[0.22em] uppercase text-tan font-medium px-2 py-1.5"
             >
@@ -189,7 +196,7 @@ export default function WerkboekenPage() {
           </h1>
           <div className="my-5 flex items-center gap-2.5 text-tan">
             <span className="h-px w-12 bg-tan/55" />
-            <span className="text-sm">♡</span>
+            <HeartDraw size={14} />
             <span className="h-px w-12 bg-tan/55" />
           </div>
           <p className="text-ink-soft text-[15px] leading-[1.85] max-w-md">

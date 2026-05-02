@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
+import HeartDraw from "@/components/ui/HeartDraw";
 
 export default function SiteHeader({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
@@ -131,7 +132,7 @@ export default function SiteHeader({ locale }: { locale: Locale }) {
 
                 <div className="my-6 flex items-center gap-2.5 text-tan">
                   <span className="h-px w-12 bg-tan/55" />
-                  <span className="text-sm">♡</span>
+                  <HeartDraw size={14} />
                   <span className="h-px w-12 bg-tan/55" />
                 </div>
 

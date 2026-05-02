@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
 import Calligraphy from "@/components/ui/Calligraphy";
+import HeartDraw from "@/components/ui/HeartDraw";
 
 export default function Closing({ locale }: { locale: Locale }) {
   return (
@@ -24,7 +25,7 @@ export default function Closing({ locale }: { locale: Locale }) {
           durationPerChar={0.05}
           delay={0.3}
         />
-        <span className="text-tan ml-1.5">♡</span>
+        <span className="inline-block ml-1.5 text-tan align-middle"><HeartDraw size={14} /></span>
       </p>
     </motion.section>
   );

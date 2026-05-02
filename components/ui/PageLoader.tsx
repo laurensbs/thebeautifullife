@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import HeartDraw from "@/components/ui/HeartDraw";
 
 export default function PageLoader({
   label,
@@ -36,9 +37,9 @@ export default function PageLoader({
           <motion.span
             animate={{ scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] }}
             transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-            className="text-xs"
+            className="inline-flex"
           >
-            ♡
+            <HeartDraw size={13} />
           </motion.span>
           <span className="h-px w-10 bg-tan/55" />
         </motion.div>

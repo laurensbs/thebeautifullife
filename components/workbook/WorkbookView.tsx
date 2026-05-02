@@ -10,6 +10,7 @@ import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
 import AudioCueIcon from "./AudioCueIcon";
 import WorkbookField from "./WorkbookField";
+import HeartDraw from "@/components/ui/HeartDraw";
 
 type SaveState = "idle" | "saving" | "saved";
 
@@ -152,7 +153,7 @@ function CoverPage({ workbook, locale }: { workbook: Workbook; locale: Locale })
         </div>
         <div className="wb-rule wb-rule--center wb-rule--long">
           <span className="l" />
-          <span className="h">♡</span>
+          <span className="h" aria-hidden style={{ display: "inline-flex" }}><HeartDraw size={13} /></span>
           <span className="l" />
         </div>
         <p className="wb-cover__sub">{tx(c.sub, locale)}</p>
@@ -194,7 +195,7 @@ function PageView({
           )}
           <div className="wb-rule wb-rule--center">
             <span className="l" />
-            <span className="h">♡</span>
+            <span className="h" aria-hidden style={{ display: "inline-flex" }}><HeartDraw size={13} /></span>
             <span className="l" />
           </div>
           {page.partLead && (
@@ -273,7 +274,7 @@ function BlockView({
       return (
         <div className={cls}>
           <span className="l" />
-          <span className="h">♡</span>
+          <span className="h" aria-hidden style={{ display: "inline-flex" }}><HeartDraw size={13} /></span>
           {block.align !== "left" && <span className="l" />}
         </div>
       );

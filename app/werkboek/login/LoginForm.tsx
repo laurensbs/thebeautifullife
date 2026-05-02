@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 import "@/components/workbook/workbook.css";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
+import HeartDraw from "@/components/ui/HeartDraw";
 
 export default function LoginForm({ locale }: { locale: Locale }) {
   const params = useSearchParams();
@@ -70,7 +71,7 @@ export default function LoginForm({ locale }: { locale: Locale }) {
 
         <div className="wb-rule wb-rule--center">
           <span className="l" />
-          <span className="h">♡</span>
+          <HeartDraw size={13} />
           <span className="l" />
         </div>
 
@@ -112,12 +113,11 @@ export default function LoginForm({ locale }: { locale: Locale }) {
                 <span
                   style={{
                     color: "var(--color-tan)",
-                    fontSize: 14,
-                    lineHeight: 1,
+                    flex: "none",
                     marginTop: 2,
                   }}
                 >
-                  ♡
+                  <HeartDraw size={12} />
                 </span>
                 <p
                   style={{

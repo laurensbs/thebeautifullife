@@ -13,6 +13,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import FadeIn from "@/components/ui/FadeIn";
 import { StaggerList } from "@/components/ui/StaggerList";
 import Calligraphy from "@/components/ui/Calligraphy";
+import HeartDraw from "@/components/ui/HeartDraw";
 
 export async function generateMetadata({
   params,
@@ -115,7 +116,7 @@ export default async function PackagePage({
 
           <div className="my-7 flex items-center gap-2.5 text-tan">
             <span className="h-px w-12 bg-tan/55" />
-            <span className="text-sm">♡</span>
+            <HeartDraw size={14} />
             <span className="h-px w-12 bg-tan/55" />
           </div>
 
