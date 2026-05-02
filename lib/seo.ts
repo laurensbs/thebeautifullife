@@ -1,9 +1,22 @@
 import type { Metadata } from "next";
 import { LOCALES, type Locale } from "./i18n/types";
 
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://thebeautifullife.nl";
+function normalizeSiteUrl(raw: string | undefined): string {
+  const fallback = "https://thebeautifullife.nl";
+  if (!raw) return fallback;
+  let v = raw.trim().replace(/\/$/, "");
+  if (!v) return fallback;
+  // Voeg protocol toe als het mist (bv. "thebeautifullife.vercel.app")
+  if (!/^https?:\/\//i.test(v)) v = `https://${v}`;
+  // Valideer; als het nog steeds geen geldige URL is, val terug.
+  try {
+    return new URL(v).origin;
+  } catch {
+    return fallback;
+  }
+}
+
+export const SITE_URL = normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
 
 const HREFLANG_MAP: Record<Locale, string> = {
   nl: "nl-NL",
