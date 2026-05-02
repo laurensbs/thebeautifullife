@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 
+export const runtime = "edge";
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
@@ -28,23 +29,25 @@ export default function AppleIcon() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontFamily: "Pinyon Script, cursive",
             color: "#F6F1E7",
-            fontSize: 78,
+            fontSize: 56,
+            fontWeight: 600,
+            fontStyle: "italic",
             lineHeight: 1,
-            paddingBottom: 8,
+            fontFamily: "serif",
+            paddingBottom: 4,
           }}
         >
           B
         </div>
         <div
           style={{
-            fontFamily: "Cormorant Garamond, serif",
             color: "#2A2A28",
-            fontSize: 12,
+            fontSize: 11,
             letterSpacing: "0.18em",
             textTransform: "uppercase",
             fontWeight: 500,
+            fontFamily: "serif",
             display: "flex",
           }}
         >
