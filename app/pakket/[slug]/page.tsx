@@ -122,39 +122,35 @@ export default async function PackagePage({
           <h2 className="font-serif font-medium tracking-[0.22em] uppercase text-[12px] text-ink mb-3">
             {tr(DICT.pkgPage.whatYouGet, locale)}
           </h2>
-          <StaggerList
-            items={features}
-            className="flex flex-col gap-2.5 text-[14px] text-ink"
-            itemClassName="flex gap-2.5 leading-snug"
-            renderItem={(f) => (
-              <>
+          <StaggerList className="flex flex-col gap-2.5 text-[14px] text-ink">
+            {features.map((f) => (
+              <li key={f} className="flex gap-2.5 leading-snug">
                 <span className="flex-none w-4 h-4 rounded-full border border-tan inline-flex items-center justify-center mt-0.5">
                   <Check size={9} strokeWidth={2.2} className="text-tan" />
                 </span>
                 <span>{f}</span>
-              </>
-            )}
-          />
+              </li>
+            ))}
+          </StaggerList>
 
           <h2 className="mt-8 font-serif font-medium tracking-[0.22em] uppercase text-[12px] text-ink mb-3">
             {tr(DICT.pkgPage.howItWorks, locale)}
           </h2>
           <StaggerList
-            items={steps}
             baseDelay={0.1}
             className="flex flex-col gap-3 text-[14px] text-ink-soft"
-            itemClassName="flex gap-3 leading-snug"
-            renderItem={(step, i) => (
-              <>
+          >
+            {steps.map((step, i) => (
+              <li key={step} className="flex gap-3 leading-snug">
                 <span
                   className={`flex-none w-6 h-6 rounded-full ${accentBar} text-white text-xs font-medium flex items-center justify-center mt-0.5`}
                 >
                   {i + 1}
                 </span>
                 <span>{step}</span>
-              </>
-            )}
-          />
+              </li>
+            ))}
+          </StaggerList>
 
           <Calligraphy
             as="p"
