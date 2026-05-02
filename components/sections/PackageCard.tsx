@@ -53,10 +53,6 @@ export default function PackageCard({
       whileHover={{ y: -6 }}
       className="group relative bg-page-soft rounded-tl-[40px] rounded-tr-[40px] rounded-bl-[6px] rounded-br-[6px] overflow-hidden shadow-[0_12px_40px_rgba(60,50,30,0.08)] hover:shadow-[0_22px_50px_rgba(60,50,30,0.14)] transition-shadow duration-500 flex flex-col h-full"
     >
-      <span className="absolute top-3.5 left-1/2 -translate-x-1/2 z-10 w-9 h-9 rounded-full bg-page-soft border border-tan text-tan font-serif text-lg font-medium flex items-center justify-center">
-        {pkg.number}
-      </span>
-
       <div
         className="relative h-[200px] sm:h-[240px] lg:h-[260px] overflow-hidden bg-gradient-to-br from-page-dark to-line"
       >
