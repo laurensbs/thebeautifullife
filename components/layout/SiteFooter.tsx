@@ -3,6 +3,7 @@ import { Mail } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
+import Calligraphy from "@/components/ui/Calligraphy";
 
 function InstagramIcon({ size = 14 }: { size?: number }) {
   return (
@@ -42,9 +43,12 @@ export default function SiteFooter({ locale }: { locale: Locale }) {
                 The Beautiful Life
               </span>
             </div>
-            <p className="font-script text-tan text-2xl mb-2">
-              {tr(DICT.footer.tagline, locale)}
-            </p>
+            <Calligraphy
+              as="p"
+              className="font-script text-tan text-2xl mb-2"
+              text={tr(DICT.footer.tagline, locale)}
+              durationPerChar={0.04}
+            />
             <p className="text-ink-soft text-sm leading-[1.85]">
               {tr(DICT.footer.intro, locale)}
             </p>
@@ -119,9 +123,12 @@ export default function SiteFooter({ locale }: { locale: Locale }) {
               </li>
             </ul>
 
-            <p className="font-script text-tan text-xl mt-6">
-              {tr(DICT.footer.signoff, locale)}
-            </p>
+            <Calligraphy
+              as="p"
+              className="font-script text-tan text-xl mt-6"
+              text={tr(DICT.footer.signoff, locale)}
+              durationPerChar={0.07}
+            />
           </div>
         </div>
 

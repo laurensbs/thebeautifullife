@@ -7,6 +7,7 @@ import { Loader2, Heart } from "lucide-react";
 import Link from "next/link";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
+import Calligraphy from "@/components/ui/Calligraphy";
 
 export default function LoginForm({ locale }: { locale: Locale }) {
   const params = useSearchParams();
@@ -58,9 +59,7 @@ export default function LoginForm({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <p className="font-script text-tan text-3xl">
-          {tr(DICT.portal.loginKicker, locale)}
-        </p>
+        <Calligraphy as="p" className="font-script text-tan text-3xl" text={tr(DICT.portal.loginKicker, locale)} durationPerChar={0.06} />
         <h1 className="font-serif font-medium text-2xl tracking-[0.06em] uppercase mt-1 text-ink">
           {tr(DICT.portal.loginTitle, locale)}
         </h1>

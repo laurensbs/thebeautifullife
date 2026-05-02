@@ -12,6 +12,7 @@ import { buildMetadata, serviceLd } from "@/lib/seo";
 import JsonLd from "@/components/seo/JsonLd";
 import FadeIn from "@/components/ui/FadeIn";
 import { StaggerList } from "@/components/ui/StaggerList";
+import Calligraphy from "@/components/ui/Calligraphy";
 
 export async function generateMetadata({
   params,
@@ -95,7 +96,7 @@ export default async function PackagePage({
         <FadeIn direction="up" className="bg-page-soft rounded-[6px] p-6 sm:p-10 lg:p-12 shadow-[0_12px_40px_rgba(60,50,30,0.08)]">
           <div className={`flex items-center gap-2.5 ${accentText}`}>
             <span className={`h-px w-10 ${accentBar} opacity-60`} />
-            <span className="font-script text-2xl">{kicker}</span>
+            <Calligraphy as="span" className="font-script text-2xl" text={kicker} durationPerChar={0.07} />
           </div>
 
           <h1 className="mt-3 font-serif font-medium text-2xl sm:text-3xl lg:text-4xl tracking-[0.06em] uppercase leading-tight text-ink">
@@ -155,16 +156,23 @@ export default async function PackagePage({
             )}
           />
 
-          <p className="mt-9 font-script text-tan text-2xl leading-snug">
-            &ldquo;{quote}&rdquo;
-          </p>
+          <Calligraphy
+            as="p"
+            className="mt-9 font-script text-tan text-2xl leading-snug"
+            text={`“${quote}”`}
+            durationPerChar={0.04}
+            delay={0.3}
+          />
         </FadeIn>
 
         <FadeIn direction="up" delay={0.15} className="bg-page-soft rounded-[6px] p-6 sm:p-9 lg:p-10 shadow-[0_12px_40px_rgba(60,50,30,0.08)] lg:sticky lg:top-24">
           <div className="text-center mb-6">
-            <p className={`font-script text-2xl ${accentText}`}>
-              {tr(DICT.pkgPage.enroll, locale)}
-            </p>
+            <Calligraphy
+              as="p"
+              className={`font-script text-2xl ${accentText}`}
+              text={tr(DICT.pkgPage.enroll, locale)}
+              durationPerChar={0.07}
+            />
             <h2 className="font-serif font-medium tracking-[0.18em] uppercase text-lg text-ink mt-1">
               {pkg.priceLabel}
             </h2>

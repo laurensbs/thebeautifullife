@@ -14,6 +14,7 @@ import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
 import { tx } from "@/lib/workbooks/types";
 import FadeIn from "@/components/ui/FadeIn";
+import Calligraphy from "@/components/ui/Calligraphy";
 import {
   Heart,
   CheckCircle,
@@ -153,7 +154,7 @@ export default async function MijnPad() {
           </a>
         </div>
 
-        <p className="font-script text-tan text-3xl">{tr(DICT.portal.welcomeBack, locale)}</p>
+        <Calligraphy as="p" className="font-script text-tan text-3xl" text={tr(DICT.portal.welcomeBack, locale)} durationPerChar={0.06} />
         <h1 className="font-serif font-medium text-3xl sm:text-4xl tracking-[0.06em] uppercase mt-1 text-ink">
           {session.firstName}
         </h1>
@@ -178,7 +179,7 @@ export default async function MijnPad() {
           {subs.length === 0 && (
             <div className="bg-page-soft rounded-[6px] px-8 py-10 text-center text-ink-soft">
               <Sparkles className="text-tan mx-auto mb-3" size={22} />
-              <p className="font-script text-tan text-2xl">{tr(DICT.portal.noPackagesYet, locale)}</p>
+              <Calligraphy as="p" className="font-script text-tan text-2xl" text={tr(DICT.portal.noPackagesYet, locale)} durationPerChar={0.05} />
               <p className="mt-2 text-sm">
                 <Link href="/" className="underline hover:text-tan">
                   {tr(DICT.portal.seeThreePaths, locale)}

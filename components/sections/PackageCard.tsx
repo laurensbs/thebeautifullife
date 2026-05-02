@@ -7,6 +7,7 @@ import { Check } from "lucide-react";
 import type { PACKAGES } from "@/lib/packages";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
+import Calligraphy from "@/components/ui/Calligraphy";
 
 type Pkg = (typeof PACKAGES)[keyof typeof PACKAGES];
 
@@ -75,9 +76,12 @@ export default function PackageCard({
       </div>
 
       <div className="px-6 sm:px-8 lg:px-9 py-7 sm:py-8 lg:py-9 text-center flex flex-col flex-1">
-        <p className="font-script text-tan text-2xl font-normal mb-2.5">
-          {kicker}
-        </p>
+        <Calligraphy
+          as="p"
+          className="font-script text-tan text-2xl font-normal mb-2.5"
+          text={kicker}
+          durationPerChar={0.07}
+        />
         <h3 className="font-serif font-medium text-[22px] tracking-[0.18em] uppercase leading-tight text-ink">
           {nameLines[0]}
           {nameLines[1] && (
@@ -115,9 +119,13 @@ export default function PackageCard({
           {pkg.priceLabel}
         </Link>
 
-        <p className="mt-5 font-script text-tan text-xl leading-snug">
-          {quote}
-        </p>
+        <Calligraphy
+          as="p"
+          className="mt-5 font-script text-tan text-xl leading-snug"
+          text={quote}
+          durationPerChar={0.04}
+          delay={0.2}
+        />
       </div>
     </motion.article>
   );

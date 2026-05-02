@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Sun, Leaf, Heart, Sparkles } from "lucide-react";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
+import Calligraphy from "@/components/ui/Calligraphy";
 
 export default function HeroPanel({ locale }: { locale: Locale }) {
   const FEATURES = [
@@ -27,15 +28,20 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
               gecentreerd boven Beautiful, óók op desktop wanneer de rest van
               de h1 links uitlijnt. De negatieve margin-right compenseert de
               optische uithang van letterspacing 0.32em. */}
-          <span className="block uppercase tracking-[0.32em] text-[clamp(18px,2.4vw,26px)] font-medium text-ink-soft text-center -mr-[0.32em]">
+          {/* "The" overlapt subtiel de bovenkant van Beautiful (zacht layering) */}
+          <span className="relative z-10 block uppercase tracking-[0.32em] text-[clamp(18px,2.4vw,26px)] font-medium text-ink-soft text-center -mr-[0.32em] -mb-[0.4em] sm:-mb-[0.5em]">
             The
           </span>
-          <span className="block uppercase tracking-[0.18em] text-[clamp(40px,7vw,72px)] font-medium mt-1">
+          <span className="block uppercase tracking-[0.18em] text-[clamp(40px,7vw,72px)] font-medium">
             Beautiful
           </span>
-          <span className="block font-script font-normal text-[clamp(54px,9vw,96px)] tracking-[0.02em] -mt-2 lg:ml-[60px]">
-            Life
-          </span>
+          <Calligraphy
+            as="span"
+            className="block font-script font-normal text-[clamp(54px,9vw,96px)] tracking-[0.02em] -mt-2 lg:ml-[60px]"
+            text="Life"
+            durationPerChar={0.18}
+            delay={0.4}
+          />
         </h1>
 
         <div className="mt-6 mb-4 flex items-center gap-2.5 text-tan justify-center lg:justify-start">
