@@ -54,8 +54,8 @@ export const DICT = {
     threePaths: t("3 Paths. One Goal.", "3 Paths. One Goal."),
     yourIdealLife: t("Your Ideal Life.", "Your Ideal Life."),
     lead: t(
-      "Van helderheid tot transformatie. Ik help je een leven te ontwerpen dat aanvoelt als jouw thuis.",
-      "From clarity to transformation. I help you design a life that feels like coming home to yourself."
+      "Drie paden om terug te komen bij jezelf. Van een werkboek in je eigen tempo tot 8 dagen samen — kies wat past bij waar jij nu staat.",
+      "Three paths to come back to yourself. From a workbook in your own time to 8 days together — choose what fits where you are now."
     ),
     feat: {
       clarity: t("More Clarity", "More Clarity"),
@@ -94,16 +94,16 @@ export const DICT = {
 
     tagline: {
       ikigai: t(
-        "Ontdek wie je bent, wat je wilt en waar je naartoe gaat.",
-        "Discover who you are, what you want, and where you're going."
+        "Het werkboek dat je terugbrengt bij jezelf — in jouw eigen tempo.",
+        "The workbook that brings you back to yourself — in your own time."
       ),
       alignment: t(
-        "Bouw structuur, creëer rust en ontwerp een leven dat je ondersteunt.",
-        "Build structure, create calm, and design a life that supports you."
+        "Werkboek + 2 persoonlijke calls met Marion. Van helderheid naar een plan dat past bij jouw leven.",
+        "Workbook + 2 personal calls with Marion. From clarity to a plan that fits your life."
       ),
       experience: t(
-        "8 dagen transformatie & persoonlijke coaching om je droomleven te bouwen.",
-        "8 days of transformation & personal coaching to build your dream life."
+        "8 dagen in Spanje of Sardinië. Werkboek, persoonlijke coaching en een levensplan dat blijft.",
+        "8 days in Spain or Sardinia. Workbook, personal coaching, and a life plan that lasts."
       ),
     },
 
@@ -125,57 +125,57 @@ export const DICT = {
     features: {
       ikigai: {
         nl: [
-          "Wie ben ik, werkelijk?",
-          "Hoe ziet mijn ideale leven eruit?",
-          "Wat zijn mijn doelen & dromen?",
-          "Wat geeft mij energie?",
-          "Ontdek je Ikigai",
-          "Helderheid & richting in 3–5 stappen",
+          "Het werkboek Return to Calm — 16 pagina's",
+          "Pagina's om te vertragen, voelen & schrijven",
+          "Digitaal in te vullen of te printen als PDF",
+          "Auto-saved — pak het op wanneer je wil",
+          "Voor altijd terug te lezen in je portaal",
+          "Een eerste stap, op jouw tempo",
         ],
         en: [
-          "Who am I, really?",
-          "What does my ideal life look like?",
-          "What are my goals & dreams?",
-          "What gives me energy?",
-          "Discover your Ikigai",
-          "Clarity & direction in 3–5 steps",
+          "The Return to Calm workbook — 16 pages",
+          "Pages to slow down, feel & write",
+          "Fill in digitally or print as PDF",
+          "Auto-saved — pick it up whenever you want",
+          "Always available in your personal portal",
+          "A first step, at your own pace",
         ],
       },
       alignment: {
         nl: [
-          "Maak je hoofd leeg & krijg overzicht",
-          "Structuur die voor jou werkt",
-          "Dagelijkse ritmes & gewoontes",
-          "Grenzen stellen & balans vinden",
-          "Lichte persoonlijke begeleiding",
-          "Een praktisch plan voor je ideale leven",
+          "Het werkboek From Noise to Structure",
+          "Een uitgebreide vragenlijst om jezelf scherp te krijgen",
+          "Twee 1-op-1 Zoom-calls met Marion (60 min elk)",
+          "Een persoonlijk plan dat bij jouw leven past",
+          "Concrete ritmes & gewoontes om mee te starten",
+          "Toegang tot je portaal — alles op één plek",
         ],
         en: [
-          "Clear your mind & gain perspective",
-          "Structure that works for you",
-          "Daily rhythms & habits",
-          "Set boundaries & find balance",
-          "Light personal guidance",
-          "A practical plan for your ideal life",
+          "The From Noise to Structure workbook",
+          "An in-depth questionnaire to bring yourself into focus",
+          "Two 1-on-1 Zoom calls with Marion (60 min each)",
+          "A personal plan that fits your life",
+          "Concrete rhythms & habits to start with",
+          "Access to your portal — everything in one place",
         ],
       },
       experience: {
         nl: [
-          "8-daagse Beautiful Life Experience",
-          "Self-care & wellness pakket",
-          "Luxe werkboek",
-          "Ontspanning, vrije tijd & ervaringen",
-          "1-op-1 persoonlijke coaching",
-          "Persoonlijk levensplan",
+          "8 dagen in Spanje of Sardinië — vanaf 8 deelnemers",
+          "Het werkboek Return to Calm als zachte voorbereiding",
+          "Persoonlijk kennismakingsgesprek vooraf",
+          "Self-care & wellness pakket bij je thuis",
+          "1-op-1 persoonlijke coaching met Marion",
+          "Een persoonlijk levensplan dat blijft",
           "De fundering van je ideale leven",
         ],
         en: [
-          "8-day Beautiful Life Experience",
-          "Self-care & wellness package",
-          "Luxury workbook",
-          "Relaxation, free time & experiences",
-          "1-on-1 personal coaching",
-          "Personal life plan",
+          "8 days in Spain or Sardinia — from 8 participants",
+          "The Return to Calm workbook as gentle preparation",
+          "A personal introductory call in advance",
+          "Self-care & wellness package delivered to your home",
+          "1-on-1 personal coaching with Marion",
+          "A personal life plan that lasts",
           "The foundation of your ideal life",
         ],
       },
@@ -187,18 +187,18 @@ export const DICT = {
     title: t("What You Get", "What You Get"),
     items: {
       nl: [
-        "Meer helderheid over wie je bent en wat je wilt",
-        "Structuur & overzicht in je dagelijks leven",
-        "Gewoontes die je energie geven",
-        "Meer tijd, vrijheid & vreugde",
-        "Een leven dat klopt — van binnen en van buiten",
+        "Een werkboek dat je écht meeneemt — geen invuloefening",
+        "Pagina's om te vertragen, voelen & schrijven",
+        "Persoonlijke begeleiding op jouw tempo",
+        "Een eigen portaal waar alles bewaard blijft",
+        "Het begin van een leven dat past bij wie je bent",
       ],
       en: [
-        "More clarity about who you are and what you want",
-        "Structure & overview in your daily life",
-        "Habits that give you energy",
-        "More time, freedom & joy",
-        "A life that feels right — inside and out",
+        "A workbook that truly takes you along — no checkbox exercise",
+        "Pages to slow down, feel & write",
+        "Personal guidance at your own pace",
+        "A personal portal where everything is saved",
+        "The beginning of a life that fits who you are",
       ],
     },
   },
@@ -243,47 +243,53 @@ export const DICT = {
       ikigai: {
         nl: [
           "Je rondt je aanmelding af",
-          "Je betaalt veilig met iDEAL of creditcard (binnenkort via Mollie)",
-          "Je vult de Ikigai-vragenlijst in (~20 min)",
-          "Marion stuurt jouw persoonlijke Ikigai-document binnen 5 werkdagen",
+          "Je betaalt veilig (binnenkort via Mollie)",
+          "Je werkboek ligt direct in je inbox",
+          "Je vult in op jouw tempo — alles wordt bewaard",
+          "Je portaal blijft open, ook als je later verder wil",
         ],
         en: [
           "You complete your enrollment",
-          "You pay securely by iDEAL or credit card (Mollie, coming soon)",
-          "You complete the Ikigai questionnaire (~20 min)",
-          "Marion sends your personal Ikigai document within 5 working days",
+          "You pay securely (Mollie, coming soon)",
+          "Your workbook lands in your inbox right away",
+          "You fill it in at your own pace — everything is saved",
+          "Your portal stays open, also for when you return later",
         ],
       },
       alignment: {
         nl: [
           "Je rondt je aanmelding af",
-          "Je betaalt veilig (binnenkort via Mollie)",
-          "Je vult de uitgebreide vragenlijst in",
-          "We plannen samen 1–2 calls (Zoom)",
-          "Je ontvangt een praktisch plan op maat",
+          "Je werkboek + portaal staan direct voor je klaar",
+          "Je vult de uitgebreide vragenlijst in (in jouw tempo)",
+          "We plannen je twee 60-minuten Zoom-calls met Marion",
+          "Na de calls ontvang je jouw persoonlijke plan",
+          "Alles blijft beschikbaar in je portaal",
         ],
         en: [
           "You complete your enrollment",
-          "You pay securely (Mollie, coming soon)",
-          "You complete the in-depth questionnaire",
-          "We schedule 1–2 calls together (Zoom)",
-          "You receive a practical, tailored plan",
+          "Your workbook + portal are ready for you right away",
+          "You complete the in-depth questionnaire (in your own time)",
+          "We schedule your two 60-minute Zoom calls with Marion",
+          "After the calls you receive your personal plan",
+          "Everything stays available in your portal",
         ],
       },
       experience: {
         nl: [
           "Je rondt je aanmelding af",
-          "Marion neemt persoonlijk contact met je op voor een kennismakingsgesprek",
-          "Samen bepalen we datum, locatie en wensen",
+          "Je ontvangt direct het werkboek Return to Calm",
+          "Marion neemt persoonlijk contact op voor je kennismakingsgesprek",
+          "Samen bepalen we de bestemming (Spanje of Sardinië) en je wensen",
           "Na bevestiging volgt de betaling",
-          "Je 8-daagse Beautiful Life Experience start",
+          "Je 8-daagse Experience begint — vanaf 8 deelnemers",
         ],
         en: [
           "You complete your enrollment",
-          "Marion personally contacts you for an introductory call",
-          "Together we set the dates, location and your wishes",
+          "You instantly receive the Return to Calm workbook",
+          "Marion personally contacts you for your introductory call",
+          "Together we set the destination (Spain or Sardinia) and your wishes",
           "After confirmation, the payment follows",
-          "Your 8-day Beautiful Life Experience begins",
+          "Your 8-day Experience begins — from 8 participants",
         ],
       },
     } as Record<"ikigai" | "alignment" | "experience", { nl: string[]; en: string[] }>,
@@ -436,16 +442,16 @@ export const DICT = {
     title: t("Je aanmelding is binnen", "Your enrollment has arrived"),
     next: {
       ikigai: t(
-        "Houd je inbox in de gaten — je ontvangt nu twee mails: je persoonlijke reflectievragenlijst, én je werkboek 'Return to Calm' om in jouw eigen tempo in te vullen.",
-        "Check your inbox — you'll receive two emails: your personal reflection questionnaire, and your workbook 'Return to Calm' to fill in at your own pace."
+        "Je werkboek Return to Calm ligt direct in je inbox. Vul in jouw eigen tempo in — alles wordt bewaard. Alles blijft ook bereikbaar in je portaal.",
+        "Your Return to Calm workbook lands in your inbox right away. Fill it in at your own pace — everything is saved. Always available in your portal too."
       ),
       alignment: t(
-        "Je ontvangt zo de bevestiging én je werkboek 'From Noise to Structure' per e-mail. Marion neemt binnen 2 werkdagen contact op om de eerste call te plannen.",
-        "You'll receive your confirmation and your workbook 'From Noise to Structure' by email. Marion will contact you within 2 working days to schedule the first call."
+        "Je werkboek + uitgebreide vragenlijst staan direct voor je klaar. Marion neemt binnen 2 werkdagen contact op om je twee Zoom-calls te plannen.",
+        "Your workbook + in-depth questionnaire are ready for you right away. Marion will contact you within 2 working days to schedule your two Zoom calls."
       ),
       experience: t(
-        "Marion neemt persoonlijk contact met je op voor een kennismakingsgesprek. Je ontvangt alvast je werkboek 'Return to Calm' als zachte voorbereiding.",
-        "Marion will personally contact you for an introductory call. You'll receive your workbook 'Return to Calm' as gentle preparation."
+        "Marion neemt persoonlijk contact met je op voor je kennismakingsgesprek (Spanje of Sardinië). Je ontvangt alvast het werkboek Return to Calm als zachte voorbereiding.",
+        "Marion will personally contact you for your introductory call (Spain or Sardinia). You'll receive the Return to Calm workbook as gentle preparation."
       ),
       generic: t(
         "Houd je inbox in de gaten voor de volgende stap.",

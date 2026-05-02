@@ -11,7 +11,7 @@ export const WORKBOOKS: Record<string, Workbook> = {
 // Welk werkboek hoort bij welk pakket?
 // Pakket 1 (Ikigai)     → Return to Calm
 // Pakket 2 (Alignment)  → From Noise to Structure
-// Pakket 3 (Experience) → Return to Calm (zachte voorbereiding)
+// Pakket 3 (Experience) → Return to Calm (zachte voorbereiding voor de Experience)
 export const PACKAGE_WORKBOOKS: Record<PackageSlug, string[]> = {
   ikigai: ["return-to-calm"],
   alignment: ["from-noise-to-structure"],
