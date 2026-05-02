@@ -46,6 +46,7 @@ import {
   WORKBOOKS,
   workbookFieldKeys,
 } from "@/lib/workbooks";
+import PageLoader from "@/components/ui/PageLoader";
 
 type Submission = {
   id: number;
@@ -258,56 +259,66 @@ export default function AdminDashboard() {
     : submissions;
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-page flex items-center justify-center">
-        <Loader2 size={28} className="text-tan animate-spin" />
-      </div>
-    );
+    return <PageLoader label="dashboard wordt geladen…" />;
   }
 
   return (
     <div className="min-h-screen bg-page">
-      {/* Header */}
-      <header className="sticky top-0 z-30 bg-page-soft/85 backdrop-blur-md border-b border-line/60">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-sage flex items-center justify-center">
-              <span className="font-script text-white text-lg leading-none -mt-0.5">
-                B
-              </span>
-            </div>
-            <div>
-              <span className="font-serif text-ink text-[15px] block leading-tight tracking-wide">
-                Dashboard
-              </span>
-              <span className="font-sans text-muted text-[10px] tracking-[0.2em] uppercase">
-                The Beautiful Life
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-1">
+      {/* Header — homepage stijl: cream-soft band, brand links, nav rechts */}
+      <header className="sticky top-0 z-30 bg-page/90 backdrop-blur-md border-b border-line/40">
+        <div className="max-w-5xl mx-auto px-5 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+          <Link href="/admin/dashboard" className="flex flex-col leading-none group">
+            <span className="font-serif text-ink text-[14px] tracking-[0.18em] uppercase group-hover:text-tan transition-colors">
+              The Beautiful Life
+            </span>
+            <span className="font-script text-tan text-[15px] -mt-0.5">
+              admin
+            </span>
+          </Link>
+          <nav className="flex items-center gap-1 sm:gap-3">
             <Link
-              href="/admin/vragen"
-              className="flex items-center gap-1.5 font-sans text-xs text-ink-soft hover:text-tan transition-colors p-2 rounded-lg hover:bg-page-dark/50"
+              href="/admin/dashboard"
+              className="text-[11px] tracking-[0.22em] uppercase text-tan font-medium px-2 py-1.5"
             >
-              <MessageSquare size={15} />
-              <span className="hidden sm:inline">Vragen</span>
+              Inzendingen
+            </Link>
+            <Link
+              href="/admin/werkboeken"
+              className="text-[11px] tracking-[0.22em] uppercase text-ink-soft hover:text-tan transition-colors px-2 py-1.5"
+            >
+              Werkboeken
             </Link>
             <button
               onClick={logout}
-              className="flex items-center gap-1.5 font-sans text-xs text-ink-soft hover:text-tan transition-colors p-2 rounded-lg hover:bg-page-dark/50"
+              className="flex items-center gap-1.5 text-[11px] tracking-[0.22em] uppercase text-ink-soft hover:text-tan transition-colors px-2 py-1.5 ml-1"
             >
-              <LogOut size={15} />
+              <LogOut size={13} />
               <span className="hidden sm:inline">Uit</span>
             </button>
-          </div>
+          </nav>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-5 md:py-8">
+      <main className="max-w-5xl mx-auto px-5 sm:px-6 pt-6 sm:pt-8 pb-16">
+        {/* Welkom-card in homepage portaal-stijl */}
+        <div className="bg-page-soft rounded-tl-[40px] rounded-tr-[40px] rounded-b-[6px] px-6 py-7 sm:px-12 sm:py-10 shadow-[0_18px_48px_rgba(60,50,30,0.08)] mb-6 sm:mb-8">
+          <p className="font-script text-tan text-3xl">welkom terug,</p>
+          <h1 className="font-serif font-medium text-2xl sm:text-3xl tracking-[0.06em] uppercase mt-1 text-ink">
+            Marion
+          </h1>
+          <div className="my-5 flex items-center gap-2.5 text-tan">
+            <span className="h-px w-12 bg-tan/55" />
+            <span className="text-sm">♡</span>
+            <span className="h-px w-12 bg-tan/55" />
+          </div>
+          <p className="text-ink-soft text-[15px] leading-[1.85] max-w-md">
+            Hier vind je alle aanmeldingen, hun pad en hun werkboeken.
+          </p>
+        </div>
+
         {/* Test mode banner */}
         {testMode && (
-          <div className="mb-5 bg-amber-50 border border-amber-300 rounded-lg px-4 py-3 flex items-center gap-2.5 text-amber-900">
+          <div className="mb-6 bg-amber-50 border border-amber-300 rounded-lg px-4 py-3 flex items-center gap-2.5 text-amber-900">
             <AlertTriangle size={15} className="flex-shrink-0" />
             <p className="text-[12px] leading-snug">
               <strong className="font-medium">Test-modus actief.</strong>{" "}
@@ -639,25 +650,25 @@ export default function AdminDashboard() {
     label: string;
     tint?: "sage" | "tan" | "gold";
   }) {
-    const ring =
+    const accent =
       tint === "sage"
-        ? "border-sage/30"
+        ? "bg-sage"
         : tint === "tan"
-          ? "border-tan/30"
+          ? "bg-tan"
           : tint === "gold"
-            ? "border-gold/30"
-            : "border-line/50";
+            ? "bg-gold"
+            : "bg-line";
     return (
-      <div
-        className={`bg-page-soft rounded-xl p-3 md:p-4 border ${ring} text-center`}
-      >
-        <div className="flex justify-center mb-1.5 h-[18px] items-center">
+      <div className="relative bg-page-soft rounded-[6px] p-4 md:p-5 text-center shadow-[0_8px_24px_rgba(60,50,30,0.06)] hover:shadow-[0_12px_32px_rgba(60,50,30,0.1)] transition-shadow overflow-hidden">
+        {/* Top accent strip — pakket-achtige kleur-band */}
+        <span className={`absolute top-0 left-0 right-0 h-0.5 ${accent}`} />
+        <div className="flex justify-center mb-2 h-[20px] items-center">
           {icon}
         </div>
-        <p className="font-serif text-ink text-xl md:text-2xl font-light leading-none">
+        <p className="font-serif text-ink text-xl md:text-2xl font-medium leading-none">
           {value}
         </p>
-        <p className="font-sans text-muted text-[10px] md:text-xs mt-1 tracking-[0.18em] uppercase">
+        <p className="font-sans text-muted text-[10px] md:text-[11px] mt-1.5 tracking-[0.22em] uppercase">
           {label}
         </p>
       </div>
@@ -765,24 +776,27 @@ function PkgPill({
   value: number;
   onClick: () => void;
 }) {
-  const cls =
-    color === "sage"
-      ? "border-sage/30 hover:border-sage"
-      : color === "tan"
-        ? "border-tan/30 hover:border-tan"
-        : "border-gold/30 hover:border-gold";
-  const dot =
+  const accent =
     color === "sage" ? "bg-sage" : color === "tan" ? "bg-tan" : "bg-gold";
+  const text =
+    color === "sage"
+      ? "text-sage-deep"
+      : color === "tan"
+        ? "text-tan"
+        : "text-gold";
   return (
     <button
       onClick={onClick}
-      className={`bg-page-soft rounded-lg px-3 py-2 border ${cls} transition flex items-center justify-center gap-2`}
+      className="group relative bg-page-soft rounded-[6px] px-4 py-3 hover:-translate-y-0.5 transition-all flex items-center justify-between shadow-[0_8px_24px_rgba(60,50,30,0.06)] hover:shadow-[0_12px_32px_rgba(60,50,30,0.1)] overflow-hidden"
     >
-      <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
-      <span className="text-[11px] tracking-[0.18em] uppercase text-ink-soft">
-        {label}
+      <span className={`absolute top-0 left-0 right-0 h-0.5 ${accent}`} />
+      <span className="flex items-center gap-2">
+        <span className={`w-1.5 h-1.5 rounded-full ${accent}`} />
+        <span className="text-[11px] tracking-[0.18em] uppercase text-ink-soft group-hover:text-ink transition-colors">
+          {label}
+        </span>
       </span>
-      <span className="font-serif text-ink text-base ml-auto">{value}</span>
+      <span className={`font-serif text-xl ${text}`}>{value}</span>
     </button>
   );
 }
