@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { sql } from "@/lib/db";
-import { getSessionByToken, getWorkbookSession, setWorkbookCookie } from "@/lib/workbook-auth";
+import { getWorkbookSession } from "@/lib/workbook-auth";
 import { getWorkbook } from "@/lib/workbooks";
 import { getLocale } from "@/lib/i18n/server";
 import WorkbookView from "@/components/workbook/WorkbookView";
@@ -24,13 +24,10 @@ export default async function WorkbookPage({
   const workbook = getWorkbook(slug);
   if (!workbook) redirect("/");
 
-  // If a fresh token is in the URL: set the cookie + clean the URL.
+  // If a fresh token is in the URL: laat de route handler de cookie
+  // setten (server component mag in Next 15+ geen cookies muteren).
   if (token) {
-    const session = await getSessionByToken(token);
-    if (session && session.workbookSlug === slug) {
-      await setWorkbookCookie(token);
-      redirect(`/werkboek/${slug}`);
-    }
+    redirect(`/api/workbook/access?token=${encodeURIComponent(token)}&slug=${encodeURIComponent(slug)}`);
   }
 
   const session = await getWorkbookSession();
