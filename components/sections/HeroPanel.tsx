@@ -36,13 +36,13 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
           <span className="block uppercase tracking-[0.18em] text-[clamp(40px,7vw,72px)] font-medium">
             Beautiful
           </span>
+          {/* "Life" gecentreerd onder Beautiful, groter, semi-transparant.
+              De L-staart ligt -mt over Beautiful zodat hij door de letters
+              heen valt — text-center op alle breakpoints. */}
           <Calligraphy
             as="span"
-            className="block font-script font-normal text-[clamp(54px,9vw,96px)] tracking-[0.02em] -mt-2 lg:ml-[60px]"
+            className="block font-script font-normal text-[clamp(72px,13vw,140px)] tracking-[0.02em] -mt-[0.42em] sm:-mt-[0.46em] text-center text-ink/65 leading-[0.85]"
             text="Life"
-            duration={1.6}
-            delay={0.6}
-            underline
           />
         </h1>
 
