@@ -41,7 +41,7 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
               heen valt — text-center op alle breakpoints. */}
           <Calligraphy
             as="span"
-            className="block font-script font-normal text-[clamp(72px,13vw,140px)] tracking-[0.02em] -mt-[0.42em] sm:-mt-[0.46em] text-center text-ink/65 leading-[0.85]"
+            className="block font-script font-normal text-[clamp(56px,10vw,108px)] tracking-[0.02em] -mt-[0.28em] sm:-mt-[0.32em] text-center text-ink/85 leading-[0.95]"
             text="Life"
           />
         </h1>
