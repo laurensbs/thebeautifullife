@@ -678,3 +678,120 @@
   .wb-breath { font-size: 30px; }
   .wb-field { padding: 14px 16px; }
 }
+
+/* ===== Paginated app-mode (workbook redesign) ===== */
+.wb-app { display: block; }
+
+/* Print-only block: visible only when printing */
+.wb-book--print-only { display: none; }
+@media print {
+  .wb-app, .wb-toolbar, .wb-progress, .wb-nav { display: none !important; }
+  .wb-book--print-only { display: block; }
+}
+
+/* Sticky progress band */
+.wb-progress {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--color-page-dark);
+  padding: 12px 16px;
+}
+.wb-progress__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.wb-progress__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.wb-progress__step { color: var(--color-ink-soft); }
+.wb-progress__pct { color: var(--color-tan); }
+.wb-progress__bar {
+  height: 3px;
+  background: var(--color-line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.wb-progress__fill {
+  height: 100%;
+  background: var(--color-tan);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* Paginated book-container — single page in view */
+.wb-book--paginated {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px 0 32px;
+}
+.wb-book--paginated .wb-page {
+  aspect-ratio: auto;
+  margin: 0 0 16px;
+  min-height: 60vh;
+}
+
+/* Navigation buttons */
+.wb-nav {
+  max-width: 720px;
+  margin: 8px auto 0;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.wb-nav__counter {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.wb-nav-btn {
+  background: var(--color-ink);
+  color: #fff;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 3px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: filter 0.2s, transform 0.2s;
+}
+.wb-nav-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.wb-nav-btn--ghost {
+  background: transparent;
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+}
+.wb-nav-btn--ghost:hover { border-color: var(--color-tan); color: var(--color-tan); }
+
+/* Summary cards interaction */
+.wb-summary-card:hover {
+  border-color: var(--color-tan) !important;
+  background: var(--color-page-soft) !important;
+}
+
+@media (max-width: 560px) {
+  .wb-progress { padding: 10px 12px; }
+  .wb-nav { padding: 0 12px; }
+  .wb-nav-btn { padding: 10px 14px; font-size: 10px; letter-spacing: 0.18em; }
+  .wb-nav__counter { display: none; }
+}

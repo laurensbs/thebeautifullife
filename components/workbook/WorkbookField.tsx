@@ -10,12 +10,14 @@ export default function WorkbookField({
   placeholder,
   size,
   onSaveStateChange,
+  onValueChange,
 }: {
   fieldKey: string;
   initialValue: string;
   placeholder?: string;
   size?: "sm" | "md" | "lg" | "xl";
   onSaveStateChange?: (s: SaveState) => void;
+  onValueChange?: (key: string, value: string) => void;
 }) {
   const [value, setValue] = useState(initialValue);
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -74,7 +76,10 @@ export default function WorkbookField({
       className={`wb-field ${sizeCls}`}
       placeholder={placeholder}
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={(e) => {
+        setValue(e.target.value);
+        onValueChange?.(fieldKey, e.target.value);
+      }}
       spellCheck
     />
   );

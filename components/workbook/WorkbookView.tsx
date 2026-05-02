@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { LogOut } from "lucide-react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { LogOut, ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import "./workbook.css";
 import type { Workbook, WorkbookPage, Block } from "@/lib/workbooks/types";
 import { tx } from "@/lib/workbooks/types";
+import { workbookFieldKeys } from "@/lib/workbooks";
 import type { Locale } from "@/lib/i18n/types";
 import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
@@ -27,6 +30,9 @@ export default function WorkbookView({
 }) {
   const [save, setSave] = useState<SaveState>("idle");
   const [locale, setLocale] = useState<Locale>(initialLocale);
+  // step: -1 = welkomst, 0..pages.length-1 = pagina, pages.length = summary
+  const [step, setStep] = useState<number>(-1);
+  const [answers, setAnswers] = useState<Record<string, string>>(initialAnswers);
 
   useEffect(() => {
     try {
@@ -41,8 +47,64 @@ export default function WorkbookView({
     } catch {}
   }, [locale]);
 
+  // Onthou waar de klant gebleven was per workbook-slug.
+  const stepKey = `wb_step_${workbook.slug}`;
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(stepKey);
+      if (saved !== null) setStep(Number(saved));
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    try {
+      localStorage.setItem(stepKey, String(step));
+    } catch {}
+  }, [step, stepKey]);
+
+  const allFieldKeys = workbookFieldKeys(workbook);
+  const filledCount = allFieldKeys.filter(
+    (k) => (answers[k] ?? "").trim().length > 0
+  ).length;
+  const pct =
+    allFieldKeys.length > 0
+      ? Math.round((filledCount / allFieldKeys.length) * 100)
+      : 0;
+
+  const totalSteps = workbook.pages.length;
+  const isCover = step === -1;
+  const isSummary = step === totalSteps;
+  const visibleStepLabel = isCover
+    ? tr(DICT.common.optional, locale) === "optional" ? "Welcome" : "Welkom"
+    : isSummary
+      ? tr(DICT.common.optional, locale) === "optional" ? "Overview" : "Overzicht"
+      : `${step + 1} / ${totalSteps}`;
+
+  const goNext = () => {
+    if (step < totalSteps) setStep(step + 1);
+    if (typeof window !== "undefined")
+      window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const goPrev = () => {
+    if (step > -1) setStep(step - 1);
+    if (typeof window !== "undefined")
+      window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const goTo = (n: number) => {
+    setStep(n);
+    if (typeof window !== "undefined")
+      window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const onAnswerChange = (key: string, value: string) => {
+    setAnswers((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const isEN = locale === "en";
+
   return (
     <div className="wb">
+      {/* Toolbar */}
       <div className="wb-toolbar">
         <p className="wb-toolbar__greet">
           {tr(DICT.workbook.welcomeBack, locale)}
@@ -87,20 +149,388 @@ export default function WorkbookView({
         </div>
       </div>
 
-      <div className="wb-book">
+      {/* App-mode (paginated) — wordt verborgen tijdens print */}
+      <div className="wb-app">
+        {/* Sticky progress */}
+        <div className="wb-progress">
+          <div className="wb-progress__inner">
+            <div className="wb-progress__meta">
+              <span className="wb-progress__step">{visibleStepLabel}</span>
+              <span className="wb-progress__pct">
+                {pct}% {isEN ? "filled" : "ingevuld"}
+              </span>
+            </div>
+            <div className="wb-progress__bar">
+              <div
+                className="wb-progress__fill"
+                style={{
+                  width: isCover
+                    ? "0%"
+                    : isSummary
+                      ? "100%"
+                      : `${((step + 1) / totalSteps) * 100}%`,
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="wb-book wb-book--paginated">
+          <AnimatePresence mode="wait">
+            {isCover ? (
+              <motion.div
+                key="cover"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <CoverPage workbook={workbook} locale={locale} />
+                <CoverIntro
+                  locale={locale}
+                  totalPages={totalSteps}
+                  hasProgress={filledCount > 0}
+                  onStart={() => goTo(0)}
+                  onResume={() => {
+                    // Pak de eerste niet-volledig ingevulde page (rough heuristic)
+                    let resumeAt = 0;
+                    for (let i = 0; i < workbook.pages.length; i++) {
+                      const fields = workbook.pages[i].blocks
+                        .filter((b): b is Block & { type: "field"; key: string } =>
+                          b.type === "field"
+                        )
+                        .map((b) => b.key);
+                      if (fields.length === 0) continue;
+                      const allFilled = fields.every(
+                        (k) => (answers[k] ?? "").trim().length > 0
+                      );
+                      if (!allFilled) {
+                        resumeAt = i;
+                        break;
+                      }
+                      resumeAt = i + 1;
+                    }
+                    goTo(Math.min(resumeAt, totalSteps - 1));
+                  }}
+                />
+              </motion.div>
+            ) : isSummary ? (
+              <motion.div
+                key="summary"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <SummaryView
+                  workbook={workbook}
+                  answers={answers}
+                  locale={locale}
+                  onJumpTo={goTo}
+                  onPrint={() => window.print()}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key={step}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <PageView
+                  page={workbook.pages[step]}
+                  brand={tx(workbook.brand, locale)}
+                  answers={answers}
+                  locale={locale}
+                  onSaveStateChange={setSave}
+                  onAnswerChange={onAnswerChange}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Navigation */}
+          {!isCover && (
+            <div className="wb-nav">
+              <button
+                type="button"
+                onClick={goPrev}
+                className="wb-nav-btn wb-nav-btn--ghost"
+              >
+                <ChevronLeft size={14} />
+                {isEN ? "Previous" : "Vorige"}
+              </button>
+              <span className="wb-nav__counter">
+                {visibleStepLabel}
+              </span>
+              {isSummary ? (
+                <a href="/mijn-pad" className="wb-nav-btn">
+                  {isEN ? "Done" : "Klaar"} <Check size={14} />
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  onClick={goNext}
+                  className="wb-nav-btn"
+                >
+                  {step === totalSteps - 1
+                    ? isEN
+                      ? "Overview"
+                      : "Overzicht"
+                    : isEN
+                      ? "Next"
+                      : "Volgende"}
+                  <ChevronRight size={14} />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Print-only: alle pagina's onder elkaar (oude rendering) */}
+      <div className="wb-book wb-book--print-only">
         <CoverPage workbook={workbook} locale={locale} />
         {workbook.pages.map((page) => (
           <PageView
             key={page.number}
             page={page}
             brand={tx(workbook.brand, locale)}
-            answers={initialAnswers}
+            answers={answers}
             locale={locale}
             onSaveStateChange={setSave}
           />
         ))}
       </div>
     </div>
+  );
+}
+
+// ─── Cover-intro met "begin" / "verder" knoppen ───────────────────────
+function CoverIntro({
+  locale,
+  totalPages,
+  hasProgress,
+  onStart,
+  onResume,
+}: {
+  locale: Locale;
+  totalPages: number;
+  hasProgress: boolean;
+  onStart: () => void;
+  onResume: () => void;
+}) {
+  const isEN = locale === "en";
+  return (
+    <section className="wb-page" style={{ marginTop: 18 }}>
+      <div className="wb-page__inner" style={{ alignItems: "center", textAlign: "center", justifyContent: "center" }}>
+        <p className="wb-kicker">
+          {isEN ? "ready when you are" : "wanneer jij eraan toe bent"}
+        </p>
+        <h2 className="wb-title wb-title--md" style={{ marginTop: 14 }}>
+          {isEN ? "Take 20 minutes for yourself" : "Neem 20 minuten voor jezelf"}
+        </h2>
+        <div className="wb-rule wb-rule--center">
+          <span className="l" />
+          <span className="h" aria-hidden style={{ display: "inline-flex" }}>
+            <HeartDraw size={13} />
+          </span>
+          <span className="l" />
+        </div>
+        <p
+          className="wb-lead wb-lead--center wb-lead--airy"
+          style={{ maxWidth: 460, marginTop: 14 }}
+        >
+          {isEN
+            ? `${totalPages} pages of reflection. Move at your own pace — your answers are saved automatically.`
+            : `${totalPages} pagina's van reflectie. Op jouw tempo — je antwoorden worden automatisch bewaard.`}
+        </p>
+        <div
+          style={{
+            display: "flex",
+            gap: 12,
+            marginTop: 32,
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
+          {hasProgress && (
+            <button
+              type="button"
+              onClick={onResume}
+              className="wb-btn"
+              style={{ padding: "14px 22px", fontSize: 12 }}
+            >
+              {isEN ? "Continue where I left off" : "Verder waar ik was"}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={onStart}
+            className={hasProgress ? "wb-btn wb-btn--ghost" : "wb-btn"}
+            style={{ padding: "14px 22px", fontSize: 12 }}
+          >
+            {hasProgress
+              ? isEN
+                ? "Start from the beginning"
+                : "Begin opnieuw vanaf het begin"
+              : isEN
+                ? "Begin"
+                : "Beginnen"}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Eind-overzicht met al je antwoorden ───────────────────────────────
+function SummaryView({
+  workbook,
+  answers,
+  locale,
+  onJumpTo,
+  onPrint,
+}: {
+  workbook: Workbook;
+  answers: Record<string, string>;
+  locale: Locale;
+  onJumpTo: (n: number) => void;
+  onPrint: () => void;
+}) {
+  const isEN = locale === "en";
+
+  type Entry = { pageIndex: number; pageTitle: string; key: string; value: string };
+  const entries: Entry[] = [];
+  workbook.pages.forEach((page, i) => {
+    // Pagina-titel ophalen
+    let pageTitle = "";
+    for (const b of page.blocks) {
+      if (b.type === "title") {
+        pageTitle = tx(b.text, locale);
+        break;
+      }
+    }
+    if (!pageTitle && page.partTitle) pageTitle = tx(page.partTitle, locale);
+    if (!pageTitle) pageTitle = `${isEN ? "Page" : "Pagina"} ${page.number}`;
+
+    for (const b of page.blocks) {
+      if (b.type === "field") {
+        const v = (answers[b.key] ?? "").trim();
+        if (v) entries.push({ pageIndex: i, pageTitle, key: b.key, value: v });
+      }
+      if (b.type === "twoCol") {
+        for (const side of [b.left, b.right]) {
+          const v = (answers[side.field.key] ?? "").trim();
+          if (v)
+            entries.push({
+              pageIndex: i,
+              pageTitle: `${pageTitle} · ${tx(side.head, locale)}`,
+              key: side.field.key,
+              value: v,
+            });
+        }
+      }
+    }
+  });
+
+  return (
+    <section className="wb-page">
+      <div className="wb-page__inner">
+        <p className="wb-kicker">{isEN ? "your reflection" : "jouw reflectie"}</p>
+        <h2 className="wb-title wb-title--md" style={{ marginTop: 14 }}>
+          {isEN ? "What you wrote" : "Wat je opschreef"}
+        </h2>
+        <div className="wb-rule wb-rule--left">
+          <span className="l" />
+          <span className="h" aria-hidden style={{ display: "inline-flex" }}>
+            <HeartDraw size={13} />
+          </span>
+        </div>
+        <p
+          className="wb-lead"
+          style={{ maxWidth: 520, marginTop: 14, marginBottom: 20 }}
+        >
+          {isEN
+            ? "Read back what you wrote. Tap a card to edit. Print or save as PDF when you're ready."
+            : "Lees terug wat je hebt geschreven. Klik op een kaart om aan te passen. Print of bewaar als PDF wanneer je klaar bent."}
+        </p>
+
+        {entries.length === 0 ? (
+          <p className="wb-lead" style={{ color: "var(--color-muted)" }}>
+            {isEN
+              ? "You haven't written anything yet."
+              : "Je hebt nog niets opgeschreven."}
+          </p>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {entries.map((e, i) => (
+              <button
+                key={e.key + i}
+                type="button"
+                onClick={() => onJumpTo(e.pageIndex)}
+                style={{
+                  textAlign: "left",
+                  background: "var(--color-page)",
+                  border: "1px solid var(--color-line)",
+                  borderRadius: 4,
+                  padding: "14px 16px",
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                  transition: "border-color 0.2s, background 0.2s",
+                }}
+                className="wb-summary-card"
+              >
+                <p
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: 10,
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                    color: "var(--color-muted)",
+                    margin: "0 0 6px",
+                  }}
+                >
+                  {e.pageTitle}
+                </p>
+                <p
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: 14,
+                    lineHeight: 1.6,
+                    color: "var(--color-ink)",
+                    margin: 0,
+                    whiteSpace: "pre-wrap",
+                  }}
+                >
+                  {e.value}
+                </p>
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div
+          style={{
+            marginTop: 28,
+            display: "flex",
+            gap: 10,
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
+          <button
+            type="button"
+            onClick={onPrint}
+            className="wb-btn"
+            style={{ padding: "12px 22px", fontSize: 11 }}
+          >
+            {isEN ? "Save as PDF / Print" : "Bewaar als PDF / Print"}
+          </button>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -173,12 +603,14 @@ function PageView({
   answers,
   locale,
   onSaveStateChange,
+  onAnswerChange,
 }: {
   page: WorkbookPage;
   brand: string;
   answers: Record<string, string>;
   locale: Locale;
   onSaveStateChange: (s: SaveState) => void;
+  onAnswerChange?: (key: string, value: string) => void;
 }) {
   // Part divider page is its own layout
   if (page.layout === "part") {
@@ -223,6 +655,7 @@ function PageView({
             answers={answers}
             locale={locale}
             onSaveStateChange={onSaveStateChange}
+            onAnswerChange={onAnswerChange}
           />
         ))}
       </div>
@@ -237,12 +670,14 @@ function BlockView({
   answers,
   locale,
   onSaveStateChange,
+  onAnswerChange,
 }: {
   block: Block;
   centered: boolean;
   answers: Record<string, string>;
   locale: Locale;
   onSaveStateChange: (s: SaveState) => void;
+  onAnswerChange?: (key: string, value: string) => void;
 }) {
   switch (block.type) {
     case "kicker":
@@ -352,6 +787,7 @@ function BlockView({
           placeholder={block.placeholder ? tx(block.placeholder, locale) : undefined}
           size={block.size}
           onSaveStateChange={onSaveStateChange}
+          onValueChange={onAnswerChange}
         />
       );
 
@@ -370,6 +806,7 @@ function BlockView({
               }
               size={block.left.field.size ?? "md"}
               onSaveStateChange={onSaveStateChange}
+              onValueChange={onAnswerChange}
             />
           </div>
           <div>
@@ -384,6 +821,7 @@ function BlockView({
               }
               size={block.right.field.size ?? "md"}
               onSaveStateChange={onSaveStateChange}
+              onValueChange={onAnswerChange}
             />
           </div>
         </div>
