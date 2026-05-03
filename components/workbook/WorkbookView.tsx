@@ -107,6 +107,31 @@ export default function WorkbookView({
       window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Keyboard nav: ← / → om te bladeren. Niet activeren als de focus
+  // op een textarea of input ligt — dan zou de pijl in de tekst navigeren.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement | null)?.tagName;
+      if (tag === "TEXTAREA" || tag === "INPUT" || tag === "SELECT") return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        if (step < totalSteps) {
+          setDirection(1);
+          setStep(step + 1);
+        }
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        if (step > -1) {
+          setDirection(-1);
+          setStep(step - 1);
+        }
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [step, totalSteps]);
+
   const onAnswerChange = (key: string, value: string) => {
     setAnswers((prev) => ({ ...prev, [key]: value }));
   };
@@ -115,50 +140,23 @@ export default function WorkbookView({
 
   return (
     <div className="wb">
-      {/* Toolbar */}
+      {/* Toolbar — rustig, alleen brand + save + back + logout */}
       <div className="wb-toolbar">
         <div className="wb-toolbar__brand">
-          <BrandLogo size="sm" />
-          <p className="wb-toolbar__greet wb-toolbar__greet--small">
-            {tr(DICT.workbook.welcomeBack, locale)}
-            {firstName}
-          </p>
+          <BrandLogo size="sm" linkTo="/mijn-pad" />
         </div>
         <div className="wb-toolbar__actions">
-          <span className="wb-locale">
-            <button
-              type="button"
-              onClick={() => setLocale("nl")}
-              className={locale === "nl" ? "is-active" : ""}
-              aria-current={locale === "nl"}
-            >
-              NL
-            </button>
-            <span className="sep">·</span>
-            <button
-              type="button"
-              onClick={() => setLocale("en")}
-              className={locale === "en" ? "is-active" : ""}
-              aria-current={locale === "en"}
-            >
-              EN
-            </button>
-          </span>
-
           <SaveIndicator state={save} locale={locale} />
           <a href="/mijn-pad" className="wb-btn wb-btn--ghost">
             {tr(DICT.workbook.backToPortal, locale)}
           </a>
-          <button
-            type="button"
-            onClick={() => window.print()}
+          <a
+            href="/api/workbook/logout"
             className="wb-btn wb-btn--ghost"
+            aria-label={tr(DICT.common.logout, locale)}
+            title={tr(DICT.common.logout, locale)}
           >
-            {tr(DICT.workbook.print, locale)}
-          </button>
-          <a href="/api/workbook/logout" className="wb-btn">
-            <LogOut size={11} style={{ marginRight: 6, verticalAlign: -1 }} />
-            {tr(DICT.common.logout, locale)}
+            <LogOut size={13} />
           </a>
         </div>
       </div>
@@ -272,14 +270,24 @@ export default function WorkbookView({
               <button
                 type="button"
                 onClick={goPrev}
-                className="wb-nav-btn wb-nav-btn--ghost"
+                className="wb-nav-btn wb-nav-btn--ghost wb-nav-btn--icon"
+                aria-label={isEN ? "Previous" : "Vorige"}
+                title={isEN ? "Previous (←)" : "Vorige (←)"}
               >
-                <ChevronLeft size={14} />
-                {isEN ? "Previous" : "Vorige"}
+                <ChevronLeft size={18} />
               </button>
-              <span className="wb-nav__counter">
-                {visibleStepLabel}
-              </span>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={visibleStepLabel}
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  className="wb-nav__counter"
+                >
+                  {visibleStepLabel}
+                </motion.span>
+              </AnimatePresence>
               {isSummary ? (
                 <a href="/mijn-pad" className="wb-nav-btn">
                   {isEN ? "Done" : "Klaar"} <Check size={14} />
