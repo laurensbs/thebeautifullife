@@ -157,6 +157,17 @@ export async function setupDatabase() {
   `;
   await sql`CREATE INDEX IF NOT EXISTS admin_todos_done_idx ON admin_todos(done, due_at NULLS LAST)`;
 
+  // Klant-wachtwoorden — optioneel, naast magic-link. Wie geen wachtwoord
+  // heeft kan blijven inloggen via mail-link.
+  await sql`
+    CREATE TABLE IF NOT EXISTS client_passwords (
+      email VARCHAR(200) PRIMARY KEY,
+      password_hash VARCHAR(120) NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+
   // Seed default questions if empty
   const existing = await sql`SELECT COUNT(*) as count FROM questions`;
   if (Number(existing[0].count) === 0) {

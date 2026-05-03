@@ -17,6 +17,7 @@ import { tx } from "@/lib/workbooks/types";
 import FadeIn from "@/components/ui/FadeIn";
 import Calligraphy from "@/components/ui/Calligraphy";
 import BookingCard, { type PortalBooking } from "@/components/portal/BookingCard";
+import PasswordCard from "@/components/portal/PasswordCard";
 import TodayCard from "@/components/portal/TodayCard";
 import PersonalRecommendation from "@/components/portal/PersonalRecommendation";
 import DepthCallCard from "@/components/portal/DepthCallCard";
@@ -530,6 +531,7 @@ export default async function MijnPad() {
           <h2 className="font-serif font-medium tracking-[0.22em] uppercase text-sm text-ink mb-1">
             {tr(DICT.portal.myDetails, locale)}
           </h2>
+          <PasswordCard />
           <div className="bg-page-soft rounded-[6px] px-5 py-6 sm:px-7 sm:py-7 shadow-[0_18px_48px_rgba(60,50,30,0.08)] space-y-4">
             <p className="font-script text-tan text-2xl">{session.firstName}</p>
             <div className="space-y-3">
