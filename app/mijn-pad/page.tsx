@@ -16,7 +16,6 @@ import { tr, type Locale } from "@/lib/i18n/types";
 import { tx } from "@/lib/workbooks/types";
 import FadeIn from "@/components/ui/FadeIn";
 import Calligraphy from "@/components/ui/Calligraphy";
-import HeartDivider from "@/components/ui/HeartDivider";
 import BookingCard, { type PortalBooking } from "@/components/portal/BookingCard";
 import TodayCard from "@/components/portal/TodayCard";
 import PersonalRecommendation from "@/components/portal/PersonalRecommendation";
@@ -259,9 +258,24 @@ export default async function MijnPad() {
   }
 
   return (
-    <main className="max-w-[1100px] mx-auto px-5 sm:px-6 pt-6 sm:pt-8 pb-16 sm:pb-20">
-      {/* Vandaag — eerste actie voor de klant */}
-      <div className="mb-7 sm:mb-8">
+    <main className="max-w-[1100px] mx-auto px-5 sm:px-6 pt-5 sm:pt-7 pb-16 sm:pb-20">
+      {/* Top-right: test-mode badge + logout */}
+      <div className="flex items-center justify-end gap-2 mb-3 sm:mb-4">
+        {isTestMode && (
+          <span className="text-[10px] tracking-[0.18em] uppercase bg-amber-100 text-amber-800 border border-amber-300 px-2 py-1 rounded">
+            {tr(DICT.common.testMode, locale)}
+          </span>
+        )}
+        <a
+          href="/api/client/logout"
+          className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.18em] uppercase text-ink-soft hover:text-tan transition px-2 py-1"
+        >
+          <LogOut size={12} /> {tr(DICT.common.logout, locale)}
+        </a>
+      </div>
+
+      {/* Vandaag — eerste actie voor de klant (bevat al begroeting) */}
+      <div className="mb-6 sm:mb-7">
         <TodayCard firstName={session.firstName} item={todayItem} />
       </div>
 
@@ -274,39 +288,13 @@ export default async function MijnPad() {
         />
       )}
 
-      {/* Header */}
-      <FadeIn direction="up" className="bg-page-soft rounded-[6px] px-6 py-7 sm:px-12 sm:py-11 shadow-[0_18px_48px_rgba(60,50,30,0.08)] mb-7 sm:mb-8 relative overflow-hidden">
-        <div className="absolute top-6 right-6 flex items-center gap-2">
-          {isTestMode && (
-            <span className="text-[10px] tracking-[0.18em] uppercase bg-amber-100 text-amber-800 border border-amber-300 px-2 py-1 rounded">
-              {tr(DICT.common.testMode, locale)}
-            </span>
-          )}
-          <a
-            href="/api/client/logout"
-            className="flex items-center gap-1.5 text-[11px] tracking-[0.18em] uppercase text-ink-soft hover:text-tan transition px-2 py-1"
-          >
-            <LogOut size={12} /> {tr(DICT.common.logout, locale)}
-          </a>
-        </div>
-
-        <Calligraphy as="p" className="font-script text-tan text-3xl" text={tr(DICT.portal.welcomeBack, locale)} durationPerChar={0.06} />
-        <h1 className="font-serif font-medium text-3xl sm:text-4xl tracking-[0.06em] uppercase mt-1 text-ink">
-          {session.firstName}
-        </h1>
-
-        <HeartDivider align="left" className="my-5" />
-
-        <p className="text-ink-soft text-[15px] leading-[1.85] max-w-md">
-          {tr(DICT.portal.intro, locale)}
-        </p>
-      </FadeIn>
-
       <div className="grid lg:grid-cols-[1.7fr_1fr] gap-6 sm:gap-7 items-start">
         <div className="space-y-5">
-          <h2 className="font-serif font-medium tracking-[0.22em] uppercase text-sm text-ink mb-1">
-            {tr(DICT.portal.myPath, locale)}
-          </h2>
+          {subs.length > 0 && (
+            <h2 className="font-serif font-medium tracking-[0.22em] uppercase text-sm text-ink-soft mb-1">
+              {tr(DICT.portal.myPath, locale)}
+            </h2>
+          )}
 
           {subs.length === 0 && (
             <div className="bg-page-soft rounded-[6px] px-8 py-10 text-center text-ink-soft">

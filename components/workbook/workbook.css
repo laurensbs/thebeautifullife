@@ -145,19 +145,25 @@
 .wb-field {
   margin-top: 22px;
   width: 100%;
-  min-height: 180px;
-  padding: 18px 20px;
+  min-height: 192px;
+  /* Padding-top = 0 zodat de gradient exact aligned is met de regels.
+     Padding-bottom + horizontale padding geven de lucht. De gradient
+     herhaalt elke 32px en plaatst de lijn op y=31-32 (onderkant van
+     elke regel). Tekst-baseline valt dan precies op de lijn. */
+  padding: 0 20px 12px;
   border: 1px solid var(--color-line);
   border-radius: 3px;
-  background: repeating-linear-gradient(
+  background-image: repeating-linear-gradient(
     to bottom,
     transparent 0,
     transparent 31px,
     var(--color-line) 31px,
     var(--color-line) 32px
   );
+  background-repeat: repeat;
+  background-position: 0 0;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-ink);
   line-height: 32px;
   resize: vertical;
