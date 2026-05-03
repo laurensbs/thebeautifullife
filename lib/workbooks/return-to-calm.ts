@@ -160,6 +160,26 @@ export const RETURN_TO_CALM: Workbook = {
         {
           type: "lead",
           paragraphs: ta(
+            [
+              "Voor je begint te schrijven — een korte nulmeting. Geef elk gebied een score van 1 tot 10. Geen oordeel, alleen een momentopname.",
+            ],
+            [
+              "Before you start writing — a short baseline. Give each area a score from 1 to 10. No judgment, just a snapshot.",
+            ]
+          ),
+        },
+        {
+          type: "scaleGroup",
+          items: [
+            { key: "p5_scale_rest", label: t("Rust", "Calm") },
+            { key: "p5_scale_energy", label: t("Energie", "Energy") },
+            { key: "p5_scale_clarity", label: t("Helderheid", "Clarity") },
+            { key: "p5_scale_connection", label: t("Verbinding met mezelf", "Connection with myself") },
+          ],
+        },
+        {
+          type: "lead",
+          paragraphs: ta(
             ["Schrijf zonder nadenken op wat er in je leeft:"],
             ["Write down without thinking what's alive in you:"]
           ),
@@ -296,6 +316,15 @@ export const RETURN_TO_CALM: Workbook = {
           paragraphs: ta(
             ["Wees eerlijk naar jezelf:"],
             ["Be honest with yourself:"]
+          ),
+        },
+        {
+          type: "callout",
+          tone: "sage",
+          label: t("Onthoud", "Remember"),
+          body: t(
+            "Wat je nu opmerkt is genoeg. Je hoeft niet meteen iets te veranderen — alleen zien is al een stap.",
+            "What you notice now is enough. You don't have to change anything — seeing is already a step."
           ),
         },
         {
@@ -491,6 +520,22 @@ export const RETURN_TO_CALM: Workbook = {
           ),
           size: "sm",
         },
+        {
+          type: "lead",
+          paragraphs: ta(
+            [
+              "Houd 'm 30 dagen bij. Tik een vakje aan voor elke dag dat je 't deed — ook al was het maar één minuut.",
+            ],
+            [
+              "Track it for 30 days. Tap a square for each day you did it — even if it was just one minute.",
+            ]
+          ),
+        },
+        {
+          type: "tracker30",
+          key: "p12_tracker",
+          habitLabel: t("Mijn ene kleine stap", "My one small step"),
+        },
       ],
     },
 
@@ -586,6 +631,26 @@ export const RETURN_TO_CALM: Workbook = {
           size: "md",
         },
         { type: "rule", align: "left" },
+        {
+          type: "lead",
+          paragraphs: ta(
+            [
+              "Geef jezelf opnieuw scores op dezelfde vier gebieden. Niet om te toetsen — om te merken wat verschoven is.",
+            ],
+            [
+              "Score yourself again on the same four areas. Not to test — to notice what has shifted.",
+            ]
+          ),
+        },
+        {
+          type: "scaleGroup",
+          items: [
+            { key: "p15_scale_rest", label: t("Rust", "Calm") },
+            { key: "p15_scale_energy", label: t("Energie", "Energy") },
+            { key: "p15_scale_clarity", label: t("Helderheid", "Clarity") },
+            { key: "p15_scale_connection", label: t("Verbinding met mezelf", "Connection with myself") },
+          ],
+        },
         {
           type: "questions",
           items: ta(

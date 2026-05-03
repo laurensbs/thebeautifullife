@@ -33,6 +33,8 @@ export default function WorkbookView({
   const [locale, setLocale] = useState<Locale>(initialLocale);
   // step: -1 = welkomst, 0..pages.length-1 = pagina, pages.length = summary
   const [step, setStep] = useState<number>(-1);
+  // direction: +1 = vooruit, -1 = terug — bestuurt slide-richting
+  const [direction, setDirection] = useState<1 | -1>(1);
   const [answers, setAnswers] = useState<Record<string, string>>(initialAnswers);
 
   useEffect(() => {
@@ -82,16 +84,23 @@ export default function WorkbookView({
       : `${step + 1} / ${totalSteps}`;
 
   const goNext = () => {
-    if (step < totalSteps) setStep(step + 1);
+    if (step < totalSteps) {
+      setDirection(1);
+      setStep(step + 1);
+    }
     if (typeof window !== "undefined")
       window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const goPrev = () => {
-    if (step > -1) setStep(step - 1);
+    if (step > -1) {
+      setDirection(-1);
+      setStep(step - 1);
+    }
     if (typeof window !== "undefined")
       window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const goTo = (n: number) => {
+    setDirection(n >= step ? 1 : -1);
     setStep(n);
     if (typeof window !== "undefined")
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -184,10 +193,10 @@ export default function WorkbookView({
             {isCover ? (
               <motion.div
                 key="cover"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, x: direction * 40, filter: "blur(4px)" }}
+                animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, x: direction * -40, filter: "blur(4px)" }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
               >
                 <CoverPage workbook={workbook} locale={locale} />
                 <CoverIntro
@@ -221,10 +230,10 @@ export default function WorkbookView({
             ) : isSummary ? (
               <motion.div
                 key="summary"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, x: direction * 40, filter: "blur(4px)" }}
+                animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, x: direction * -40, filter: "blur(4px)" }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
               >
                 <SummaryView
                   workbook={workbook}
@@ -232,15 +241,16 @@ export default function WorkbookView({
                   locale={locale}
                   onJumpTo={goTo}
                   onPrint={() => window.print()}
+                  workbookSlug={workbook.slug}
                 />
               </motion.div>
             ) : (
               <motion.div
                 key={step}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, x: direction * 40, filter: "blur(4px)" }}
+                animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, x: direction * -40, filter: "blur(4px)" }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
               >
                 <PageView
                   page={workbook.pages[step]}
@@ -396,12 +406,14 @@ function SummaryView({
   locale,
   onJumpTo,
   onPrint,
+  workbookSlug,
 }: {
   workbook: Workbook;
   answers: Record<string, string>;
   locale: Locale;
   onJumpTo: (n: number) => void;
   onPrint: () => void;
+  workbookSlug: string;
 }) {
   const isEN = locale === "en";
 
@@ -524,13 +536,21 @@ function SummaryView({
             justifyContent: "center",
           }}
         >
-          <button
-            type="button"
-            onClick={onPrint}
+          <a
+            href={`/api/workbook/pdf?slug=${encodeURIComponent(workbookSlug)}`}
+            download
             className="wb-btn"
             style={{ padding: "12px 22px", fontSize: 11 }}
           >
-            {isEN ? "Save as PDF / Print" : "Bewaar als PDF / Print"}
+            {isEN ? "Download PDF" : "Download PDF"}
+          </a>
+          <button
+            type="button"
+            onClick={onPrint}
+            className="wb-btn wb-btn--ghost"
+            style={{ padding: "12px 22px", fontSize: 11 }}
+          >
+            {isEN ? "Print" : "Print"}
           </button>
         </div>
       </div>

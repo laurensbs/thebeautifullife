@@ -316,6 +316,12 @@ export default function WerkboekenPage() {
                                     >
                                       <ExternalLink size={11} /> Open
                                     </Link>
+                                    <a
+                                      href={`/api/workbook/pdf?slug=${encodeURIComponent(group.slug)}&access_id=${c.access_id}`}
+                                      className="text-[11px] tracking-[0.18em] uppercase bg-tan hover:brightness-95 text-white px-3 py-1.5 rounded transition"
+                                    >
+                                      PDF
+                                    </a>
                                     {resetConfirm === c.access_id ? (
                                       <div className="flex items-center gap-1.5 bg-red-50 rounded-md px-2 py-1 border border-red-200">
                                         <AlertTriangle
