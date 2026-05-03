@@ -15,6 +15,7 @@ import AudioCueIcon from "./AudioCueIcon";
 import WorkbookField from "./WorkbookField";
 import HeartDraw from "@/components/ui/HeartDraw";
 import BrandLogo from "@/components/ui/BrandLogo";
+import MarionAvatar from "@/components/ui/MarionAvatar";
 
 type SaveState = "idle" | "saving" | "saved";
 
@@ -550,6 +551,9 @@ function SummaryView({
               ? "What you wrote here is yours. Read it back. Pause. Notice what shifted. I see you in the next step."
               : "Wat je hier hebt opgeschreven is van jou. Lees het terug. Sta even stil. Merk op wat er bewogen is. Tot in de volgende stap."}
           </p>
+          <div className="wb-summary__signoff-avatar">
+            <MarionAvatar size={56} />
+          </div>
           <p className="wb-summary__signoff-name">Marion Lubach</p>
           <p className="wb-summary__signoff-role">
             {isEN ? "your creative lifestyle mentor" : "jouw creatief levensmentor"}

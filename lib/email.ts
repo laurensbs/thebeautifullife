@@ -115,7 +115,7 @@ ${hero}
             </td>
           </tr>
 
-          <!-- Hartjes-divider + signoff -->
+          <!-- Marion-portret + Hartjes-divider + signoff -->
           <tr>
             <td align="center" style="padding:8px 32px 36px;">
               <table role="presentation" cellpadding="0" cellspacing="0">
@@ -125,7 +125,8 @@ ${hero}
                   <td style="border-top:1px solid ${BRAND.tan};opacity:0.55;width:48px;height:1px;line-height:0;font-size:0;">&nbsp;</td>
                 </tr>
               </table>
-              <p style="font-family:${BRAND.scriptStack};color:${BRAND.tan};font-size:24px;line-height:1.4;margin:18px 0 0;">${scriptSignoff}</p>
+              <img src="https://u.cubeupload.com/laurensbos/fea64f52c39c42939293.jpeg" alt="Marion Lubach" width="56" height="56" style="display:inline-block;width:56px;height:56px;border-radius:50%;border:1px solid ${BRAND.tan};opacity:0.95;margin:18px 0 0;object-fit:cover;" />
+              <p style="font-family:${BRAND.scriptStack};color:${BRAND.tan};font-size:24px;line-height:1.4;margin:8px 0 0;">${scriptSignoff}</p>
             </td>
           </tr>
 

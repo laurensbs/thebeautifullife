@@ -1075,11 +1075,16 @@
   max-width: 460px;
   margin: 0 auto;
 }
+.wb-summary__signoff-avatar {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+}
 .wb-summary__signoff-name {
   font-family: var(--font-script);
   color: var(--color-ink);
   font-size: 28px;
-  margin-top: 18px;
+  margin-top: 12px;
   line-height: 1;
 }
 .wb-summary__signoff-role {
