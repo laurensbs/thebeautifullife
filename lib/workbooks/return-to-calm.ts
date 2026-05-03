@@ -23,7 +23,7 @@ export const RETURN_TO_CALM: Workbook = {
       "the beginning of your beautiful life"
     ),
     author: "Marion Lubach",
-    role: t("your creative lifestyle mentor", "your creative lifestyle mentor"),
+    role: t("jouw creatief levensmentor", "your creative lifestyle mentor"),
   },
   pages: [
     // Page 2 — Welcome
@@ -722,7 +722,7 @@ export const RETURN_TO_CALM: Workbook = {
           type: "signature",
           name: "Marion Lubach",
           role: t(
-            "your creative lifestyle mentor",
+            "jouw creatief levensmentor",
             "your creative lifestyle mentor"
           ),
         },

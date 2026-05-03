@@ -64,15 +64,25 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.4, delay: 0.2 }}
-        className="relative min-h-[280px] sm:min-h-[380px] lg:min-h-[560px] bg-page-dark"
+        className="relative min-h-[420px] sm:min-h-[480px] lg:min-h-[560px] bg-page-dark"
       >
+        {/* Mobiel/tablet: verticale foto die de hoogte vult.
+            Desktop: brede liggende foto naast de tekst-kolom. */}
+        <Image
+          src="https://u.cubeupload.com/laurensbos/81d399a46e2e45f5989c.jpeg"
+          alt={tr(DICT.hero.imageAlt, locale)}
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 0px"
+          className="object-cover object-center lg:hidden"
+        />
         <Image
           src="https://u.cubeupload.com/laurensbos/bf5fdd986cf4196c6c66.jpeg"
           alt={tr(DICT.hero.imageAlt, locale)}
           fill
           priority
-          sizes="(max-width: 1024px) 100vw, 55vw"
-          className="object-cover object-top"
+          sizes="(min-width: 1024px) 55vw, 0px"
+          className="object-cover object-top hidden lg:block"
         />
       </motion.div>
 

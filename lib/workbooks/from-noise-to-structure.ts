@@ -14,7 +14,7 @@ export const FROM_NOISE_TO_STRUCTURE: Workbook = {
     "From Noise to Structure — a deeper workbook"
   ),
   cover: {
-    eyebrow: t("Workbook · Volume II", "Workbook · Volume II"),
+    eyebrow: t("Werkboek · Deel II", "Workbook · Volume II"),
     title: ta(["Return to", "Calm"], ["Return to", "Calm"]),
     script: t("the deeper path", "the deeper path"),
     sub: t(
@@ -23,7 +23,7 @@ export const FROM_NOISE_TO_STRUCTURE: Workbook = {
     ),
     scriptSub: t("Tools · Reflecties · Rituelen", "Tools · Reflections · Rituals"),
     author: "Marion Lubach",
-    role: t("your creative lifestyle mentor", "your creative lifestyle mentor"),
+    role: t("jouw creatief levensmentor", "your creative lifestyle mentor"),
   },
   pages: [
     // ─── PAGE 2 — Welkom (brief) ────────────────────────────────────
@@ -1780,7 +1780,7 @@ export const FROM_NOISE_TO_STRUCTURE: Workbook = {
         {
           type: "signature",
           name: "Marion Lubach",
-          role: t("your creative lifestyle mentor", "your creative lifestyle mentor"),
+          role: t("jouw creatief levensmentor", "your creative lifestyle mentor"),
         },
       ],
     },

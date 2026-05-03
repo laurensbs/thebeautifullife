@@ -552,7 +552,7 @@ function SummaryView({
           </p>
           <p className="wb-summary__signoff-name">Marion Lubach</p>
           <p className="wb-summary__signoff-role">
-            {isEN ? "your creative lifestyle mentor" : "jouw creatieve leef-mentor"}
+            {isEN ? "your creative lifestyle mentor" : "jouw creatief levensmentor"}
           </p>
         </div>
 

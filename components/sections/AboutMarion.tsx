@@ -9,7 +9,7 @@ const COPY = {
   nl: {
     eyebrow: "wie ik ben",
     title: "Marion",
-    role: "your creative lifestyle mentor",
+    role: "jouw creatief levensmentor",
     paragraphs: [
       "Ik ben Marion. Een leven lang heb ik mensen begeleid die op een kruispunt stonden — niet door hen weg te trekken van waar ze waren, maar door samen te kijken: wie ben jij, écht?",
       "The Beautiful Life is mijn antwoord op een wereld die te hard, te snel en te vol is. Hier vertraag je. Hier krijg je tijd. Hier mag je weer voelen wat onder de drukte zit.",
