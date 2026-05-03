@@ -43,7 +43,7 @@ export default function AboutMarion({ locale }: { locale: Locale }) {
     >
       <div className="relative min-h-[280px] sm:min-h-[380px] lg:min-h-[480px] bg-page-dark order-1 lg:order-1">
         <Image
-          src="https://u.cubeupload.com/laurensbos/fea64f52c39c42939293.jpeg"
+          src="https://u.cubeupload.com/laurensbos/06420caa3a384d2ea36b.jpeg"
           alt="Marion Lubach"
           fill
           sizes="(max-width: 1024px) 100vw, 50vw"

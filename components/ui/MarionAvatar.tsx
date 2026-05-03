@@ -26,7 +26,7 @@ export default function MarionAvatar({
       aria-hidden={false}
     >
       <Image
-        src="https://u.cubeupload.com/laurensbos/fea64f52c39c42939293.jpeg"
+        src="https://u.cubeupload.com/laurensbos/06420caa3a384d2ea36b.jpeg"
         alt="Marion Lubach"
         fill
         sizes={`${size}px`}
