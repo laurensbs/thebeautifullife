@@ -20,8 +20,6 @@ import { loadOgFonts } from "@/lib/og-fonts";
 export const runtime = "nodejs";
 
 const SIZE = { width: 1051, height: 697 };
-const PORTRAIT_URL =
-  "https://u.cubeupload.com/laurensbs/06420caa3a384d2ea36b.jpeg";
 
 export async function GET() {
   const fonts = loadOgFonts();
@@ -53,34 +51,6 @@ export async function GET() {
             background: "#B6906A",
           }}
         />
-
-        {/* Marion portret — klein, boven het logo */}
-        <div
-          style={{
-            display: "flex",
-            width: 120,
-            height: 120,
-            borderRadius: 60,
-            overflow: "hidden",
-            border: "2px solid #B6906A",
-            boxShadow: "0 6px 20px rgba(60,50,30,0.14)",
-            marginBottom: 28,
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={PORTRAIT_URL}
-            alt="Marion Lubach"
-            width={120}
-            height={120}
-            style={{
-              width: 120,
-              height: 120,
-              objectFit: "cover",
-              objectPosition: "center",
-            }}
-          />
-        </div>
 
         {/* Gestapeld logo — gecentreerd, écht in huisstijl */}
         <div
