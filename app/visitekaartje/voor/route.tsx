@@ -182,7 +182,7 @@ export async function GET() {
             Marion Lubach
           </div>
 
-          {/* Beroep — concreet i.p.v. vage rol */}
+          {/* Belofte — concreet wat klant krijgt */}
           <div
             style={{
               fontSize: 24,
@@ -191,7 +191,7 @@ export async function GET() {
               marginTop: 6,
             }}
           >
-            Coach &amp; hypnotherapeut
+            rust, helderheid en richting
           </div>
 
           {/* Website — CTA */}
