@@ -37,6 +37,8 @@ export default function IntakeForm({
   scaleLow,
   scaleHigh,
   chooseLabel,
+  initialValues,
+  prefilledNote,
 }: {
   pkgSlug: PackageSlug;
   accent: "sage" | "tan" | "gold";
@@ -50,9 +52,13 @@ export default function IntakeForm({
   scaleHigh: string;
   chooseLabel: string;
   requiredAffix?: string;
+  initialValues?: Record<string, string | number>;
+  prefilledNote?: string;
 }) {
   const router = useRouter();
-  const [values, setValues] = useState<Record<string, string | number>>({});
+  const [values, setValues] = useState<Record<string, string | number>>(
+    initialValues ?? {}
+  );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -104,6 +110,11 @@ export default function IntakeForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {prefilledNote && (
+        <div className="bg-page/60 border border-tan/30 rounded-md px-4 py-3 text-[12.5px] text-ink-soft leading-snug">
+          {prefilledNote}
+        </div>
+      )}
       {allFields.map((f) => (
         <Field
           key={f.name}

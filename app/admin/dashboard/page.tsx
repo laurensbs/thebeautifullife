@@ -91,6 +91,19 @@ type DetailData = {
     answer_scale: number | null;
   }>;
   workbooks: WorkbookSummary[];
+  bookings?: Array<{
+    id: number;
+    type: string;
+    scheduled_at: string | null;
+    duration_min: number | null;
+    price_cents: number | null;
+    status: string;
+    paid_at: string | null;
+    meeting_url: string | null;
+    contact_name: string | null;
+    notes: string | null;
+    created_at: string;
+  }>;
 };
 
 type Stats = {
@@ -1053,6 +1066,81 @@ function Detail({
             {detail.workbooks.map((wb) => (
               <WorkbookBlock key={wb.slug} wb={wb} />
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Calls met Marion (1-op-1 zoom-aanvragen) */}
+      {detail?.bookings && detail.bookings.length > 0 && (
+        <div className="mb-4">
+          <p className="font-sans text-[10px] text-muted tracking-[0.18em] uppercase mb-2 flex items-center gap-1.5">
+            <Video size={11} /> Calls met Marion ({detail.bookings.length})
+          </p>
+          <div className="space-y-2">
+            {detail.bookings.map((b) => {
+              const when = b.scheduled_at
+                ? new Date(b.scheduled_at).toLocaleString("nl-NL", {
+                    weekday: "short",
+                    day: "numeric",
+                    month: "short",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "—";
+              const isUpcoming =
+                b.scheduled_at &&
+                new Date(b.scheduled_at).getTime() > Date.now();
+              const statusColor =
+                b.status === "confirmed"
+                  ? "bg-sage/15 text-sage-deep border-sage/30"
+                  : b.status === "cancelled" || b.status === "declined"
+                    ? "bg-red-50 text-red-600 border-red-200"
+                    : "bg-amber-50 text-amber-700 border-amber-200";
+              return (
+                <div
+                  key={b.id}
+                  className="bg-white/60 border border-line/60 rounded-md px-3 py-2.5 flex items-center justify-between gap-3 text-[12px]"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-medium text-ink">{when}</span>
+                      <span
+                        className={`text-[10px] tracking-[0.18em] uppercase px-1.5 py-0.5 rounded border ${statusColor}`}
+                      >
+                        {b.status}
+                      </span>
+                      {isUpcoming && (
+                        <span className="text-[10px] tracking-[0.18em] uppercase text-tan">
+                          aankomend
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-muted text-[11px] mt-0.5">
+                      {b.type}
+                      {b.duration_min ? ` · ${b.duration_min} min` : ""}
+                      {b.price_cents != null
+                        ? ` · ${euros(b.price_cents)}${b.paid_at ? " betaald" : ""}`
+                        : ""}
+                    </p>
+                    {b.notes && (
+                      <p className="text-ink-soft text-[11.5px] mt-1 italic line-clamp-2">
+                        {b.notes}
+                      </p>
+                    )}
+                  </div>
+                  {b.meeting_url && (
+                    <a
+                      href={b.meeting_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex-none text-[10px] tracking-[0.18em] uppercase bg-ink hover:brightness-110 text-white px-2.5 py-1.5 rounded transition inline-flex items-center gap-1"
+                    >
+                      <Video size={11} /> Open
+                    </a>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

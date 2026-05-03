@@ -79,10 +79,38 @@ export async function GET(
     });
   }
 
+  // Bookings (calls met Marion) gekoppeld aan deze klant — via
+  // submission_id óf via email (bookings kunnen ook los van submission
+  // gemaakt zijn). Dedupe op id zodat we elke booking maar één keer tonen.
+  const customerEmail = String(submissions[0].contact ?? "").toLowerCase();
+  const bookingRows = await sql`
+    SELECT id, type, scheduled_at, duration_min, price_cents, status,
+           paid_at, meeting_url, contact_name, contact_email, notes,
+           created_at
+    FROM bookings
+    WHERE submission_id = ${submissionId}
+       OR LOWER(contact_email) = ${customerEmail}
+    ORDER BY scheduled_at ASC
+  `;
+  const bookings = bookingRows.map((b) => ({
+    id: Number(b.id),
+    type: String(b.type ?? ""),
+    scheduled_at: b.scheduled_at ? String(b.scheduled_at) : null,
+    duration_min: b.duration_min == null ? null : Number(b.duration_min),
+    price_cents: b.price_cents == null ? null : Number(b.price_cents),
+    status: String(b.status ?? ""),
+    paid_at: b.paid_at ? String(b.paid_at) : null,
+    meeting_url: b.meeting_url ? String(b.meeting_url) : null,
+    contact_name: b.contact_name ? String(b.contact_name) : null,
+    notes: b.notes ? String(b.notes) : null,
+    created_at: String(b.created_at),
+  }));
+
   return NextResponse.json({
     submission: submissions[0],
     answers,
     workbooks,
+    bookings,
   });
 }
 

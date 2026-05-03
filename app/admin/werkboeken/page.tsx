@@ -8,7 +8,6 @@ import {
   LogOut,
   BookOpen,
   RefreshCw,
-  AlertTriangle,
   ChevronDown,
   Check,
   ExternalLink,
@@ -55,8 +54,6 @@ export default function WerkboekenPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [openSlug, setOpenSlug] = useState<string | null>(null);
-  const [resetConfirm, setResetConfirm] = useState<number | null>(null);
-  const [resetting, setResetting] = useState(false);
 
   const fetchData = useCallback(async (refresh = false) => {
     if (refresh) setRefreshing(true);
@@ -83,28 +80,6 @@ export default function WerkboekenPage() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  const reset = async (accessId: number) => {
-    setResetting(true);
-    try {
-      const res = await fetch(`/api/admin/workbooks/${accessId}/reset`, {
-        method: "POST",
-      });
-      if (res.ok) {
-        // Update local state
-        setGroups((prev) =>
-          prev.map((g) => ({
-            ...g,
-            clients: g.clients.map((c) =>
-              c.access_id === accessId ? { ...c, filled: 0, pct: 0 } : c
-            ),
-          }))
-        );
-        setResetConfirm(null);
-      }
-    } catch {}
-    setResetting(false);
-  };
 
   const logout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -322,36 +297,6 @@ export default function WerkboekenPage() {
                                     >
                                       PDF
                                     </a>
-                                    {resetConfirm === c.access_id ? (
-                                      <div className="flex items-center gap-1.5 bg-red-50 rounded-md px-2 py-1 border border-red-200">
-                                        <AlertTriangle
-                                          size={12}
-                                          className="text-red-500"
-                                        />
-                                        <button
-                                          onClick={() => reset(c.access_id)}
-                                          disabled={resetting}
-                                          className="text-[10px] tracking-[0.18em] uppercase text-white bg-red-500 hover:bg-red-600 px-2 py-1 rounded transition disabled:opacity-50"
-                                        >
-                                          {resetting ? "..." : "Bevestig"}
-                                        </button>
-                                        <button
-                                          onClick={() => setResetConfirm(null)}
-                                          className="text-[10px] tracking-[0.18em] uppercase text-red-400 hover:text-red-600 px-1"
-                                        >
-                                          Nee
-                                        </button>
-                                      </div>
-                                    ) : (
-                                      <button
-                                        onClick={() =>
-                                          setResetConfirm(c.access_id)
-                                        }
-                                        className="text-[11px] tracking-[0.18em] uppercase text-muted hover:text-red-500 transition px-2 py-1.5"
-                                      >
-                                        Reset
-                                      </button>
-                                    )}
                                   </div>
                                 </li>
                               ))}

@@ -8,7 +8,7 @@ export const FROM_NOISE_TO_STRUCTURE: Workbook = {
   title: t("Return to Calm — The Deeper Path", "Return to Calm — The Deeper Path"),
   scriptTitle: t("the deeper path", "the deeper path"),
   brand: t("Return to Calm", "Return to Calm"),
-  imageUrl: "https://u.cubeupload.com/laurensbs/noisetostructure.png",
+  imageUrl: "https://u.cubeupload.com/laurensbos/noisetostructure.png",
   imageAlt: t(
     "From Noise to Structure — een verdiepend werkboek",
     "From Noise to Structure — a deeper workbook"

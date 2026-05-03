@@ -7,6 +7,7 @@ import { BASE_FIELDS, PACKAGE_INTAKE } from "@/lib/intake-fields";
 import IntakeForm from "@/components/intake/IntakeForm";
 import WhatHappensNext from "@/components/sections/WhatHappensNext";
 import { getLocale } from "@/lib/i18n/server";
+import { getClientSession } from "@/lib/client-auth";
 import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
 import { buildMetadata, serviceLd, productLd, breadcrumbLd } from "@/lib/seo";
@@ -51,6 +52,33 @@ export default async function PackagePage({
 
   const pkg = PACKAGES[slug];
   const locale = await getLocale();
+
+  // Pre-fill intake voor ingelogde klanten — naam/email/telefoon hoeven
+  // ze niet opnieuw in te vullen. Phone halen we uit hun meest recente
+  // submission (niet bewaard in session).
+  const session = await getClientSession();
+  let prefill: Record<string, string | number> | undefined;
+  let prefilledNote: string | undefined;
+  if (session) {
+    const { sql } = await import("@/lib/db");
+    const phoneRows = await sql`
+      SELECT phone FROM submissions
+      WHERE LOWER(contact) = ${session.email}
+        AND phone IS NOT NULL AND phone <> ''
+      ORDER BY created_at DESC LIMIT 1
+    `;
+    const phone = phoneRows.length > 0 ? String(phoneRows[0].phone) : "";
+    prefill = {
+      firstName: session.firstName,
+      contact: session.email,
+      ...(phone ? { phone } : {}),
+    };
+    prefilledNote =
+      locale === "en"
+        ? `Welcome back, ${session.firstName}. We've filled in what we know — feel free to adjust.`
+        : `Welkom terug, ${session.firstName}. We hebben alvast ingevuld wat we van je weten — pas gerust aan.`;
+  }
+
   const accentText =
     pkg.accent === "sage" ? "text-sage-deep" : pkg.accent === "tan" ? "text-tan" : "text-gold";
   const accentBar =
@@ -208,6 +236,8 @@ export default async function PackagePage({
             scaleHigh={tr(DICT.intake.fields.scaleHigh, locale)}
             chooseLabel={tr(DICT.intake.fields.choose, locale)}
             requiredAffix="*"
+            initialValues={prefill}
+            prefilledNote={prefilledNote}
           />
         </FadeIn>
       </div>
