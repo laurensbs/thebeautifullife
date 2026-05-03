@@ -18,6 +18,8 @@ import Calligraphy from "@/components/ui/Calligraphy";
 import HeartDivider from "@/components/ui/HeartDivider";
 import BookingCard, { type PortalBooking } from "@/components/portal/BookingCard";
 import TodayCard from "@/components/portal/TodayCard";
+import PersonalRecommendation from "@/components/portal/PersonalRecommendation";
+import { recommendPackage } from "@/lib/recommend";
 import {
   Heart,
   CheckCircle,
@@ -148,6 +150,32 @@ export default async function MijnPad() {
   // Pick the first contact info we can find for the profile card.
   const profile = subs[0] ?? null;
 
+  // Persoonlijke aanbeveling — alleen voor klanten zonder pakket maar mét
+  // een ingevulde vragenlijst. Lees laatste antwoorden + bepaal pakket.
+  const hasPackage = subs.some((s) => s.package);
+  let recommendation: { slug: PackageSlug; reason: string } | null = null;
+  if (!hasPackage && subs.length > 0) {
+    const latestCompletedSub = subs.find((s) => s.questionnaire_completed);
+    if (latestCompletedSub) {
+      const answerRows = (await sql`
+        SELECT question_id, answer_text, answer_scale
+        FROM answers
+        WHERE submission_id = ${latestCompletedSub.id}
+      `) as unknown as Array<{
+        question_id: number;
+        answer_text: string | null;
+        answer_scale: number | null;
+      }>;
+      recommendation = recommendPackage(
+        answerRows.map((a) => ({
+          questionId: Number(a.question_id),
+          text: a.answer_text,
+          scale: a.answer_scale,
+        }))
+      );
+    }
+  }
+
   // Bepaal het 'Vandaag'-item — eerste relevante actie voor de klant.
   const upcomingBooking = bookingRows.find(
     (b) =>
@@ -230,6 +258,15 @@ export default async function MijnPad() {
       <div className="mb-7 sm:mb-8">
         <TodayCard firstName={session.firstName} item={todayItem} />
       </div>
+
+      {/* Persoonlijke aanbeveling — voor klanten zonder pakket */}
+      {recommendation && (
+        <PersonalRecommendation
+          primarySlug={recommendation.slug}
+          reason={recommendation.reason}
+          firstName={session.firstName}
+        />
+      )}
 
       {/* Header */}
       <FadeIn direction="up" className="bg-page-soft rounded-[6px] px-6 py-7 sm:px-12 sm:py-11 shadow-[0_18px_48px_rgba(60,50,30,0.08)] mb-7 sm:mb-8 relative overflow-hidden">

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { sql } from "@/lib/db";
 import {
-  sendQuestionnaireEmail,
+  sendClientWelcome,
   sendNewSubmissionNotification,
 } from "@/lib/email";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -58,17 +58,27 @@ export async function POST(request: NextRequest) {
     const protocol = request.headers.get("x-forwarded-proto") || "https";
     const host = request.headers.get("host") || "thebeautifullife.nl";
     const siteUrl = `${protocol}://${host}`;
-    const questionnaireUrl = `${siteUrl}/vragenlijst?token=${token}`;
+
+    // Magic-link: logt klant direct in op portaal-account én stuurt door
+    // naar de vragenlijst (questionnaire-token blijft als URL-param).
+    const linkToken = "client:" + crypto.randomBytes(32).toString("hex");
+    const linkExpires = new Date(Date.now() + 30 * 60 * 1000);
+    await sql`
+      INSERT INTO workbook_magic_links (email, token, expires_at)
+      VALUES (${email}, ${linkToken}, ${linkExpires})
+    `;
+    const next = encodeURIComponent(`/vragenlijst?token=${token}`);
+    const welcomeUrl = `${siteUrl}/api/client/login/consume?token=${linkToken}&next=${next}`;
 
     let emailSent = false;
     let emailError: string | null = null;
     try {
-      await sendQuestionnaireEmail(email, name, questionnaireUrl);
+      await sendClientWelcome(email, name, welcomeUrl);
       emailSent = true;
       await sql`UPDATE submissions SET email_sent = true WHERE id = ${result[0].id}`;
     } catch (err) {
       emailError = err instanceof Error ? err.message : String(err);
-      console.error("Lead questionnaire email failed:", emailError);
+      console.error("Lead welcome email failed:", emailError);
     }
 
     try {

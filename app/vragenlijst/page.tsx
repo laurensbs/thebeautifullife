@@ -183,8 +183,16 @@ function VragenlijstContent() {
 
           <p className="text-ink-soft text-[15px] leading-[1.85] max-w-md mx-auto">
             Marion neemt binnenkort persoonlijk contact met je op. Tot dan: laat
-            de antwoorden rustig in je doorwerken.
+            de antwoorden rustig in je doorwerken — op jouw persoonlijke pad
+            vind je een aanbeveling die bij je past.
           </p>
+
+          <a
+            href="/mijn-pad"
+            className="inline-block mt-7 bg-ink hover:brightness-110 text-white px-7 py-3.5 rounded-[3px] font-sans text-xs tracking-[0.22em] uppercase transition shadow-[0_6px_18px_rgba(60,50,30,0.12)]"
+          >
+            Open mijn pad
+          </a>
 
           <p className="font-script text-tan text-2xl mt-6">
             je eerste stap is gezet

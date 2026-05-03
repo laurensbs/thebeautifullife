@@ -15,8 +15,16 @@ import { createClientSession, setClientCookie } from "@/lib/client-auth";
  */
 const REUSE_WINDOW_MS = 5 * 60_000;
 
+// Alleen relatieve, same-origin paths toestaan als next-doel.
+function safeNext(raw: string | null): string {
+  if (!raw) return "/mijn-pad";
+  if (!raw.startsWith("/") || raw.startsWith("//")) return "/mijn-pad";
+  return raw;
+}
+
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get("token");
+  const next = safeNext(request.nextUrl.searchParams.get("next"));
   const origin = request.nextUrl.origin;
 
   if (!token) {
@@ -53,5 +61,5 @@ export async function GET(request: NextRequest) {
   const sessionToken = await createClientSession(String(link.email));
   await setClientCookie(sessionToken);
 
-  return NextResponse.redirect(`${origin}/mijn-pad`);
+  return NextResponse.redirect(`${origin}${next}`);
 }

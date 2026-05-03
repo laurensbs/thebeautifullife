@@ -9,6 +9,7 @@ import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
 import HeartDraw from "@/components/ui/HeartDraw";
 import BrandLogo from "@/components/ui/BrandLogo";
+import HeaderAuthLink from "./HeaderAuthLink";
 
 export default function SiteHeader({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
@@ -16,8 +17,8 @@ export default function SiteHeader({ locale }: { locale: Locale }) {
 
   const NAV = [
     { href: "/#packages", label: tr(DICT.nav.packages, locale) },
-    { href: "/mijn-pad", label: tr(DICT.nav.myPath, locale) },
   ];
+  const myPathLabel = tr(DICT.nav.myPath, locale);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -36,10 +37,10 @@ export default function SiteHeader({ locale }: { locale: Locale }) {
 
   return (
     <header
-      className={`sticky top-0 z-40 transition-all ${
+      className={`sticky top-0 z-40 transition-[background-color,box-shadow,border-color] duration-300 ease-out ${
         scrolled
-          ? "bg-page/90 backdrop-blur-md border-b border-line/40"
-          : "bg-transparent"
+          ? "bg-page-soft border-b border-line/60 shadow-[0_4px_20px_rgba(60,50,30,0.06)]"
+          : "bg-transparent border-b border-transparent"
       }`}
     >
       <div className="max-w-[1180px] mx-auto px-5 sm:px-6 py-3 flex items-center justify-between">
@@ -57,6 +58,7 @@ export default function SiteHeader({ locale }: { locale: Locale }) {
               <span className="absolute left-0 right-0 -bottom-1 h-px bg-tan scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
             </Link>
           ))}
+          <HeaderAuthLink fallbackLabel={myPathLabel} />
           <LanguageSwitcher current={locale} />
         </nav>
 

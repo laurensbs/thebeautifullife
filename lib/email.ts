@@ -56,15 +56,33 @@ const BRAND = {
  * en sign-off in Pinyon style. Compatible met de meeste mail clients
  * (alle styles inline, table-based fallback waar nodig).
  */
+// Default hero-image (homepage hero) — gebruikt als geen specifieke image is meegegeven
+// in templates die een hero willen tonen. Templates kunnen ook hun eigen image kiezen
+// (workbook cover, pakket-image, etc.) of `heroImage: null` doorgeven om geen image te tonen.
+const DEFAULT_HERO_IMAGE =
+  "https://u.cubeupload.com/laurensbos/bf5fdd986cf4196c6c66.jpeg";
+
+function heroBand(src: string) {
+  return `
+          <tr>
+            <td style="padding:0;line-height:0;font-size:0;">
+              <img src="${src}" alt="The Beautiful Life" width="600" style="display:block;width:100%;max-width:600px;height:auto;max-height:240px;object-fit:cover;object-position:center top;border:0;outline:none;" />
+            </td>
+          </tr>`;
+}
+
 function layout({
   preheader,
   bodyHtml,
   scriptSignoff = "liefs, Marion",
+  heroImage,
 }: {
   preheader: string;
   bodyHtml: string;
   scriptSignoff?: string;
+  heroImage?: string | null;
 }) {
+  const hero = heroImage === null ? "" : heroBand(heroImage ?? DEFAULT_HERO_IMAGE);
   return `<!doctype html>
 <html lang="nl">
 <head>
@@ -89,7 +107,7 @@ function layout({
               <div style="font-family:${BRAND.scriptStack};font-size:36px;color:${BRAND.ink};opacity:0.85;line-height:0.9;margin-top:-4px;">Life</div>
             </td>
           </tr>
-
+${hero}
           <!-- Body -->
           <tr>
             <td style="padding:8px 36px 32px;">
@@ -219,6 +237,7 @@ export async function sendNewSubmissionNotification(
      </tr>`;
 
   const html = layout({
+    heroImage: null,
     preheader: `Nieuwe aanmelding van ${name}.`,
     bodyHtml: [
       kicker("nieuwe aanmelding"),
@@ -249,7 +268,8 @@ export async function sendWorkbookInvite(
   firstName: string,
   workbookTitle: string,
   workbookUrl: string,
-  locale: "nl" | "en" = "nl"
+  locale: "nl" | "en" = "nl",
+  workbookImageUrl?: string
 ) {
   assertSmtpConfigured();
   const isEn = locale === "en";
@@ -269,6 +289,7 @@ export async function sendWorkbookInvite(
   const sign = isEn ? "with love, Marion" : "liefs, Marion";
 
   const html = layout({
+    heroImage: workbookImageUrl,
     preheader: isEn
       ? `Your workbook "${workbookTitle}" is ready.`
       : `Jouw werkboek "${workbookTitle}" staat voor je klaar.`,
@@ -351,6 +372,7 @@ export async function sendQuestionnaireCompletedNotification(
     : "";
 
   const html = layout({
+    heroImage: null,
     preheader: `${name} heeft de reflectievragenlijst ingevuld.`,
     bodyHtml: [
       kicker("vragenlijst ingevuld"),
@@ -429,5 +451,39 @@ export async function sendMarionReflection(
     subject: `${firstName}, een paar woorden van Marion`,
     html,
     replyTo: "contact@thebeautifullife.nl",
+  });
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// 7. Welkom — naar klant na /gratis submit. Magic-link logt direct in
+//    en stuurt door naar /vragenlijst. Vervangt de oude losse vragenlijst-mail.
+// ────────────────────────────────────────────────────────────────────────
+export async function sendClientWelcome(
+  to: string,
+  firstName: string,
+  loginUrl: string
+) {
+  assertSmtpConfigured();
+  const html = layout({
+    preheader: `${firstName}, welkom bij The Beautiful Life — je persoonlijke pad staat klaar.`,
+    bodyHtml: [
+      kicker("welkom,"),
+      title(firstName),
+      paragraph(
+        "Wat fijn dat je de eerste stap hebt gezet.<br>Je persoonlijke pad staat voor je klaar — met daarin de gratis reflectievragenlijst als zachte start."
+      ),
+      button(loginUrl, "Start mijn vragenlijst", "ink"),
+      `<p style="font-family:${BRAND.serifStack};font-style:italic;font-size:14px;line-height:1.85;color:${BRAND.inkSoft};margin:22px 0 6px;text-align:center;">Eén klik logt je meteen in op je persoonlijke pad — geen wachtwoord nodig.</p>`,
+      note(
+        "Bewaar deze e-mail. Je kunt altijd terugkomen via deze link of via thebeautifullife.nl/mijn-pad."
+      ),
+    ].join(""),
+  });
+
+  await transporter.sendMail({
+    from: fromAddress(),
+    to,
+    subject: `${firstName}, welkom bij The Beautiful Life`,
+    html,
   });
 }

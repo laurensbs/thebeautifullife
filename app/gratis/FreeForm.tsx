@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { DICT } from "@/lib/i18n/dict";
@@ -10,11 +11,11 @@ import HeartDivider from "@/components/ui/HeartDivider";
 import HeartDraw from "@/components/ui/HeartDraw";
 
 export default function FreeForm({ locale }: { locale: Locale }) {
+  const router = useRouter();
   const [firstName, setFirstName] = useState("");
   const [contact, setContact] = useState("");
   const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const submit = async (e: React.FormEvent) => {
@@ -31,11 +32,12 @@ export default function FreeForm({ locale }: { locale: Locale }) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Er ging iets mis.");
       }
-      setSent(true);
+      const url = `/gratis/check-mail?email=${encodeURIComponent(contact)}&name=${encodeURIComponent(firstName)}`;
+      router.push(url);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Er ging iets mis.");
+      setSubmitting(false);
     }
-    setSubmitting(false);
   };
 
   return (
@@ -64,98 +66,75 @@ export default function FreeForm({ locale }: { locale: Locale }) {
 
         <HeartDivider className="my-6" />
 
-        {sent ? (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="font-script text-tan text-2xl">
-              {tr(DICT.free.sentTitle, locale)}
-            </p>
-            <p className="text-ink-soft text-sm mt-3 leading-[1.85] max-w-md mx-auto">
-              {tr(DICT.free.sentBody, locale)}
-            </p>
-            <Link
-              href="/"
-              className="inline-block mt-7 px-7 py-3 rounded-[3px] border border-ink/30 text-ink hover:border-tan hover:text-tan font-sans text-xs tracking-[0.22em] uppercase transition"
+        <p className="text-ink-soft text-[14px] leading-[1.8] max-w-md mx-auto">
+          {tr(DICT.free.formIntro, locale)}
+        </p>
+
+        <form onSubmit={submit} className="space-y-4 mt-6 text-left">
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-page-dark/60 border border-tan/30 rounded-md px-4 py-3 flex items-start gap-2.5"
             >
-              {tr(DICT.common.backToHome, locale)}
-            </Link>
-          </motion.div>
-        ) : (
-          <>
-            <p className="text-ink-soft text-[14px] leading-[1.8] max-w-md mx-auto">
-              {tr(DICT.free.formIntro, locale)}
-            </p>
+              <span className="text-tan flex-none mt-0.5"><HeartDraw size={12} /></span>
+              <p className="text-[13px] text-ink-soft leading-snug">{error}</p>
+            </motion.div>
+          )}
 
-            <form onSubmit={submit} className="space-y-4 mt-6 text-left">
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-page-dark/60 border border-tan/30 rounded-md px-4 py-3 flex items-start gap-2.5"
-                >
-                  <span className="text-tan flex-none mt-0.5"><HeartDraw size={12} /></span>
-                  <p className="text-[13px] text-ink-soft leading-snug">{error}</p>
-                </motion.div>
-              )}
+          <div>
+            <label className="block text-[11px] tracking-[0.18em] uppercase text-ink-soft mb-1.5 font-medium">
+              {tr(DICT.intake.fields.firstName, locale)}
+            </label>
+            <input
+              type="text"
+              required
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder={tr(DICT.intake.fields.firstNamePlaceholder, locale)}
+              className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
+            />
+          </div>
 
-              <div>
-                <label className="block text-[11px] tracking-[0.18em] uppercase text-ink-soft mb-1.5 font-medium">
-                  {tr(DICT.intake.fields.firstName, locale)}
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  placeholder={tr(DICT.intake.fields.firstNamePlaceholder, locale)}
-                  className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
-                />
-              </div>
+          <div>
+            <label className="block text-[11px] tracking-[0.18em] uppercase text-ink-soft mb-1.5 font-medium">
+              {tr(DICT.common.yourEmail, locale)}
+            </label>
+            <input
+              type="email"
+              required
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
+              placeholder={tr(DICT.intake.fields.contactPlaceholder, locale)}
+              className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
+            />
+          </div>
 
-              <div>
-                <label className="block text-[11px] tracking-[0.18em] uppercase text-ink-soft mb-1.5 font-medium">
-                  {tr(DICT.common.yourEmail, locale)}
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  placeholder={tr(DICT.intake.fields.contactPlaceholder, locale)}
-                  className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
-                />
-              </div>
+          <div>
+            <label className="block text-[11px] tracking-[0.18em] uppercase text-ink-soft mb-1.5 font-medium">
+              {tr(DICT.intake.fields.phone, locale)} ·{" "}
+              <span className="text-muted normal-case tracking-normal text-[11px] italic">
+                {tr(DICT.common.optional, locale)}
+              </span>
+            </label>
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder={tr(DICT.intake.fields.phonePlaceholder, locale)}
+              className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
+            />
+          </div>
 
-              <div>
-                <label className="block text-[11px] tracking-[0.18em] uppercase text-ink-soft mb-1.5 font-medium">
-                  {tr(DICT.intake.fields.phone, locale)} ·{" "}
-                  <span className="text-muted normal-case tracking-normal text-[11px] italic">
-                    {tr(DICT.common.optional, locale)}
-                  </span>
-                </label>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder={tr(DICT.intake.fields.phonePlaceholder, locale)}
-                  className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full mt-2 px-6 py-4 rounded-[3px] bg-sage hover:bg-sage-deep text-white font-sans text-xs tracking-[0.22em] uppercase transition disabled:opacity-60 flex items-center justify-center gap-2"
-              >
-                {submitting && <Loader2 size={14} className="animate-spin" />}
-                {tr(DICT.free.submitLabel, locale)}
-              </button>
-            </form>
-          </>
-        )}
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full mt-2 px-6 py-4 rounded-[3px] bg-sage hover:bg-sage-deep text-white font-sans text-xs tracking-[0.22em] uppercase transition disabled:opacity-60 flex items-center justify-center gap-2"
+          >
+            {submitting && <Loader2 size={14} className="animate-spin" />}
+            {tr(DICT.free.submitLabel, locale)}
+          </button>
+        </form>
       </motion.div>
     </main>
   );
