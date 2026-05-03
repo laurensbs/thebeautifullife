@@ -42,8 +42,8 @@ export const PACKAGES: Record<
     nameLines: ["Return to Calm"],
     kicker: "Package 1",
     tagline: "Ontdek wie je bent, wat je wilt en waar je naartoe gaat.",
-    priceLabel: "€97",
-    priceCents: 9700,
+    priceLabel: "€49",
+    priceCents: 4900,
     accent: "sage",
     quote: "Helderheid is de eerste stap naar verandering.",
     features: [

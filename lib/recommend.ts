@@ -11,7 +11,7 @@ export type AnswerInput = {
  * van een klant. Pure heuristiek — geen LLM, geen API-calls.
  *
  * Logica:
- * - Lage rust/duidelijkheid scores (1-4) → urgent, klein eerste pakket = ikigai (€97)
+ * - Lage rust/duidelijkheid scores (1-4) → urgent, klein eerste pakket = ikigai (€49)
  * - Middelmatige scores + behoefte aan structuur → alignment (€397)
  * - Diepe transformatie-vraag of hoge scores op alle assen → experience (€1997)
  * - Default fallback: ikigai (laagste drempel)
