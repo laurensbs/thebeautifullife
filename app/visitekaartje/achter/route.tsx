@@ -8,13 +8,14 @@ import { loadOgFonts } from "@/lib/og-fonts";
  * Marion's signoff bovenaan in Pinyon, contact gecentreerd, KvK fijn onderaan.
  */
 
-export const runtime = "edge";
+// Node runtime — Edge faalt omdat fetch naar /fonts/ door apex→www redirect
+// een lege response geeft, waardoor next/og een lege PNG retourneert.
+export const runtime = "nodejs";
 
 const SIZE = { width: 1051, height: 697 };
 
-export async function GET(request: Request) {
-  const origin = new URL(request.url).origin;
-  const fonts = await loadOgFonts(origin);
+export async function GET() {
+  const fonts = loadOgFonts();
 
   return new ImageResponse(
     (
