@@ -15,6 +15,15 @@ export const BOOKING_TYPES = {
     description:
       "Een persoonlijke 60-minuten Teams-call met Marion. Stel je vraag, krijg richting, of werk gericht aan iets dat speelt.",
   },
+  return_to_calm_30: {
+    key: "return_to_calm_30",
+    title: "Verdiepingscall — Return to Calm",
+    duration_min: 30,
+    price_cents: 4900,
+    price_label: "€49",
+    description:
+      "Een persoonlijke 30-minuten Teams-call met Marion om dieper in te gaan op wat je in het werkboek Return to Calm bent tegengekomen. Speciaal voor wie het werkboek heeft (of doorloopt).",
+  },
 } as const;
 
 export type BookingTypeKey = keyof typeof BOOKING_TYPES;

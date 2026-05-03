@@ -11,7 +11,7 @@ import {
   Check,
 } from "lucide-react";
 import { type Locale } from "@/lib/i18n/types";
-import { BOOKING_TYPES } from "@/lib/bookings";
+import { BOOKING_TYPES, type BookingTypeKey } from "@/lib/bookings";
 import HeartDivider from "@/components/ui/HeartDivider";
 import MarionAvatar from "@/components/ui/MarionAvatar";
 import HeartDraw from "@/components/ui/HeartDraw";
@@ -22,11 +22,13 @@ type Prefill = { firstName: string; email: string; phone: string | null };
 
 export default function BookingFlow({
   prefill,
+  bookingType = "one_on_one_60",
 }: {
   locale: Locale;
   prefill: Prefill | null;
+  bookingType?: BookingTypeKey;
 }) {
-  const t = BOOKING_TYPES.one_on_one_60;
+  const t = BOOKING_TYPES[bookingType];
 
   const [step, setStep] = useState<"slot" | "details" | "done">("slot");
   const [days, setDays] = useState<Slot[]>([]);
@@ -40,12 +42,12 @@ export default function BookingFlow({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/bookings/availability")
+    fetch(`/api/bookings/availability?type=${bookingType}`)
       .then((r) => r.json())
       .then((data) => setDays(data.slots ?? []))
       .catch(() => setDays([]))
       .finally(() => setLoadingDays(false));
-  }, []);
+  }, [bookingType]);
 
   const fmtDate = (iso: string) =>
     new Date(iso).toLocaleDateString("nl-NL", {
@@ -69,7 +71,7 @@ export default function BookingFlow({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          booking_type: "one_on_one_60",
+          booking_type: bookingType,
           scheduled_at: chosen,
           firstName,
           contact: email,

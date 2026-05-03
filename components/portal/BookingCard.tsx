@@ -12,6 +12,7 @@ import HeartDraw from "@/components/ui/HeartDraw";
 
 export type PortalBooking = {
   id: number;
+  booking_type?: string | null;
   scheduled_at: string;
   duration_min: number;
   price_cents: number;

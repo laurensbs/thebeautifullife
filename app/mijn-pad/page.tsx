@@ -19,6 +19,7 @@ import Calligraphy from "@/components/ui/Calligraphy";
 import BookingCard, { type PortalBooking } from "@/components/portal/BookingCard";
 import TodayCard from "@/components/portal/TodayCard";
 import PersonalRecommendation from "@/components/portal/PersonalRecommendation";
+import DepthCallCard from "@/components/portal/DepthCallCard";
 import { recommendPackage } from "@/lib/recommend";
 import {
   Heart,
@@ -128,7 +129,7 @@ export default async function MijnPad() {
 
   // Bookings van deze klant
   const bookingRows = (await sql`
-    SELECT id, scheduled_at, duration_min, price_cents, status, paid_at, meeting_url
+    SELECT id, booking_type, scheduled_at, duration_min, price_cents, status, paid_at, meeting_url
     FROM bookings
     WHERE LOWER(contact_email) = ${session.email}
        OR submission_id = ANY(${session.submissionIds}::int[])
@@ -287,6 +288,12 @@ export default async function MijnPad() {
           firstName={session.firstName}
         />
       )}
+
+      {/* Verdiepingscall-upsell voor Return to Calm-klanten */}
+      {subs.some((s) => s.package === "ikigai") &&
+        !bookingRows.some(
+          (b) => String(b.booking_type ?? "") === "return_to_calm_30"
+        ) && <DepthCallCard firstName={session.firstName} />}
 
       <div className="grid lg:grid-cols-[1.7fr_1fr] gap-6 sm:gap-7 items-start">
         <div className="space-y-5">
