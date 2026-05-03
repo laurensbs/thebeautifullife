@@ -76,16 +76,13 @@ export const DICT = {
     kicker3: t("Package 3", "Package 3"),
 
     name: {
-      ikigai: t("The Ikigai Story", "The Ikigai Story"),
-      alignment: t("From Insight to Alignment", "From Insight to Alignment"),
+      ikigai: t("Return to Calm", "Return to Calm"),
+      alignment: t("The Ikigai Story", "The Ikigai Story"),
       experience: t("The Beautiful Life Experience", "The Beautiful Life Experience"),
     },
     nameLines: {
-      ikigai: { nl: ["The Ikigai Story"], en: ["The Ikigai Story"] },
-      alignment: {
-        nl: ["From Insight", "to Alignment"],
-        en: ["From Insight", "to Alignment"],
-      },
+      ikigai: { nl: ["Return to", "Calm"], en: ["Return to", "Calm"] },
+      alignment: { nl: ["The Ikigai", "Story"], en: ["The Ikigai", "Story"] },
       experience: {
         nl: ["The Beautiful Life", "Experience"],
         en: ["The Beautiful Life", "Experience"],
