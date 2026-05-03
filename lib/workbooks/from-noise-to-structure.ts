@@ -1449,9 +1449,231 @@ export const FROM_NOISE_TO_STRUCTURE: Workbook = {
       ],
     },
 
-    // ─── PAGE 31 — Even stilstaan ───────────────────────────────────
+    // ─── PAGE 31 — Wat ik nodig heb van anderen ─────────────────────
     {
       number: 31,
+      chapter: t("Part Five · Bewegen", "Part Five · Move"),
+      blocks: [
+        { type: "kicker", text: t("relational map", "relational map") },
+        {
+          type: "title",
+          text: t("Wat ik nodig heb van anderen", "What I need from others"),
+          size: "md",
+          lines: ta(
+            ["Wat ik nodig heb", "van anderen"],
+            ["What I need", "from others"]
+          ),
+        },
+        { type: "rule", align: "left" },
+        {
+          type: "lead",
+          paragraphs: ta(
+            [
+              "Veel mensen weten niet wat ze nodig hebben totdat ze het missen. En veel mensen om jou heen zouden je graag helpen — als ze wisten hóe.",
+              "Schrijf het uit, ook al voelt het ongemakkelijk. Je hoeft het niet te delen. Het opschrijven alleen al maakt iets helder.",
+            ],
+            [
+              "Many people don't know what they need until they miss it. And many people around you would gladly help — if they knew how.",
+              "Write it out, even if it feels uncomfortable. You don't have to share it. Just writing it down makes something clearer.",
+            ]
+          ),
+        },
+        {
+          type: "twoCol",
+          left: {
+            head: t("Wat ik nodig heb", "What I need"),
+            field: {
+              key: "ns_p31_need",
+              placeholder: t(
+                "Tijd alleen · een luisterend oor · iemand die niet adviseert · een knuffel zonder vragen…",
+                "Time alone · a listening ear · someone who doesn't advise · a hug without questions…"
+              ),
+              size: "md",
+            },
+          },
+          right: {
+            head: t("Wat ik te bieden heb", "What I have to offer"),
+            field: {
+              key: "ns_p31_offer",
+              placeholder: t(
+                "Aanwezigheid · een maaltijd · stilte naast iemand · een eerlijk gesprek…",
+                "Presence · a meal · silence beside someone · an honest conversation…"
+              ),
+              size: "md",
+            },
+          },
+        },
+        {
+          type: "callout",
+          tone: "tan",
+          label: t("Reflectie", "Reflection"),
+          body: t(
+            "Wie in jouw leven mag dit weten? Soms is het uitspreken van één behoefte, tegen één mens, het stilste maar diepste werk van een seizoen.",
+            "Who in your life may know this? Sometimes speaking one need, to one person, is the quietest yet deepest work of a season."
+          ),
+        },
+      ],
+    },
+
+    // ─── PAGE 32 — Mantra's & ankers ────────────────────────────────
+    {
+      number: 32,
+      chapter: t("Part Five · Bewegen", "Part Five · Move"),
+      blocks: [
+        { type: "kicker", text: t("daily anchors", "daily anchors") },
+        {
+          type: "title",
+          text: t("Zeven mantra's voor zachte dagen", "Seven mantras for soft days"),
+          size: "md",
+          lines: ta(
+            ["Zeven mantra's voor", "zachte dagen"],
+            ["Seven mantras for", "soft days"]
+          ),
+        },
+        { type: "rule", align: "left" },
+        {
+          type: "lead",
+          paragraphs: ta(
+            [
+              "Een mantra is geen afkortrouting naar geluk — het is een zin die je zenuwstelsel langzaam leert dat het veilig is. Lees ze. Onderstreep er één per dag. Zeg 'm hardop voor de spiegel, of zachtjes voor je in slaap valt.",
+            ],
+            [
+              "A mantra isn't a shortcut to happiness — it's a sentence that slowly teaches your nervous system that it is safe. Read them. Underline one each day. Say it out loud in the mirror, or quietly before you fall asleep.",
+            ]
+          ),
+        },
+        {
+          type: "calloutList",
+          tone: "cream",
+          items: [
+            {
+              label: t("Maandag", "Monday"),
+              body: t(
+                "_Ik mag traag beginnen. Mijn dag wacht op mij, niet andersom._",
+                "_I may begin slowly. My day waits for me, not the other way around._"
+              ),
+            },
+            {
+              label: t("Dinsdag", "Tuesday"),
+              body: t(
+                "_Wat ik voel hoeft niet weg. Het mag erbij zijn._",
+                "_What I feel doesn't have to go away. It may be here too._"
+              ),
+            },
+            {
+              label: t("Woensdag", "Wednesday"),
+              body: t(
+                "_Ik ben geen taak die afgewerkt moet. Ik ben een mens die geleefd wordt._",
+                "_I'm not a task to complete. I'm a human being lived._"
+              ),
+            },
+            {
+              label: t("Donderdag", "Thursday"),
+              body: t(
+                "_Ik mag rusten zonder het verdiend te hebben._",
+                "_I may rest without having earned it._"
+              ),
+            },
+            {
+              label: t("Vrijdag", "Friday"),
+              body: t(
+                "_Vandaag mag genoeg zijn, ook als het klein is._",
+                "_Today may be enough, even when it is small._"
+              ),
+            },
+            {
+              label: t("Zaterdag", "Saturday"),
+              body: t(
+                "_Mijn ja is alleen waardevol als mijn nee ook bestaat._",
+                "_My yes is only valuable if my no also exists._"
+              ),
+            },
+            {
+              label: t("Zondag", "Sunday"),
+              body: t(
+                "_Ik leef niet voor de drukte. Ik leef voor de momenten ertussenin._",
+                "_I don't live for the busyness. I live for the moments in between._"
+              ),
+            },
+          ],
+        },
+        {
+          type: "lead",
+          paragraphs: ta(
+            ["_Welke mantra raakt iets in je vandaag — en waarom?_"],
+            ["_Which mantra touches something in you today — and why?_"]
+          ),
+        },
+        { type: "field", key: "ns_p32_mantra", size: "sm" },
+      ],
+    },
+
+    // ─── PAGE 33 — Seizoens-ritueel ─────────────────────────────────
+    {
+      number: 33,
+      chapter: t("Part Five · Bewegen", "Part Five · Move"),
+      blocks: [
+        { type: "kicker", text: t("season ritual", "season ritual") },
+        {
+          type: "title",
+          text: t("Maandelijks bij jezelf inchecken", "A monthly check-in with yourself"),
+          size: "md",
+          lines: ta(
+            ["Maandelijks bij", "jezelf inchecken"],
+            ["A monthly", "check-in with yourself"]
+          ),
+        },
+        { type: "rule", align: "left" },
+        {
+          type: "lead",
+          paragraphs: ta(
+            [
+              "Eén keer per maand — dezelfde dag, dezelfde plek, dezelfde thee. Geen prestatie, geen verslag. Alleen vier vragen die je weer naar je middelpunt brengen.",
+              "Zet 'm in je agenda. Op de eerste zondag, of de laatste. Niet langer dan twintig minuten.",
+            ],
+            [
+              "Once a month — same day, same spot, same tea. No achievement, no report. Just four questions that bring you back to your center.",
+              "Put it in your calendar. On the first Sunday, or the last. No longer than twenty minutes.",
+            ]
+          ),
+        },
+        {
+          type: "callout",
+          tone: "tan",
+          label: t("De vier vragen", "The four questions"),
+          body: t(
+            "**1.** Wat heeft me deze maand het meest gegeven?\n**2.** Wat heeft me het meest gekost?\n**3.** Wat wil ik volgende maand minder doen?\n**4.** Wat wil ik volgende maand zachter doen?",
+            "**1.** What gave me the most this month?\n**2.** What cost me the most?\n**3.** What do I want to do less of next month?\n**4.** What do I want to do more gently next month?"
+          ),
+        },
+        {
+          type: "eyebrow",
+          text: t("Deze maand · korte schets", "This month · a brief sketch"),
+        },
+        {
+          type: "field",
+          key: "ns_p33_month",
+          placeholder: t(
+            "Wat valt je op als je terugkijkt op de afgelopen weken?",
+            "What stands out as you look back over the past weeks?"
+          ),
+          size: "md",
+        },
+        {
+          type: "callout",
+          tone: "sage",
+          label: t("Belofte", "Promise"),
+          body: t(
+            "Een ritueel dat één keer per maand terugkomt, doet meer voor je rust dan een retraite van een week. Continuïteit is de stille superkracht van zachtheid.",
+            "A ritual that returns once a month does more for your calm than a week-long retreat. Continuity is the quiet superpower of softness."
+          ),
+        },
+      ],
+    },
+
+    // ─── PAGE 34 — Even stilstaan + herhaling weerbericht ───────────
+    {
+      number: 34,
       chapter: t("Integratie", "Integration"),
       blocks: [
         { type: "kicker", text: t("integration", "integration") },
@@ -1461,40 +1683,61 @@ export const FROM_NOISE_TO_STRUCTURE: Workbook = {
           type: "lead",
           paragraphs: ta(
             [
-              "Je bent door iets bijzonders gegaan. Voordat je dit boek dichtdoet — drie eerlijke vragen.",
+              "Je bent door iets bijzonders gegaan. Voordat je dit boek dichtdoet — een tweede weerbericht, en drie eerlijke vragen.",
+              "_Geef opnieuw elk gebied een score van 1 tot 10. Vergelijk straks met pagina 5._",
             ],
             [
-              "You've been through something meaningful. Before you close this book — three honest questions.",
+              "You've been through something meaningful. Before you close this book — a second weather report, and three honest questions.",
+              "_Give each area a score from 1 to 10 again. Then compare with page 5._",
             ]
           ),
+        },
+        {
+          type: "scaleGroup",
+          items: [
+            { key: "ns_p34_body", label: t("Lichaam", "Body") },
+            { key: "ns_p34_head", label: t("Hoofd", "Head") },
+            { key: "ns_p34_heart", label: t("Hart", "Heart") },
+            { key: "ns_p34_energy", label: t("Energie", "Energy") },
+            { key: "ns_p34_calm", label: t("Rust", "Calm") },
+          ],
         },
         {
           type: "questions",
           items: ta(
             [
-              "Hoe voel je je nu, vergeleken met je nulmeting?",
               "Wat is er zacht veranderd in je dagelijkse leven?",
+              "Welk inzicht wil je niet meer vergeten?",
               "Wat is je drie zinnen waardig om mee te nemen?",
             ],
             [
-              "How do you feel now, compared to your baseline?",
               "What has gently changed in your daily life?",
+              "Which insight do you not want to forget?",
               "What is worth three sentences to take with you?",
             ]
           ),
         },
         {
           type: "field",
-          key: "ns_p31_integration",
+          key: "ns_p34_integration",
           placeholder: t("Voel even na…", "Sit with it for a moment…"),
           size: "lg",
+        },
+        {
+          type: "callout",
+          tone: "tan",
+          label: t("Een laatste opmerking", "One last note"),
+          body: t(
+            "Wat je hier opschrijft, lees je over een jaar terug. Schrijf alsof je een brief aan je toekomstige zelf achterlaat — want dat doe je ook.",
+            "What you write here, you'll read back a year from now. Write as if you're leaving a letter for your future self — because you are."
+          ),
         },
       ],
     },
 
-    // ─── PAGE 32 — Doorstroom ───────────────────────────────────────
+    // ─── PAGE 35 — Doorstroom ───────────────────────────────────────
     {
-      number: 32,
+      number: 35,
       layout: "centered",
       chapter: t("Tot ziens", "Until next time"),
       blocks: [

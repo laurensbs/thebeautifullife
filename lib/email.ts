@@ -377,3 +377,57 @@ export async function sendQuestionnaireCompletedNotification(
     html,
   });
 }
+
+// ────────────────────────────────────────────────────────────────────────
+// 6. Persoonlijke reflectie van Marion naar klant (na lezen werkboek)
+// ────────────────────────────────────────────────────────────────────────
+export async function sendMarionReflection(
+  to: string,
+  firstName: string,
+  workbookTitle: string,
+  marionMessage: string,
+  portalUrl: string
+) {
+  assertSmtpConfigured();
+
+  // Behoud witregels van Marion's tekst
+  const messageHtml = marionMessage
+    .split(/\n\n+/)
+    .map(
+      (p) =>
+        `<p style="font-family:${BRAND.serifStack};font-style:italic;font-size:15px;line-height:1.85;color:${BRAND.ink};margin:0 0 14px;">${p
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\n/g, "<br/>")}</p>`
+    )
+    .join("");
+
+  const html = layout({
+    preheader: `${firstName}, een persoonlijke reflectie van Marion op je werkboek.`,
+    bodyHtml: [
+      kicker("voor jou,"),
+      title(firstName),
+      `<p style="font-family:${BRAND.sansStack};font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:${BRAND.muted};text-align:center;margin:0 0 18px;">${workbookTitle}</p>`,
+      `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 22px;">
+         <tr>
+           <td style="border-left:2px solid ${BRAND.tan};padding:4px 18px 4px 22px;">
+             ${messageHtml}
+           </td>
+         </tr>
+       </table>`,
+      button(portalUrl, "Open mijn pad", "ink"),
+      note(
+        "Klik op de knop om je werkboek en alles wat je hebt opgeschreven terug te vinden."
+      ),
+    ].join(""),
+  });
+
+  await transporter.sendMail({
+    from: fromAddress(),
+    to,
+    subject: `${firstName}, een paar woorden van Marion`,
+    html,
+    replyTo: "contact@thebeautifullife.nl",
+  });
+}

@@ -805,3 +805,301 @@
   .wb-nav-btn { padding: 10px 14px; font-size: 10px; letter-spacing: 0.18em; }
   .wb-nav__counter { display: none; }
 }
+
+/* ===== Book-style cover (Ronde D) ===== */
+.wb-cover--book {
+  background: var(--color-page-soft);
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.wb-cover--book .frame { display: none; } /* legacy */
+
+/* Hero image — neemt bovenste 55% van de pagina */
+.wb-cover__hero {
+  position: relative;
+  width: 100%;
+  height: 55%;
+  min-height: 320px;
+  overflow: hidden;
+}
+.wb-cover__hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+/* Veil maakt onderkant van image fade naar cream zodat tekst leest */
+.wb-cover__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(241, 235, 224, 0) 0%,
+    rgba(241, 235, 224, 0) 55%,
+    rgba(246, 241, 231, 0.7) 80%,
+    var(--color-page-soft) 100%
+  );
+  pointer-events: none;
+}
+
+/* Tekst-body schuift over de image heen — negatieve margin-top */
+.wb-cover--book .wb-cover__body {
+  position: relative;
+  padding: 0 56px 64px;
+  margin-top: -8%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+/* Titel-stijl op book-cover (groter dan default) */
+.wb-cover--book .wb-cover__title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 56px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--color-ink);
+  margin-top: 12px;
+}
+.wb-cover--book .wb-cover__script {
+  font-family: var(--font-script);
+  font-size: 78px;
+  line-height: 1;
+  color: var(--color-tan);
+  margin-top: -8px;
+}
+.wb-cover--book .wb-cover__top {
+  font-family: var(--font-serif);
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--color-tan);
+  background: var(--color-page-soft);
+  padding: 6px 14px;
+  border-radius: 2px;
+}
+.wb-cover--book .wb-cover__sub {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  margin-top: 12px;
+}
+.wb-cover--book .wb-cover__scriptsub {
+  font-family: var(--font-script);
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--color-tan);
+  margin-top: 4px;
+}
+
+/* Persoonlijk: 'voor [naam]' + datum */
+.wb-cover__personal {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.wb-cover__personal-label {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.wb-cover__personal-name {
+  font-family: var(--font-script);
+  font-size: 36px;
+  color: var(--color-ink);
+  line-height: 1;
+}
+.wb-cover__personal-date {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--color-muted);
+  margin-top: 4px;
+}
+
+.wb-cover--book .wb-cover__author {
+  margin-top: auto;
+  padding-top: 36px;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+.wb-cover--book .wb-cover__author small {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-script);
+  font-size: 18px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-tan);
+}
+
+@media (max-width: 720px) {
+  .wb-cover--book .wb-cover__body { padding: 0 28px 48px; }
+  .wb-cover--book .wb-cover__title { font-size: 38px; letter-spacing: 0.12em; }
+  .wb-cover--book .wb-cover__script { font-size: 54px; }
+  .wb-cover__personal-name { font-size: 30px; }
+  .wb-cover__hero { height: 45%; min-height: 240px; }
+}
+
+/* ===== Summary als persoonlijk document (Ronde E) ===== */
+.wb-summary__head {
+  text-align: center;
+  padding-bottom: 8px;
+}
+.wb-summary__name {
+  font-family: var(--font-script);
+  color: var(--color-ink);
+  font-size: 48px;
+  line-height: 1.1;
+  margin-top: 4px;
+}
+.wb-summary__date {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-top: 4px;
+}
+.wb-summary__intro {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--color-ink-soft);
+  margin-top: 14px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wb-summary__parts {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.wb-summary__part {
+  position: relative;
+}
+.wb-summary__part-head {
+  text-align: center;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-line);
+}
+.wb-summary__part-script {
+  font-family: var(--font-script);
+  color: var(--color-tan);
+  font-size: 24px;
+  line-height: 1;
+}
+.wb-summary__part-title {
+  font-family: var(--font-serif);
+  color: var(--color-ink);
+  font-size: 18px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.wb-summary__entries {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wb-summary-card--quote {
+  text-align: left;
+  background: var(--color-page);
+  border: none;
+  border-left: 2px solid var(--color-tan);
+  border-radius: 0;
+  padding: 14px 18px 14px 20px;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+  transition: background 0.2s, border-color 0.2s;
+}
+.wb-summary-card--quote:hover {
+  background: var(--color-page-soft);
+  border-left-color: var(--color-ink);
+}
+.wb-summary-card__label {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin: 0 0 8px;
+}
+.wb-summary-card__value {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--color-ink);
+  margin: 0;
+  white-space: pre-wrap;
+  font-weight: 400;
+}
+
+.wb-summary__signoff {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--color-line);
+  text-align: center;
+}
+.wb-summary__signoff-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--color-ink-soft);
+  max-width: 460px;
+  margin: 0 auto;
+}
+.wb-summary__signoff-name {
+  font-family: var(--font-script);
+  color: var(--color-ink);
+  font-size: 28px;
+  margin-top: 18px;
+  line-height: 1;
+}
+.wb-summary__signoff-role {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-tan);
+  margin-top: 6px;
+}
+
+.wb-summary__actions {
+  margin-top: 36px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media (max-width: 720px) {
+  .wb-summary__name { font-size: 38px; }
+  .wb-summary-card__value { font-size: 15px; }
+}

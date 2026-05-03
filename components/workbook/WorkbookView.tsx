@@ -198,7 +198,7 @@ export default function WorkbookView({
                 exit={{ opacity: 0, x: direction * -40, filter: "blur(4px)" }}
                 transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
               >
-                <CoverPage workbook={workbook} locale={locale} />
+                <CoverPage workbook={workbook} locale={locale} firstName={firstName} />
                 <CoverIntro
                   locale={locale}
                   totalPages={totalSteps}
@@ -242,6 +242,7 @@ export default function WorkbookView({
                   onJumpTo={goTo}
                   onPrint={() => window.print()}
                   workbookSlug={workbook.slug}
+                  firstName={firstName}
                 />
               </motion.div>
             ) : (
@@ -305,7 +306,7 @@ export default function WorkbookView({
 
       {/* Print-only: alle pagina's onder elkaar (oude rendering) */}
       <div className="wb-book wb-book--print-only">
-        <CoverPage workbook={workbook} locale={locale} />
+        <CoverPage workbook={workbook} locale={locale} firstName={firstName} />
         {workbook.pages.map((page) => (
           <PageView
             key={page.number}
@@ -407,6 +408,7 @@ function SummaryView({
   onJumpTo,
   onPrint,
   workbookSlug,
+  firstName,
 }: {
   workbook: Workbook;
   answers: Record<string, string>;
@@ -414,13 +416,33 @@ function SummaryView({
   onJumpTo: (n: number) => void;
   onPrint: () => void;
   workbookSlug: string;
+  firstName: string;
 }) {
   const isEN = locale === "en";
 
-  type Entry = { pageIndex: number; pageTitle: string; key: string; value: string };
-  const entries: Entry[] = [];
+  // Gegroepeerd per part — een part-divider start een nieuwe sectie.
+  type Entry = {
+    pageIndex: number;
+    pageTitle: string;
+    label?: string;
+    value: string;
+  };
+  type PartGroup = {
+    title: string | null;
+    script: string | null;
+    entries: Entry[];
+  };
+
+  const groups: PartGroup[] = [{ title: null, script: null, entries: [] }];
   workbook.pages.forEach((page, i) => {
-    // Pagina-titel ophalen
+    if (page.layout === "part") {
+      groups.push({
+        title: page.partTitle ? tx(page.partTitle, locale) : null,
+        script: page.partScript ? tx(page.partScript, locale) : null,
+        entries: [],
+      });
+      return;
+    }
     let pageTitle = "";
     for (const b of page.blocks) {
       if (b.type === "title") {
@@ -428,22 +450,22 @@ function SummaryView({
         break;
       }
     }
-    if (!pageTitle && page.partTitle) pageTitle = tx(page.partTitle, locale);
     if (!pageTitle) pageTitle = `${isEN ? "Page" : "Pagina"} ${page.number}`;
 
+    const cur = groups[groups.length - 1];
     for (const b of page.blocks) {
       if (b.type === "field") {
         const v = (answers[b.key] ?? "").trim();
-        if (v) entries.push({ pageIndex: i, pageTitle, key: b.key, value: v });
+        if (v) cur.entries.push({ pageIndex: i, pageTitle, value: v });
       }
       if (b.type === "twoCol") {
         for (const side of [b.left, b.right]) {
           const v = (answers[side.field.key] ?? "").trim();
           if (v)
-            entries.push({
+            cur.entries.push({
               pageIndex: i,
-              pageTitle: `${pageTitle} · ${tx(side.head, locale)}`,
-              key: side.field.key,
+              pageTitle,
+              label: tx(side.head, locale),
               value: v,
             });
         }
@@ -451,104 +473,104 @@ function SummaryView({
     }
   });
 
-  return (
-    <section className="wb-page">
-      <div className="wb-page__inner">
-        <p className="wb-kicker">{isEN ? "your reflection" : "jouw reflectie"}</p>
-        <h2 className="wb-title wb-title--md" style={{ marginTop: 14 }}>
-          {isEN ? "What you wrote" : "Wat je opschreef"}
-        </h2>
-        <div className="wb-rule wb-rule--left">
-          <span className="l" />
-          <span className="h" aria-hidden style={{ display: "inline-flex" }}>
-            <HeartDraw size={13} />
-          </span>
-        </div>
-        <p
-          className="wb-lead"
-          style={{ maxWidth: 520, marginTop: 14, marginBottom: 20 }}
-        >
-          {isEN
-            ? "Read back what you wrote. Tap a card to edit. Print or save as PDF when you're ready."
-            : "Lees terug wat je hebt geschreven. Klik op een kaart om aan te passen. Print of bewaar als PDF wanneer je klaar bent."}
-        </p>
+  const populatedGroups = groups.filter((g) => g.entries.length > 0);
+  const today = new Date().toLocaleDateString(isEN ? "en-GB" : "nl-NL", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
-        {entries.length === 0 ? (
-          <p className="wb-lead" style={{ color: "var(--color-muted)" }}>
+  return (
+    <section className="wb-page wb-summary">
+      <div className="wb-page__inner">
+        {/* Documentkop */}
+        <div className="wb-summary__head">
+          <p className="wb-kicker">
+            {isEN ? "your reflection" : "jouw reflectie"}
+          </p>
+          <h2 className="wb-summary__name">{firstName}</h2>
+          <p className="wb-summary__date">{today}</p>
+          <div className="wb-rule wb-rule--center wb-rule--long">
+            <span className="l" />
+            <span className="h" aria-hidden style={{ display: "inline-flex" }}>
+              <HeartDraw size={13} />
+            </span>
+            <span className="l" />
+          </div>
+          <p className="wb-summary__intro">
+            {isEN
+              ? "Below is everything you wrote. Tap any passage to revisit it. Save as PDF or print when you're ready to take it with you."
+              : "Hieronder vind je alles wat je hebt opgeschreven. Klik op een passage om terug te gaan. Bewaar als PDF of print wanneer je het mee wil nemen."}
+          </p>
+        </div>
+
+        {populatedGroups.length === 0 ? (
+          <p className="wb-lead" style={{ color: "var(--color-muted)", marginTop: 24 }}>
             {isEN
               ? "You haven't written anything yet."
               : "Je hebt nog niets opgeschreven."}
           </p>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {entries.map((e, i) => (
-              <button
-                key={e.key + i}
-                type="button"
-                onClick={() => onJumpTo(e.pageIndex)}
-                style={{
-                  textAlign: "left",
-                  background: "var(--color-page)",
-                  border: "1px solid var(--color-line)",
-                  borderRadius: 4,
-                  padding: "14px 16px",
-                  cursor: "pointer",
-                  fontFamily: "inherit",
-                  transition: "border-color 0.2s, background 0.2s",
-                }}
-                className="wb-summary-card"
-              >
-                <p
-                  style={{
-                    fontFamily: "var(--font-sans)",
-                    fontSize: 10,
-                    letterSpacing: "0.18em",
-                    textTransform: "uppercase",
-                    color: "var(--color-muted)",
-                    margin: "0 0 6px",
-                  }}
-                >
-                  {e.pageTitle}
-                </p>
-                <p
-                  style={{
-                    fontFamily: "var(--font-sans)",
-                    fontSize: 14,
-                    lineHeight: 1.6,
-                    color: "var(--color-ink)",
-                    margin: 0,
-                    whiteSpace: "pre-wrap",
-                  }}
-                >
-                  {e.value}
-                </p>
-              </button>
+          <div className="wb-summary__parts">
+            {populatedGroups.map((g, gi) => (
+              <div key={gi} className="wb-summary__part">
+                {g.title && (
+                  <div className="wb-summary__part-head">
+                    <p className="wb-summary__part-script">
+                      {g.script ?? ""}
+                    </p>
+                    <h3 className="wb-summary__part-title">{g.title}</h3>
+                  </div>
+                )}
+                <div className="wb-summary__entries">
+                  {g.entries.map((e, ei) => (
+                    <button
+                      key={ei}
+                      type="button"
+                      onClick={() => onJumpTo(e.pageIndex)}
+                      className="wb-summary-card wb-summary-card--quote"
+                    >
+                      <p className="wb-summary-card__label">
+                        {e.pageTitle}
+                        {e.label ? ` · ${e.label}` : ""}
+                      </p>
+                      <p className="wb-summary-card__value">{e.value}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
 
-        <div
-          style={{
-            marginTop: 28,
-            display: "flex",
-            gap: 10,
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
+        {/* Marion's afsluiter */}
+        <div className="wb-summary__signoff">
+          <p className="wb-summary__signoff-text">
+            {isEN
+              ? "What you wrote here is yours. Read it back. Pause. Notice what shifted. I see you in the next step."
+              : "Wat je hier hebt opgeschreven is van jou. Lees het terug. Sta even stil. Merk op wat er bewogen is. Tot in de volgende stap."}
+          </p>
+          <p className="wb-summary__signoff-name">Marion Lubach</p>
+          <p className="wb-summary__signoff-role">
+            {isEN ? "your creative lifestyle mentor" : "jouw creatieve leef-mentor"}
+          </p>
+        </div>
+
+        {/* Acties */}
+        <div className="wb-summary__actions">
           <a
             href={`/api/workbook/pdf?slug=${encodeURIComponent(workbookSlug)}`}
             download
             className="wb-btn"
-            style={{ padding: "12px 22px", fontSize: 11 }}
+            style={{ padding: "14px 26px", fontSize: 11 }}
           >
-            {isEN ? "Download PDF" : "Download PDF"}
+            {isEN ? "Download as PDF" : "Download als PDF"}
           </a>
           <button
             type="button"
             onClick={onPrint}
             className="wb-btn wb-btn--ghost"
-            style={{ padding: "12px 22px", fontSize: 11 }}
+            style={{ padding: "14px 26px", fontSize: 11 }}
           >
             {isEN ? "Print" : "Print"}
           </button>
@@ -578,40 +600,72 @@ function SaveIndicator({ state, locale }: { state: SaveState; locale: Locale }) 
   );
 }
 
-function CoverPage({ workbook, locale }: { workbook: Workbook; locale: Locale }) {
+function CoverPage({
+  workbook,
+  locale,
+  firstName,
+}: {
+  workbook: Workbook;
+  locale: Locale;
+  firstName: string;
+}) {
   const c = workbook.cover;
   const titleLines = tx(c.title, locale);
   const altText = workbook.imageAlt ? tx(workbook.imageAlt, locale) : "";
+  const isEN = locale === "en";
+
   return (
-    <section className="wb-page wb-cover">
-      <div className="frame">
+    <section className="wb-page wb-cover wb-cover--book">
+      {/* Full-bleed image als achtergrond, gradient-overlay zorgt voor leesbaarheid */}
+      {workbook.imageUrl && (
+        <div className="wb-cover__hero">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={workbook.imageUrl} alt={altText} />
+          <div className="wb-cover__veil" />
+        </div>
+      )}
+
+      {/* Tekst in de onderhelft, valt deels over de image */}
+      <div className="wb-cover__body">
         <p className="wb-cover__top">{tx(c.eyebrow, locale)}</p>
 
-        {workbook.imageUrl && (
-          <div className="wb-cover__img">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={workbook.imageUrl} alt={altText} />
+        <h1 className="wb-cover__title">
+          {titleLines.map((t, i) => (
+            <span key={i}>
+              {t}
+              {i < titleLines.length - 1 && <br />}
+            </span>
+          ))}
+        </h1>
+        <div className="wb-cover__script">{tx(c.script, locale)}</div>
+
+        <div className="wb-rule wb-rule--center wb-rule--long">
+          <span className="l" />
+          <span className="h" aria-hidden style={{ display: "inline-flex" }}>
+            <HeartDraw size={13} />
+          </span>
+          <span className="l" />
+        </div>
+
+        <p className="wb-cover__sub">{tx(c.sub, locale)}</p>
+        <p className="wb-cover__scriptsub">{tx(c.scriptSub, locale)}</p>
+
+        {firstName && (
+          <div className="wb-cover__personal">
+            <span className="wb-cover__personal-label">
+              {isEN ? "for" : "voor"}
+            </span>
+            <span className="wb-cover__personal-name">{firstName}</span>
+            <span className="wb-cover__personal-date">
+              {new Date().toLocaleDateString(isEN ? "en-GB" : "nl-NL", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </span>
           </div>
         )}
 
-        <div>
-          <h1 className="wb-cover__title">
-            {titleLines.map((t, i) => (
-              <span key={i}>
-                {t}
-                {i < titleLines.length - 1 && <br />}
-              </span>
-            ))}
-          </h1>
-          <div className="wb-cover__script">{tx(c.script, locale)}</div>
-        </div>
-        <div className="wb-rule wb-rule--center wb-rule--long">
-          <span className="l" />
-          <span className="h" aria-hidden style={{ display: "inline-flex" }}><HeartDraw size={13} /></span>
-          <span className="l" />
-        </div>
-        <p className="wb-cover__sub">{tx(c.sub, locale)}</p>
-        <p className="wb-cover__scriptsub">{tx(c.scriptSub, locale)}</p>
         <div className="wb-cover__author">
           {c.author}
           <small>{tx(c.role, locale)}</small>
