@@ -12,24 +12,24 @@ import type { Workbook, Block } from "@/lib/workbooks/types";
 import { tx } from "@/lib/workbooks/types";
 import type { Locale } from "@/lib/i18n/types";
 
-// Fonts — Google Fonts URL's, geladen door react-pdf op render
+// Fonts — lokale TTF via /public/fonts/. Site-URL via env zodat ook de
+// PDF-renderer in serverless (Vercel) ze kan ophalen. Fallback op
+// productie-domein zodat het altijd werkt zonder extra config.
+const FONT_BASE =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  "https://thebeautifullife.nl";
+
 Font.register({
   family: "Cormorant Garamond",
   fonts: [
-    {
-      src: "https://fonts.gstatic.com/s/cormorantgaramond/v16/co3bmX5slCNuHLi8bLeY9MK7whWMhyjornFLsS6V7w.ttf",
-      fontWeight: 400,
-    },
-    {
-      src: "https://fonts.gstatic.com/s/cormorantgaramond/v16/co3YmX5slCNuHLi8bLeY9MK7whWMhyjQAllvuQWJ5heb_w.ttf",
-      fontWeight: 500,
-    },
+    { src: `${FONT_BASE}/fonts/cormorant-regular.ttf`, fontWeight: 400 },
+    { src: `${FONT_BASE}/fonts/cormorant-medium.ttf`, fontWeight: 500 },
   ],
 });
 
 Font.register({
   family: "Pinyon Script",
-  src: "https://fonts.gstatic.com/s/pinyonscript/v22/6xKpdSJaJ7SnMcetb0DyRVotZ0kwTA.ttf",
+  src: `${FONT_BASE}/fonts/pinyon-regular.ttf`,
 });
 
 // Brand kleuren — moeten matchen met site-tokens

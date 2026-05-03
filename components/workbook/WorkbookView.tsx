@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { LogOut, ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import "./workbook.css";
 import type { Workbook, WorkbookPage, Block } from "@/lib/workbooks/types";
 import { tx } from "@/lib/workbooks/types";
@@ -631,8 +632,14 @@ function CoverPage({
       {/* Full-bleed image als achtergrond, gradient-overlay zorgt voor leesbaarheid */}
       {workbook.imageUrl && (
         <div className="wb-cover__hero">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={workbook.imageUrl} alt={altText} />
+          <Image
+            src={workbook.imageUrl}
+            alt={altText}
+            fill
+            sizes="(max-width: 768px) 100vw, 800px"
+            priority
+            className="object-cover object-center"
+          />
           <div className="wb-cover__veil" />
         </div>
       )}
