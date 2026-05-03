@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  LogOut,
   Users,
   Mail,
   Phone,
@@ -19,7 +18,7 @@ import {
   Loader2,
 } from "lucide-react";
 import PageLoader from "@/components/ui/PageLoader";
-import BrandLogo from "@/components/ui/BrandLogo";
+import AdminNav from "@/components/admin/AdminNav";
 
 type Customer = {
   email: string;
@@ -63,11 +62,6 @@ export default function KlantenPage() {
     fetchData();
   }, [fetchData]);
 
-  const logout = async () => {
-    await fetch("/api/admin/logout", { method: "POST" });
-    router.push("/admin");
-  };
-
   const remove = async (email: string) => {
     setDeleting(email);
     try {
@@ -107,30 +101,7 @@ export default function KlantenPage() {
 
   return (
     <div className="min-h-screen bg-page">
-      {/* Header */}
-      <header className="sticky top-0 z-30 bg-page-soft/95 backdrop-blur-md border-b border-line/60 shadow-[0_4px_20px_rgba(60,50,30,0.04)]">
-        <div className="max-w-5xl mx-auto px-5 sm:px-6 py-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <BrandLogo size="sm" linkTo="/admin/dashboard" />
-            <span className="text-[10px] tracking-[0.22em] uppercase text-muted border border-line rounded-full px-2 py-0.5">
-              admin
-            </span>
-          </div>
-          <nav className="flex items-center gap-1.5 sm:gap-2">
-            <NavLink href="/admin/dashboard" label="Dashboard" />
-            <NavLink href="/admin/klanten" label="Klanten" active />
-            <NavLink href="/admin/werkboeken" label="Werkboeken" />
-            <NavLink href="/admin/calls" label="Calls" />
-            <button
-              onClick={logout}
-              className="text-[11px] tracking-[0.18em] uppercase text-ink-soft hover:text-tan transition px-2 py-1 inline-flex items-center gap-1.5"
-              title="Uitloggen"
-            >
-              <LogOut size={12} />
-            </button>
-          </nav>
-        </div>
-      </header>
+      <AdminNav />
 
       <main className="max-w-5xl mx-auto px-5 sm:px-6 py-8 sm:py-10">
         <div className="flex items-end justify-between gap-4 flex-wrap mb-6">
@@ -246,9 +217,9 @@ export default function KlantenPage() {
 
                     <div className="flex items-center gap-1.5 flex-none">
                       <Link
-                        href={`/admin/dashboard?q=${encodeURIComponent(c.email)}`}
+                        href={`/admin/klanten/${encodeURIComponent(c.email)}`}
                         className="text-[10px] tracking-[0.18em] uppercase border border-line hover:border-tan hover:text-tan text-ink-soft px-3 py-1.5 rounded transition inline-flex items-center gap-1"
-                        title="Open in dashboard"
+                        title="Bekijk klant"
                       >
                         <ExternalLink size={11} /> Bekijk
                       </Link>
@@ -312,28 +283,5 @@ export default function KlantenPage() {
         </p>
       </main>
     </div>
-  );
-}
-
-function NavLink({
-  href,
-  label,
-  active,
-}: {
-  href: string;
-  label: string;
-  active?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`text-[11px] tracking-[0.18em] uppercase px-2 py-1 transition ${
-        active
-          ? "text-tan font-medium"
-          : "text-ink-soft hover:text-tan"
-      }`}
-    >
-      {label}
-    </Link>
   );
 }

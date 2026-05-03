@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  LogOut,
   BookOpen,
   RefreshCw,
   ChevronDown,
@@ -14,7 +13,7 @@ import {
 } from "lucide-react";
 import PageLoader from "@/components/ui/PageLoader";
 import HeartDraw from "@/components/ui/HeartDraw";
-import BrandLogo from "@/components/ui/BrandLogo";
+import AdminNav from "@/components/admin/AdminNav";
 
 type Client = {
   access_id: number;
@@ -81,11 +80,6 @@ export default function WerkboekenPage() {
     fetchData();
   }, [fetchData]);
 
-  const logout = async () => {
-    await fetch("/api/admin/logout", { method: "POST" });
-    router.push("/admin");
-  };
-
   const fmtDate = (s: string | null) =>
     s
       ? new Date(s).toLocaleDateString("nl-NL", {
@@ -100,50 +94,7 @@ export default function WerkboekenPage() {
 
   return (
     <div className="min-h-screen bg-page">
-      {/* Header */}
-      <header className="sticky top-0 z-30 bg-page/90 backdrop-blur-md border-b border-line/40">
-        <div className="max-w-5xl mx-auto px-5 sm:px-6 py-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <BrandLogo size="sm" linkTo="/admin/dashboard" />
-            <span className="text-[10px] tracking-[0.22em] uppercase text-muted border border-line rounded-full px-2 py-0.5">
-              admin
-            </span>
-          </div>
-          <nav className="flex items-center gap-1 sm:gap-3">
-            <Link
-              href="/admin/dashboard"
-              className="text-[11px] tracking-[0.22em] uppercase text-ink-soft hover:text-tan transition-colors px-2 py-1.5"
-            >
-              Inzendingen
-            </Link>
-            <Link
-              href="/admin/klanten"
-              className="text-[11px] tracking-[0.22em] uppercase text-ink-soft hover:text-tan transition-colors px-2 py-1.5"
-            >
-              Klanten
-            </Link>
-            <Link
-              href="/admin/calls"
-              className="text-[11px] tracking-[0.22em] uppercase text-ink-soft hover:text-tan transition-colors px-2 py-1.5"
-            >
-              Calls
-            </Link>
-            <Link
-              href="/admin/werkboeken"
-              className="text-[11px] tracking-[0.22em] uppercase text-tan font-medium px-2 py-1.5"
-            >
-              Werkboeken
-            </Link>
-            <button
-              onClick={logout}
-              className="flex items-center gap-1.5 text-[11px] tracking-[0.22em] uppercase text-ink-soft hover:text-tan transition-colors px-2 py-1.5 ml-1"
-            >
-              <LogOut size={13} />
-              <span className="hidden sm:inline">Uit</span>
-            </button>
-          </nav>
-        </div>
-      </header>
+      <AdminNav />
 
       <main className="max-w-5xl mx-auto px-5 sm:px-6 pt-6 sm:pt-8 pb-16">
         <motion.div

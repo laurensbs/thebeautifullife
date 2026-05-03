@@ -120,6 +120,43 @@ export async function setupDatabase() {
     )
   `;
 
+  // Klant-notities (vrije tekst per email — Marion's losse observaties)
+  await sql`
+    CREATE TABLE IF NOT EXISTS customer_notes (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(200) NOT NULL,
+      body TEXT NOT NULL DEFAULT '',
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE UNIQUE INDEX IF NOT EXISTS customer_notes_email_idx ON customer_notes(LOWER(email))`;
+
+  // Call-notities (gestructureerde velden per booking)
+  await sql`
+    CREATE TABLE IF NOT EXISTS call_notes (
+      booking_id INT PRIMARY KEY REFERENCES bookings(id) ON DELETE CASCADE,
+      template_key VARCHAR(60) NOT NULL,
+      fields JSONB NOT NULL DEFAULT '{}'::jsonb,
+      summary TEXT NOT NULL DEFAULT '',
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+
+  // Persoonlijke todo's voor Marion (admin-only)
+  await sql`
+    CREATE TABLE IF NOT EXISTS admin_todos (
+      id SERIAL PRIMARY KEY,
+      title TEXT NOT NULL,
+      body_md TEXT NOT NULL DEFAULT '',
+      done BOOLEAN NOT NULL DEFAULT FALSE,
+      due_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      completed_at TIMESTAMPTZ
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS admin_todos_done_idx ON admin_todos(done, due_at NULLS LAST)`;
+
   // Seed default questions if empty
   const existing = await sql`SELECT COUNT(*) as count FROM questions`;
   if (Number(existing[0].count) === 0) {
