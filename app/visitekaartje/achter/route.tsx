@@ -1,10 +1,11 @@
 import { ImageResponse } from "next/og";
+import { loadOgFonts } from "@/lib/og-fonts";
 
 /**
- * Visitekaartje achterzijde — zelfde formaat als voorzijde.
+ * Visitekaartje achterzijde — 89×59 mm.
  *
- * Layout: contactgegevens, gecentreerd, met dezelfde tan-strips zodat
- * voor- en achterkant visueel bij elkaar horen.
+ * Hier komen alle harde details: naam, contact, KvK.
+ * Marion's signoff bovenaan in Pinyon, contact gecentreerd, KvK fijn onderaan.
  */
 
 export const runtime = "edge";
@@ -12,6 +13,8 @@ export const runtime = "edge";
 const SIZE = { width: 1051, height: 697 };
 
 export async function GET() {
+  const fonts = await loadOgFonts();
+
   return new ImageResponse(
     (
       <div
@@ -23,44 +26,33 @@ export async function GET() {
           alignItems: "center",
           justifyContent: "center",
           background: "#F1EBE0",
-          fontFamily: "Georgia, serif",
+          fontFamily: "Cormorant",
           position: "relative",
+          padding: 64,
         }}
       >
-        {/* Tan accent strip top (kleiner dan voor) */}
+        {/* Tan accent strip boven, loopt door tot in bleed */}
         <div
           style={{
             position: "absolute",
             top: 0,
             left: 0,
             right: 0,
-            height: 4,
-            background: "#B6906A",
-            opacity: 0.5,
-          }}
-        />
-        {/* Tan accent strip bottom (groter) */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: 12,
+            height: 8,
             background: "#B6906A",
           }}
         />
 
-        {/* Eyebrow script-stijl */}
+        {/* Eyebrow in Pinyon */}
         <div
           style={{
-            fontSize: 38,
+            fontFamily: "Pinyon",
+            fontSize: 60,
             color: "#B6906A",
-            fontStyle: "italic",
-            marginBottom: 6,
+            lineHeight: 1,
           }}
         >
-          let&apos;s connect,
+          let&apos;s stay in touch
         </div>
 
         {/* Hartjes-divider */}
@@ -68,88 +60,75 @@ export async function GET() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 18,
+            gap: 16,
             color: "#B6906A",
-            marginBottom: 38,
+            marginTop: 22,
+            marginBottom: 36,
           }}
         >
-          <div style={{ width: 70, height: 1, background: "#B6906A" }} />
-          <div style={{ fontSize: 22, lineHeight: 1 }}>♡</div>
-          <div style={{ width: 70, height: 1, background: "#B6906A" }} />
+          <div style={{ width: 70, height: 1, background: "#B6906A", opacity: 0.6 }} />
+          <div style={{ fontSize: 18, lineHeight: 1 }}>♡</div>
+          <div style={{ width: 70, height: 1, background: "#B6906A", opacity: 0.6 }} />
         </div>
 
-        {/* Contactblok */}
+        {/* Naam */}
+        <div
+          style={{
+            fontSize: 26,
+            letterSpacing: "0.22em",
+            textTransform: "uppercase",
+            color: "#2A2A28",
+            fontWeight: 500,
+          }}
+        >
+          Marion Lubach
+        </div>
+
+        {/* Website prominent */}
+        <div
+          style={{
+            fontSize: 32,
+            letterSpacing: "0.16em",
+            textTransform: "uppercase",
+            color: "#2A2A28",
+            fontWeight: 500,
+            marginTop: 24,
+          }}
+        >
+          thebeautifullife.nl
+        </div>
+
+        {/* Email + IG */}
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
             alignItems: "center",
-            gap: 18,
+            gap: 22,
+            fontSize: 22,
+            color: "#4A4A45",
+            marginTop: 14,
           }}
         >
-          {/* Website */}
-          <div
-            style={{
-              fontSize: 32,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "#2A2A28",
-              fontWeight: 500,
-            }}
-          >
-            thebeautifullife.nl
-          </div>
-
-          {/* Email + IG in twee kolommen */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 36,
-              fontSize: 22,
-              color: "#4A4A45",
-            }}
-          >
-            <span>contact@thebeautifullife.nl</span>
-            <span style={{ color: "#B6906A" }}>·</span>
-            <span>@thebeautifullife</span>
-          </div>
+          <span>contact@thebeautifullife.nl</span>
+          <span style={{ color: "#B6906A" }}>·</span>
+          <span>@thebeautifullife</span>
         </div>
 
-        {/* Footer met KvK + sub-tagline */}
+        {/* KvK fijn onderaan */}
         <div
           style={{
             position: "absolute",
-            bottom: 38,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 8,
+            bottom: 30,
+            fontSize: 14,
+            letterSpacing: "0.32em",
+            textTransform: "uppercase",
+            color: "#8A8270",
           }}
         >
-          <div
-            style={{
-              fontSize: 22,
-              color: "#2A2A28",
-              opacity: 0.85,
-              fontStyle: "italic",
-            }}
-          >
-            the beginning of your beautiful life
-          </div>
-          <div
-            style={{
-              fontSize: 16,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: "#8A8270",
-            }}
-          >
-            KvK 72639970
-          </div>
+          KvK 72639970
         </div>
       </div>
     ),
-    { ...SIZE }
+    { ...SIZE, fonts }
   );
 }
