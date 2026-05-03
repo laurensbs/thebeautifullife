@@ -152,7 +152,7 @@ export default function SiteFooter({ locale }: { locale: Locale }) {
               © {year} The Beautiful Life · Marion Lubach
               <span className="hidden sm:inline text-muted/50"> · </span>
               <span className="block sm:inline mt-1 sm:mt-0">
-                KvK op aanvraag · btw inbegrepen
+                KvK 72639970 · btw inbegrepen
               </span>
             </p>
             <div className="flex items-center gap-4 sm:gap-5 flex-wrap justify-center">

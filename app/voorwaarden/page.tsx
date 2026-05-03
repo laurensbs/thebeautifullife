@@ -45,7 +45,7 @@ const COPY: Record<"nl" | "en", CopyBlock> = {
           {
             type: "small",
             html:
-              "KvK-nummer en btw-nummer worden op verzoek verstrekt en zijn vermeld op iedere factuur.",
+              "KvK-nummer: 72639970. Het btw-nummer staat vermeld op iedere factuur.",
           },
         ],
       },
@@ -174,7 +174,7 @@ const COPY: Record<"nl" | "en", CopyBlock> = {
           {
             type: "small",
             html:
-              "Chamber of Commerce (KvK) and VAT numbers are provided on request and shown on every invoice.",
+              "Chamber of Commerce (KvK) number: 72639970. The VAT number appears on every invoice.",
           },
         ],
       },
