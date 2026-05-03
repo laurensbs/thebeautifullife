@@ -127,7 +127,7 @@ export const DICT = {
           "Digitaal in te vullen of te printen als PDF",
           "Auto-saved — pak het op wanneer je wil",
           "Voor altijd terug te lezen in je portaal",
-          "Optioneel: 30-min verdiepingscall met Marion (€49)",
+          "Inclusief 30-min verdiepingscall met Marion",
         ],
         en: [
           "The Return to Calm workbook — 16 pages",
@@ -135,7 +135,7 @@ export const DICT = {
           "Fill in digitally or print as PDF",
           "Auto-saved — pick it up whenever you want",
           "Always available in your personal portal",
-          "Optional: 30-min depth call with Marion (€49)",
+          "Includes a 30-min depth call with Marion",
         ],
       },
       alignment: {

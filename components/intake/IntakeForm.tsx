@@ -101,7 +101,15 @@ export default function IntakeForm({
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Error");
       }
-      router.push(`/bedankt?pkg=${pkgSlug}`);
+      const data = await res.json();
+      // Pakket Ikigai (Return to Calm) bevat een gratis 30-min call —
+      // klant kiest direct na aanmelding een tijd. Andere pakketten
+      // gaan rechtstreeks naar de bedankt-pagina.
+      if (pkgSlug === "ikigai" && data.id) {
+        router.push(`/pakket/ikigai/plan-call?id=${data.id}`);
+      } else {
+        router.push(`/bedankt?pkg=${pkgSlug}`);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error");
       setSubmitting(false);

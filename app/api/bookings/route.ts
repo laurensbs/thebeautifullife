@@ -40,13 +40,34 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const typeKey = String(body.booking_type ?? "one_on_one_60");
     const scheduledIso = String(body.scheduled_at ?? "");
-    const firstName = String(body.firstName ?? "").trim().slice(0, 100);
-    const email = String(body.contact ?? "").trim().toLowerCase().slice(0, 200);
-    const phone = body.phone ? String(body.phone).trim().slice(0, 20) : null;
+    let firstName = String(body.firstName ?? "").trim().slice(0, 100);
+    let email = String(body.contact ?? "").trim().toLowerCase().slice(0, 200);
+    let phone = body.phone ? String(body.phone).trim().slice(0, 20) : null;
+    const submissionIdHint =
+      typeof body.submission_id === "number" ? body.submission_id : null;
+    let includedInPackage = Boolean(body.included_in_package);
 
     if (!(typeKey in BOOKING_TYPES)) {
       return NextResponse.json({ error: "Onbekend type" }, { status: 400 });
     }
+
+    // Als de klant net is ingeschreven (intake-form → plan-call) hebben we
+    // submission_id maar nog geen client-sessie. Vul naam/email aan uit DB.
+    if (submissionIdHint && (!firstName || !email.includes("@"))) {
+      const found = await sql`
+        SELECT first_name, contact, phone FROM submissions
+        WHERE id = ${submissionIdHint} LIMIT 1
+      `;
+      if (found.length > 0) {
+        firstName = firstName || String(found[0].first_name ?? "").slice(0, 100);
+        email =
+          email.includes("@")
+            ? email
+            : String(found[0].contact ?? "").toLowerCase().slice(0, 200);
+        phone = phone || (found[0].phone ? String(found[0].phone).slice(0, 20) : null);
+      }
+    }
+
     if (!firstName || !email.includes("@")) {
       return NextResponse.json(
         { error: "Naam en geldig e-mailadres zijn verplicht." },
@@ -78,18 +99,49 @@ export async function POST(request: NextRequest) {
     }
 
     // Koppel aan bestaande submission als die er is
-    let submissionId: number | null = null;
-    const session = await getClientSession();
-    if (session) {
-      submissionId = session.submissionIds[0] ?? null;
-    } else {
-      const found = await sql`
-        SELECT id FROM submissions
-        WHERE LOWER(contact) = ${email}
-        ORDER BY created_at DESC LIMIT 1
-      `;
-      if (found.length > 0) submissionId = Number(found[0].id);
+    let submissionId: number | null = submissionIdHint;
+    if (!submissionId) {
+      const session = await getClientSession();
+      if (session) {
+        submissionId = session.submissionIds[0] ?? null;
+      } else {
+        const found = await sql`
+          SELECT id FROM submissions
+          WHERE LOWER(contact) = ${email}
+          ORDER BY created_at DESC LIMIT 1
+        `;
+        if (found.length > 0) submissionId = Number(found[0].id);
+      }
     }
+
+    // Auto-detect: 30-min Return to Calm call gekoppeld aan een ikigai-
+    // submission die nog géén call heeft → standaard inbegrepen (gratis).
+    if (
+      !includedInPackage &&
+      typeKey === "return_to_calm_30" &&
+      submissionId
+    ) {
+      const subRow = await sql`
+        SELECT package FROM submissions WHERE id = ${submissionId} LIMIT 1
+      `;
+      if (subRow[0]?.package === "ikigai") {
+        const existingCall = await sql`
+          SELECT id FROM bookings
+          WHERE submission_id = ${submissionId}
+            AND booking_type = 'return_to_calm_30'
+            AND status NOT IN ('cancelled', 'declined')
+          LIMIT 1
+        `;
+        if (existingCall.length === 0) {
+          includedInPackage = true;
+        }
+      }
+    }
+
+    // Als de call standaard bij een pakket zit, prijs = 0 en status =
+    // confirmed (geen losse betaling nodig). Anders behoud het tarief.
+    const priceCents = includedInPackage ? 0 : type.price_cents;
+    const status = includedInPackage ? "confirmed" : "reserved";
 
     const inserted = await sql`
       INSERT INTO bookings
@@ -98,7 +150,7 @@ export async function POST(request: NextRequest) {
       VALUES
         (${submissionId}, ${email}, ${firstName}, ${phone},
          ${typeKey}, ${scheduled}, ${type.duration_min},
-         ${type.price_cents}, 'reserved')
+         ${priceCents}, ${status})
       RETURNING id
     `;
 
@@ -119,7 +171,7 @@ export async function POST(request: NextRequest) {
         email,
         dashboardUrl,
         `Call gereserveerd · ${when}`,
-        type.price_label
+        includedInPackage ? "inbegrepen bij pakket" : type.price_label
       );
     } catch (err) {
       console.error("booking notification email failed:", err);
