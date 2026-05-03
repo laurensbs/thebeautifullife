@@ -17,7 +17,7 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="relative bg-page-soft rounded-[6px] overflow-hidden shadow-[0_12px_40px_rgba(60,50,30,0.08)] grid lg:grid-cols-[1fr_1.05fr]">
+    <section className="relative bg-page-soft rounded-[6px] overflow-hidden shadow-[0_12px_40px_rgba(60,50,30,0.08)] grid lg:grid-cols-[46%_1fr]">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}

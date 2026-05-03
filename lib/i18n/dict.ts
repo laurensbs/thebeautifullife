@@ -141,7 +141,6 @@ export const DICT = {
       alignment: {
         nl: [
           "Het Ikigai-werkboek met de vier kernvragen",
-          "Wat hou je van · waar ben je goed in · wat heeft de wereld nodig · waarvoor word je betaald",
           "Een uitgebreide vragenlijst om jezelf scherp te krijgen",
           "Twee 1-op-1 Zoom-calls met Marion (60 min elk)",
           "Een persoonlijk Ikigai-plan dat bij jouw leven past",
@@ -149,7 +148,6 @@ export const DICT = {
         ],
         en: [
           "The Ikigai workbook built around the four core questions",
-          "What you love · what you're good at · what the world needs · what you can be paid for",
           "An in-depth questionnaire to bring yourself into focus",
           "Two 1-on-1 Zoom calls with Marion (60 min each)",
           "A personal Ikigai plan that fits your life",
