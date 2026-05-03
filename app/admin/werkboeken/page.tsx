@@ -117,6 +117,12 @@ export default function WerkboekenPage() {
               Inzendingen
             </Link>
             <Link
+              href="/admin/klanten"
+              className="text-[11px] tracking-[0.22em] uppercase text-ink-soft hover:text-tan transition-colors px-2 py-1.5"
+            >
+              Klanten
+            </Link>
+            <Link
               href="/admin/calls"
               className="text-[11px] tracking-[0.22em] uppercase text-ink-soft hover:text-tan transition-colors px-2 py-1.5"
             >
