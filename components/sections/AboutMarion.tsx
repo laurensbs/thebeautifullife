@@ -12,6 +12,7 @@ const COPY = {
     role: "jouw creatief levensmentor",
     paragraphs: [
       "Ik ben Marion. Een leven lang heb ik mensen begeleid die op een kruispunt stonden — niet door hen weg te trekken van waar ze waren, maar door samen te kijken: wie ben jij, écht?",
+      "Naast mijn werk als coach heb ik hypnotherapie gestudeerd. Daardoor kan ik ook met je werken op de laag onder het denken — waar oude patronen zacht losser worden en nieuwe rust kan landen.",
       "The Beautiful Life is mijn antwoord op een wereld die te hard, te snel en te vol is. Hier vertraag je. Hier krijg je tijd. Hier mag je weer voelen wat onder de drukte zit.",
       "Mijn werk is zacht maar eerlijk. Ik laat je niet ontsnappen — ik laat je thuiskomen.",
     ],
@@ -23,6 +24,7 @@ const COPY = {
     role: "your creative lifestyle mentor",
     paragraphs: [
       "I'm Marion. For a lifetime I've guided people standing at a crossroads — not by pulling them away from where they were, but by looking together: who are you, really?",
+      "Alongside my work as a coach I studied hypnotherapy. That means I can also work with you on the layer beneath thinking — where old patterns gently loosen and new calm can land.",
       "The Beautiful Life is my answer to a world that is too loud, too fast, too full. Here you slow down. Here you get time. Here you may feel again what lies beneath the noise.",
       "My work is soft but honest. I don't let you escape — I let you come home.",
     ],
