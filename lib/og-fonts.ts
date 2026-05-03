@@ -27,6 +27,18 @@ function loadFont(filename: string): ArrayBuffer {
   return arrayBuffer;
 }
 
+/**
+ * Lees een binary asset uit /public/ als data-URL — voor ImageResponse.
+ * Satori heeft inline images (data:image/...) nodig om ze te tonen;
+ * remote URLs werken niet betrouwbaar in serverless.
+ */
+export function publicImageDataUrl(filename: string, mimeType: string): string {
+  const filePath = path.join(process.cwd(), "public", filename);
+  const buffer = fs.readFileSync(filePath);
+  const base64 = buffer.toString("base64");
+  return `data:${mimeType};base64,${base64}`;
+}
+
 export function loadOgFonts() {
   const cormorant = loadFont("cormorant-regular.ttf");
   const cormorantMedium = loadFont("cormorant-medium.ttf");

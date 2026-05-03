@@ -1,23 +1,24 @@
 import { ImageResponse } from "next/og";
-import { loadOgFonts } from "@/lib/og-fonts";
+import { loadOgFonts, publicImageDataUrl } from "@/lib/og-fonts";
 
 /**
  * Visitekaartje achterzijde — 89×59 mm.
  *
- * 2-koloms layout: rond Marion-portret links (gezicht koppelt naam aan
- * persoon), alle contact-details rechts. KvK fijn onderaan.
+ * 2-koloms layout met écht laadbaar Marion-portret (lokaal /public/marion.jpg
+ * als base64 data-URL omdat Satori remote images niet betrouwbaar laadt).
  */
 
-// Node runtime — Edge faalt omdat fetch naar /fonts/ door apex→www redirect
-// een lege response geeft, waardoor next/og een lege PNG retourneert.
 export const runtime = "nodejs";
 
 const SIZE = { width: 1051, height: 697 };
-const PORTRAIT_URL =
-  "https://u.cubeupload.com/laurensbs/06420caa3a384d2ea36b.jpeg";
+
+const HEART_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#B6906A"><path d="M12 21s-8-4.5-8-11a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.5-8 11-8 11z" opacity="0.85"/></svg>`
+)}`;
 
 export async function GET() {
   const fonts = loadOgFonts();
+  const marionDataUrl = publicImageDataUrl("marion.jpg", "image/jpeg");
 
   return new ImageResponse(
     (
@@ -31,10 +32,10 @@ export async function GET() {
           background: "#F1EBE0",
           fontFamily: "Cormorant",
           position: "relative",
-          padding: "60px 64px",
+          padding: "55px 64px 70px",
         }}
       >
-        {/* Tan accent strip boven, loopt door tot in bleed */}
+        {/* Tan accent strip boven */}
         <div
           style={{
             position: "absolute",
@@ -59,23 +60,23 @@ export async function GET() {
           <div
             style={{
               display: "flex",
-              width: 240,
-              height: 240,
-              borderRadius: 120,
+              width: 260,
+              height: 260,
+              borderRadius: 130,
               overflow: "hidden",
               border: "3px solid #B6906A",
-              boxShadow: "0 8px 24px rgba(60,50,30,0.14)",
+              boxShadow: "0 10px 28px rgba(60,50,30,0.18)",
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={PORTRAIT_URL}
+              src={marionDataUrl}
               alt="Marion Lubach"
-              width={240}
-              height={240}
+              width={260}
+              height={260}
               style={{
-                width: 240,
-                height: 240,
+                width: 260,
+                height: 260,
                 objectFit: "cover",
                 objectPosition: "center",
               }}
@@ -83,7 +84,7 @@ export async function GET() {
           </div>
         </div>
 
-        {/* RECHTS — content blok */}
+        {/* RECHTS — content */}
         <div
           style={{
             display: "flex",
@@ -91,35 +92,37 @@ export async function GET() {
             alignItems: "flex-start",
             justifyContent: "center",
             flex: 1,
-            paddingLeft: 40,
+            paddingLeft: 50,
           }}
         >
           {/* Eyebrow in Pinyon */}
           <div
             style={{
               fontFamily: "Pinyon",
-              fontSize: 48,
+              fontSize: 56,
               color: "#B6906A",
               lineHeight: 1,
+              letterSpacing: "0.01em",
             }}
           >
-            let&apos;s stay in touch
+            {/* Spatie na apostrof + curly quote om Pinyon kerning issue te omzeilen */}
+            {"let’s  stay in touch"}
           </div>
 
-          {/* Korte hartjes-divider */}
+          {/* Hartjes-divider */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 12,
-              color: "#B6906A",
-              marginTop: 14,
-              marginBottom: 22,
+              gap: 14,
+              marginTop: 16,
+              marginBottom: 24,
             }}
           >
-            <div style={{ width: 50, height: 1, background: "#B6906A", opacity: 0.6 }} />
-            <div style={{ fontSize: 16, lineHeight: 1 }}>♡</div>
-            <div style={{ width: 50, height: 1, background: "#B6906A", opacity: 0.6 }} />
+            <div style={{ width: 60, height: 1, background: "#B6906A", opacity: 0.6 }} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={HEART_SVG} width={14} height={14} alt="" />
+            <div style={{ width: 60, height: 1, background: "#B6906A", opacity: 0.6 }} />
           </div>
 
           {/* Naam */}
@@ -138,7 +141,7 @@ export async function GET() {
           {/* Website prominent */}
           <div
             style={{
-              fontSize: 28,
+              fontSize: 30,
               letterSpacing: "0.14em",
               textTransform: "uppercase",
               color: "#2A2A28",
@@ -152,9 +155,9 @@ export async function GET() {
           {/* Email */}
           <div
             style={{
-              fontSize: 18,
+              fontSize: 19,
               color: "#4A4A45",
-              marginTop: 10,
+              marginTop: 12,
             }}
           >
             contact@thebeautifullife.nl
@@ -163,9 +166,9 @@ export async function GET() {
           {/* Instagram */}
           <div
             style={{
-              fontSize: 18,
+              fontSize: 19,
               color: "#4A4A45",
-              marginTop: 4,
+              marginTop: 5,
             }}
           >
             @thebeautifullife
@@ -176,7 +179,7 @@ export async function GET() {
         <div
           style={{
             position: "absolute",
-            bottom: 22,
+            bottom: 24,
             left: 0,
             right: 0,
             display: "flex",
