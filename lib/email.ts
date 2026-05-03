@@ -203,6 +203,7 @@ export async function sendQuestionnaireEmail(
     to,
     subject: `${firstName}, jouw reflectievragenlijst staat klaar`,
     html,
+    replyTo: "contact@thebeautifullife.nl",
   });
 }
 
@@ -310,6 +311,7 @@ export async function sendWorkbookInvite(
     to,
     subject: subj,
     html,
+    replyTo: "contact@thebeautifullife.nl",
   });
 }
 
@@ -342,6 +344,7 @@ export async function sendWorkbookMagicLink(
     to,
     subject: `${firstName}, jouw inlog-link`,
     html,
+    replyTo: "contact@thebeautifullife.nl",
   });
 }
 
@@ -486,5 +489,6 @@ export async function sendClientWelcome(
     to,
     subject: `${firstName}, welkom bij The Beautiful Life`,
     html,
+    replyTo: "contact@thebeautifullife.nl",
   });
 }

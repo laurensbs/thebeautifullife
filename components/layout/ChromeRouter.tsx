@@ -31,7 +31,14 @@ export default function ChromeRouter({
   return (
     <>
       {header}
-      <div className="flex-1 flex flex-col">{children}</div>
+      {/*
+        id="main" — anker voor de skip-to-content link in app/layout.tsx.
+        Pages renderen vaak hun eigen <main>; deze div is een neutraal
+        target zonder semantische dubbeling.
+      */}
+      <div id="main" className="flex-1 flex flex-col">
+        {children}
+      </div>
       {footer}
     </>
   );

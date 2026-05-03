@@ -74,3 +74,17 @@ textarea::placeholder {
   50% { transform: translateY(-6px); }
 }
 .animate-floaty { animation: floaty 7s ease-in-out infinite; }
+
+/* Focus-visible: zichtbare tan-ring voor toetsenbord-navigatie zonder
+   muis-clicks te storen. Inputs hebben hun eigen focus-ring (zie Tailwind
+   focus:ring-1 utility) en krijgen geen dubbele outline. */
+*:focus-visible {
+  outline: 2px solid var(--color-tan);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Check, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import { PACKAGES, isPackageSlug } from "@/lib/packages";
 import { BASE_FIELDS, PACKAGE_INTAKE } from "@/lib/intake-fields";
@@ -239,6 +239,19 @@ export default async function PackagePage({
             initialValues={prefill}
             prefilledNote={prefilledNote}
           />
+
+          {/* Trust-badge: 14-dagen herroeping zichtbaar maken */}
+          <Link
+            href="/voorwaarden"
+            className="mt-5 flex items-center justify-center gap-2 text-[11px] tracking-[0.18em] uppercase text-ink-soft hover:text-tan transition group"
+          >
+            <ShieldCheck size={13} strokeWidth={1.6} className="text-tan" />
+            <span>
+              {locale === "en"
+                ? "14-day cooling-off · safe payment"
+                : "14 dagen bedenktijd · veilige betaling"}
+            </span>
+          </Link>
         </FadeIn>
       </div>
     </main>
