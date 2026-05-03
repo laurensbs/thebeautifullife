@@ -141,14 +141,17 @@ export default function WorkbookView({
 
   return (
     <div className="wb">
-      {/* Toolbar — rustig, alleen brand + save + back + logout */}
+      {/* Toolbar — rustig, alleen brand + save + back + logout.
+          'Mijn pad' link gaat via /api/workbook/to-portal die een
+          client-sessie maakt op basis van de werkboek-sessie zodat
+          klant niet opnieuw hoeft in te loggen. */}
       <div className="wb-toolbar">
         <div className="wb-toolbar__brand">
-          <BrandLogo size="sm" linkTo="/mijn-pad" />
+          <BrandLogo size="sm" linkTo="/api/workbook/to-portal" />
         </div>
         <div className="wb-toolbar__actions">
           <SaveIndicator state={save} locale={locale} />
-          <a href="/mijn-pad" className="wb-btn wb-btn--ghost">
+          <a href="/api/workbook/to-portal" className="wb-btn wb-btn--ghost">
             {tr(DICT.workbook.backToPortal, locale)}
           </a>
           <a

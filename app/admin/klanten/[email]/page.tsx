@@ -346,6 +346,13 @@ export default function KlantDetailPage({
                             </p>
                           </div>
                           <div className="flex items-center gap-2">
+                            <Link
+                              href={`/admin/werkboeken/${wb.access_id}`}
+                              className="text-[10px] tracking-[0.18em] uppercase bg-ink hover:brightness-110 text-white px-2.5 py-1.5 rounded transition"
+                              title="Lees alle antwoorden"
+                            >
+                              Lees
+                            </Link>
                             <a
                               href={`/api/workbook/pdf?slug=${encodeURIComponent(wb.slug)}&access_id=${wb.access_id}`}
                               className="text-[10px] tracking-[0.18em] uppercase border border-line hover:border-tan hover:text-tan text-ink-soft px-2.5 py-1.5 rounded transition"

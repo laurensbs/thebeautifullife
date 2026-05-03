@@ -146,11 +146,11 @@
   margin-top: 22px;
   width: 100%;
   min-height: 192px;
-  /* Padding-top = 0 zodat de gradient exact aligned is met de regels.
-     Padding-bottom + horizontale padding geven de lucht. De gradient
-     herhaalt elke 32px en plaatst de lijn op y=31-32 (onderkant van
-     elke regel). Tekst-baseline valt dan precies op de lijn. */
-  padding: 0 20px 12px;
+  /* Lijnen-papier effect: line-height 32px + repeating gradient elke 32px.
+     Eerste regel zit visueel iets boven de eerste lijn — tekst landt
+     ON de lijn (baseline-on-line, klassieke schoolschrift-look).
+     padding-bottom voor lucht onderaan, padding-x voor marge. */
+  padding: 4px 20px 12px;
   border: 1px solid var(--color-line);
   border-radius: 3px;
   background-image: repeating-linear-gradient(
@@ -161,7 +161,7 @@
     var(--color-line) 32px
   );
   background-repeat: repeat;
-  background-position: 0 0;
+  background-position: 0 4px;
   font-family: var(--font-sans);
   font-size: 15px;
   color: var(--color-ink);
@@ -310,19 +310,20 @@
 .wb-save--saved .dot { background: var(--color-sage); }
 @keyframes wb-pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-/* Toolbar — rustig, één regel */
+/* Toolbar — rustig, één regel. NIET sticky (progress-bar is sticky).
+   Verdwijnt zodra je scrollt zodat alleen progress in beeld blijft. */
 .wb-toolbar {
-  position: sticky; top: 0; z-index: 20;
   display: flex; justify-content: space-between; align-items: center; gap: 10px;
   padding: 12px 20px;
   background: var(--color-page-soft);
   border-bottom: 1px solid rgba(217, 207, 190, 0.5);
-  backdrop-filter: blur(6px);
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 @media (max-width: 560px) {
-  .wb-toolbar { padding: 9px 14px; }
-  .wb-btn { padding: 7px 10px; font-size: 10px; letter-spacing: 0.18em; }
+  .wb-toolbar { padding: 9px 12px; }
+  .wb-btn { padding: 6px 10px; font-size: 10px; letter-spacing: 0.16em; }
+  /* Save-indicator weg op mobiel — hij staat al in de progress-bar */
+  .wb-toolbar .wb-save { display: none; }
 }
 .wb-toolbar__brand {
   display: flex;

@@ -240,13 +240,13 @@ export default function WerkboekenPage() {
                                       Laatst actief {fmtDate(c.last_seen_at)}
                                     </p>
                                   </div>
-                                  <div className="flex items-center gap-2 sm:flex-col sm:items-end">
+                                  <div className="flex items-center gap-2 sm:flex-col sm:items-end flex-wrap">
                                     <Link
-                                      href={`/werkboek/${group.slug}?token=${c.access_token}`}
-                                      target="_blank"
-                                      className="text-[11px] tracking-[0.18em] uppercase border border-line text-ink-soft hover:border-tan hover:text-tan px-3 py-1.5 rounded transition flex items-center gap-1.5"
+                                      href={`/admin/werkboeken/${c.access_id}`}
+                                      className="text-[11px] tracking-[0.18em] uppercase bg-ink hover:brightness-110 text-white px-3 py-1.5 rounded transition flex items-center gap-1.5 shadow-[0_4px_12px_rgba(60,50,30,0.10)]"
+                                      title="Lees alle antwoorden"
                                     >
-                                      <ExternalLink size={11} /> Open
+                                      Lees
                                     </Link>
                                     <a
                                       href={`/api/workbook/pdf?slug=${encodeURIComponent(group.slug)}&access_id=${c.access_id}`}
@@ -254,6 +254,14 @@ export default function WerkboekenPage() {
                                     >
                                       PDF
                                     </a>
+                                    <Link
+                                      href={`/werkboek/${group.slug}?token=${c.access_token}`}
+                                      target="_blank"
+                                      className="text-[11px] tracking-[0.18em] uppercase border border-line text-ink-soft hover:border-tan hover:text-tan px-3 py-1.5 rounded transition flex items-center gap-1.5"
+                                      title="Open zoals klant het ziet"
+                                    >
+                                      <ExternalLink size={11} />
+                                    </Link>
                                   </div>
                                 </li>
                               ))}
