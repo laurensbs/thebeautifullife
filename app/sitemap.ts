@@ -6,6 +6,8 @@ const PUBLIC_PATHS = [
   { path: "/pakket/ikigai", priority: 0.9, freq: "monthly" as const },
   { path: "/pakket/alignment", priority: 0.9, freq: "monthly" as const },
   { path: "/pakket/experience", priority: 0.9, freq: "monthly" as const },
+  { path: "/gratis", priority: 0.7, freq: "monthly" as const },
+  { path: "/voorwaarden", priority: 0.3, freq: "yearly" as const },
   { path: "/privacy", priority: 0.3, freq: "yearly" as const },
 ];
 

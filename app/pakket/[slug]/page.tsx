@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { PACKAGES, isPackageSlug } from "@/lib/packages";
 import { BASE_FIELDS, PACKAGE_INTAKE } from "@/lib/intake-fields";
 import IntakeForm from "@/components/intake/IntakeForm";
+import WhatHappensNext from "@/components/sections/WhatHappensNext";
 import { getLocale } from "@/lib/i18n/server";
 import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
@@ -175,6 +176,8 @@ export default async function PackagePage({
             </h2>
             <p className="text-[12px] text-ink-soft mt-2">{helper}</p>
           </div>
+
+          <WhatHappensNext slug={slug} locale={locale} accent={pkg.accent} />
 
           <IntakeForm
             pkgSlug={slug}

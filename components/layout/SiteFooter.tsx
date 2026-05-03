@@ -144,8 +144,18 @@ export default function SiteFooter({ locale }: { locale: Locale }) {
 
           {/* Bottom strip */}
           <div className="bg-page-dark/40 border-t border-line/40 px-6 py-5 sm:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-muted text-center sm:text-left">
-            <p>© {year} The Beautiful Life · Marion Lubach</p>
-            <div className="flex items-center gap-4 sm:gap-5">
+            <p>
+              © {year} The Beautiful Life · Marion Lubach
+              <span className="hidden sm:inline text-muted/50"> · </span>
+              <span className="block sm:inline mt-1 sm:mt-0">
+                KvK op aanvraag · btw inbegrepen
+              </span>
+            </p>
+            <div className="flex items-center gap-4 sm:gap-5 flex-wrap justify-center">
+              <Link href="/voorwaarden" className="hover:text-tan transition">
+                {locale === "en" ? "Terms" : "Voorwaarden"}
+              </Link>
+              <span className="text-muted/40">·</span>
               <Link href="/privacy" className="hover:text-tan transition">
                 {tr(DICT.footer.privacy, locale)}
               </Link>

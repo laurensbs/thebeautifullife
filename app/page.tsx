@@ -2,6 +2,8 @@ import HeroPanel from "@/components/sections/HeroPanel";
 import PackageCard from "@/components/sections/PackageCard";
 import WhatYouGet from "@/components/sections/WhatYouGet";
 import FreeReflectionCta from "@/components/sections/FreeReflectionCta";
+import AboutMarion from "@/components/sections/AboutMarion";
+import FAQ from "@/components/sections/FAQ";
 import Closing from "@/components/sections/Closing";
 import { PACKAGE_LIST } from "@/lib/packages";
 import { getLocale } from "@/lib/i18n/server";
@@ -11,6 +13,8 @@ export default async function Home() {
   return (
     <main className="max-w-[1180px] mx-auto px-5 sm:px-6 pt-4 sm:pt-6 pb-12 sm:pb-16">
       <HeroPanel locale={locale} />
+
+      <AboutMarion locale={locale} />
 
       <section
         id="packages"
@@ -26,6 +30,8 @@ export default async function Home() {
       </div>
 
       <FreeReflectionCta locale={locale} />
+
+      <FAQ locale={locale} />
 
       <Closing locale={locale} />
     </main>
