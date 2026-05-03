@@ -1,50 +1,32 @@
 /**
- * Hulpfuncties om de site-fonts (Cormorant Garamond, Pinyon Script) te laden
- * voor next/og ImageResponse. Via Google Fonts CSS API + WOFF2 → ArrayBuffer.
+ * Hulpfunctie om de site-fonts (Cormorant Garamond, Pinyon Script) te laden
+ * voor next/og ImageResponse.
  *
- * Wordt gebruikt in /api/workbook/pdf en /visitekaartje/* zodat OG-images
- * écht de huisstijl-fonts gebruiken in plaats van Georgia/cursive fallback.
+ * TTF (niet WOFF2) — next/og's edge runtime ondersteunt TTF/OTF,
+ * de WOFF2-decoder die in production was geprobeerd faalt met
+ * 'Unsupported OpenType signature wOF2'.
+ *
+ * Bestanden staan in /public/fonts/ en worden via een absolute URL opgehaald
+ * (zelfde origin als de request). Edge runtime mag fetch() maar geen fs.
  */
-
-const FONT_URLS = {
-  cormorantRegular:
-    "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&display=swap",
-  cormorantMedium:
-    "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&display=swap",
-  pinyon:
-    "https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap",
-};
 
 const cache = new Map<string, ArrayBuffer>();
 
-async function fetchFont(cssUrl: string): Promise<ArrayBuffer> {
-  if (cache.has(cssUrl)) return cache.get(cssUrl)!;
-
-  // Vraag de CSS op met Chrome user-agent zodat Google WOFF2 teruggeeft
-  // (fallback geeft TTF wat next/og niet leest).
-  const cssRes = await fetch(cssUrl, {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    },
-  });
-  const css = await cssRes.text();
-
-  // Pak eerste woff2-URL uit de CSS
-  const match = css.match(/src:\s*url\(([^)]+)\)\s*format\(['"]woff2['"]\)/);
-  if (!match) throw new Error("Kon woff2 URL niet vinden in Google CSS");
-
-  const fontRes = await fetch(match[1]);
-  const buf = await fontRes.arrayBuffer();
-  cache.set(cssUrl, buf);
+async function loadFont(origin: string, filename: string): Promise<ArrayBuffer> {
+  const url = `${origin}/fonts/${filename}`;
+  if (cache.has(url)) return cache.get(url)!;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Font fetch failed: ${url} → ${res.status}`);
+  const buf = await res.arrayBuffer();
+  cache.set(url, buf);
   return buf;
 }
 
-export async function loadOgFonts() {
+export async function loadOgFonts(origin: string) {
   const [cormorant, cormorantMedium, pinyon] = await Promise.all([
-    fetchFont(FONT_URLS.cormorantRegular),
-    fetchFont(FONT_URLS.cormorantMedium),
-    fetchFont(FONT_URLS.pinyon),
+    loadFont(origin, "cormorant-regular.ttf"),
+    loadFont(origin, "cormorant-medium.ttf"),
+    loadFont(origin, "pinyon-regular.ttf"),
   ]);
   return [
     {

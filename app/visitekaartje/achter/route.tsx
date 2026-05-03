@@ -12,8 +12,9 @@ export const runtime = "edge";
 
 const SIZE = { width: 1051, height: 697 };
 
-export async function GET() {
-  const fonts = await loadOgFonts();
+export async function GET(request: Request) {
+  const origin = new URL(request.url).origin;
+  const fonts = await loadOgFonts(origin);
 
   return new ImageResponse(
     (

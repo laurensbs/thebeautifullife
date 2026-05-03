@@ -21,8 +21,9 @@ const SIZE = { width: 1051, height: 697 };
 const PORTRAIT_URL =
   "https://u.cubeupload.com/laurensbs/06420caa3a384d2ea36b.jpeg";
 
-export async function GET() {
-  const fonts = await loadOgFonts();
+export async function GET(request: Request) {
+  const origin = new URL(request.url).origin;
+  const fonts = await loadOgFonts(origin);
 
   return new ImageResponse(
     (
