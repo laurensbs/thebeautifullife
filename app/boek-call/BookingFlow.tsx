@@ -13,6 +13,7 @@ import {
 import { type Locale } from "@/lib/i18n/types";
 import { BOOKING_TYPES } from "@/lib/bookings";
 import HeartDivider from "@/components/ui/HeartDivider";
+import MarionAvatar from "@/components/ui/MarionAvatar";
 import HeartDraw from "@/components/ui/HeartDraw";
 
 type Slot = { date: string; slots: string[] };
@@ -157,6 +158,9 @@ export default function BookingFlow({
 
         {/* Header */}
         <div className="px-6 py-9 sm:px-12 sm:py-10 text-center border-b border-line/40">
+          <div className="flex justify-center mb-4">
+            <MarionAvatar size={52} />
+          </div>
           <p className="font-script text-tan text-3xl">een moment voor jou,</p>
           <h1 className="font-serif font-medium text-2xl sm:text-3xl tracking-[0.06em] uppercase mt-2 text-ink">
             {t.title}

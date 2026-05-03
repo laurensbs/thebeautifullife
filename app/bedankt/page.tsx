@@ -5,7 +5,7 @@ import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
 import FadeIn from "@/components/ui/FadeIn";
 import Calligraphy from "@/components/ui/Calligraphy";
-import HeartDraw from "@/components/ui/HeartDraw";
+import MarionAvatar from "@/components/ui/MarionAvatar";
 
 export const metadata = {
   robots: { index: false, follow: false },
@@ -30,9 +30,7 @@ export default async function Bedankt({
     <main className="max-w-[680px] mx-auto px-5 sm:px-6 py-16 sm:py-20 text-center">
       <FadeIn direction="up" scale className="bg-page-soft rounded-[6px] px-6 py-12 sm:px-14 sm:py-16 shadow-[0_12px_40px_rgba(60,50,30,0.08)]">
         <FadeIn direction="none" delay={0.4} className="flex justify-center mb-5">
-          <div className="w-14 h-14 rounded-full bg-tan/10 border border-tan/40 flex items-center justify-center text-tan">
-            <HeartDraw size={22} duration={1.6} delay={0.5} />
-          </div>
+          <MarionAvatar size={60} />
         </FadeIn>
 
         <Calligraphy

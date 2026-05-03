@@ -6,6 +6,7 @@ import { tr, type Locale } from "@/lib/i18n/types";
 import Calligraphy from "@/components/ui/Calligraphy";
 import HeartDivider from "@/components/ui/HeartDivider";
 import BrandLogo from "@/components/ui/BrandLogo";
+import MarionAvatar from "@/components/ui/MarionAvatar";
 
 function InstagramIcon({ size = 14 }: { size?: number }) {
   return (
@@ -133,12 +134,15 @@ export default function SiteFooter({ locale }: { locale: Locale }) {
                 </li>
               </ul>
 
-              <Calligraphy
-                as="p"
-                className="font-script text-tan text-xl mt-7"
-                text={tr(DICT.footer.signoff, locale)}
-                durationPerChar={0.07}
-              />
+              <div className="mt-7 inline-flex items-center gap-3 sm:gap-3.5">
+                <MarionAvatar size={44} />
+                <Calligraphy
+                  as="p"
+                  className="font-script text-tan text-xl"
+                  text={tr(DICT.footer.signoff, locale)}
+                  durationPerChar={0.07}
+                />
+              </div>
             </div>
           </div>
 

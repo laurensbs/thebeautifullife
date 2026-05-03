@@ -14,6 +14,7 @@ import HeartDivider from "@/components/ui/HeartDivider";
 import HeartDraw from "@/components/ui/HeartDraw";
 import PageLoader from "@/components/ui/PageLoader";
 import BrandLogo from "@/components/ui/BrandLogo";
+import MarionAvatar from "@/components/ui/MarionAvatar";
 
 type Question = {
   id: number;
@@ -166,10 +167,8 @@ function VragenlijstContent() {
         >
           <span className="absolute top-0 left-0 right-0 h-0.5 bg-sage" />
 
-          <div className="flex justify-center mb-5 text-tan">
-            <div className="w-14 h-14 rounded-full bg-tan/10 border border-tan/40 flex items-center justify-center">
-              <HeartDraw size={22} duration={1.6} delay={0.4} />
-            </div>
+          <div className="flex justify-center mb-5">
+            <MarionAvatar size={60} accent="sage" />
           </div>
 
           <p className="font-script text-tan text-3xl sm:text-4xl">

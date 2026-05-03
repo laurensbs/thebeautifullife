@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Calendar } from "lucide-react";
 import { PACKAGES, type PackageSlug } from "@/lib/packages";
 import HeartDraw from "@/components/ui/HeartDraw";
+import MarionAvatar from "@/components/ui/MarionAvatar";
 
 export default function PersonalRecommendation({
   primarySlug,
@@ -53,7 +54,8 @@ export default function PersonalRecommendation({
         )}
 
         <div className="px-6 py-9 sm:px-10 sm:py-11">
-          <p className="font-script text-tan text-2xl sm:text-3xl">
+          <p className="font-script text-tan text-2xl sm:text-3xl inline-flex items-center gap-2.5">
+            <MarionAvatar size={32} />
             een gedachte van Marion
           </p>
 

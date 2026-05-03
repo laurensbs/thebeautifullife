@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { sql } from "@/lib/db";
+import { setupDatabase } from "@/lib/setup-db";
 import { getClientSession } from "@/lib/client-auth";
 import {
   PACKAGES,
@@ -91,6 +92,11 @@ const euros = (cents: number | null) =>
       })}`;
 
 export default async function MijnPad() {
+  // Idempotent — zorgt dat alle tabellen bestaan bij eerste portal-bezoek
+  // (vooral 'bookings' werd in productie pas later toegevoegd).
+  await setupDatabase().catch((err) => {
+    console.error("setupDatabase in /mijn-pad failed:", err);
+  });
   const session = await getClientSession();
   if (!session) redirect("/mijn-pad/login");
   const locale = await getLocale();
