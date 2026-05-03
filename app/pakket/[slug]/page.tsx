@@ -172,7 +172,7 @@ export default async function PackagePage({
 
           <Calligraphy
             as="p"
-            className="mt-9 font-script text-tan text-2xl leading-snug"
+            className="mt-9 font-script text-tan text-3xl sm:text-4xl leading-snug"
             text={`“${quote}”`}
             durationPerChar={0.04}
             delay={0.3}
@@ -183,7 +183,7 @@ export default async function PackagePage({
           <div className="text-center mb-6">
             <Calligraphy
               as="p"
-              className={`font-script text-2xl ${accentText}`}
+              className={`font-script text-3xl sm:text-4xl ${accentText}`}
               text={tr(DICT.pkgPage.enroll, locale)}
               durationPerChar={0.07}
             />
