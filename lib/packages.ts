@@ -87,7 +87,7 @@ export const PACKAGES: Record<
   },
   experience: {
     slug: "experience",
-    imageUrl: "https://u.cubeupload.com/laurensbos/beautifullife.png",
+    imageUrl: "https://u.cubeupload.com/laurensbos/c9629089f94943dfa1ac.png",
     number: 3,
     name: "The Beautiful Life Experience",
     nameLines: ["The Beautiful Life", "Experience"],
