@@ -5,13 +5,18 @@ import FreeReflectionCta from "@/components/sections/FreeReflectionCta";
 import AboutMarion from "@/components/sections/AboutMarion";
 import FAQ from "@/components/sections/FAQ";
 import Closing from "@/components/sections/Closing";
+import JsonLd from "@/components/seo/JsonLd";
 import { PACKAGE_LIST } from "@/lib/packages";
 import { getLocale } from "@/lib/i18n/server";
+import { getFaq } from "@/lib/faq-data";
+import { faqPageLd } from "@/lib/seo";
 
 export default async function Home() {
   const locale = await getLocale();
+  const faq = getFaq(locale);
   return (
     <main className="max-w-[1180px] mx-auto px-5 sm:px-6 pt-4 sm:pt-6 pb-12 sm:pb-16">
+      <JsonLd data={faqPageLd(faq.items)} />
       <HeroPanel locale={locale} />
 
       <AboutMarion locale={locale} />

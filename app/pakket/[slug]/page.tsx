@@ -9,7 +9,7 @@ import WhatHappensNext from "@/components/sections/WhatHappensNext";
 import { getLocale } from "@/lib/i18n/server";
 import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
-import { buildMetadata, serviceLd } from "@/lib/seo";
+import { buildMetadata, serviceLd, productLd, breadcrumbLd } from "@/lib/seo";
 import JsonLd from "@/components/seo/JsonLd";
 import FadeIn from "@/components/ui/FadeIn";
 import { StaggerList } from "@/components/ui/StaggerList";
@@ -76,13 +76,29 @@ export default async function PackagePage({
       ? tr(DICT.pkgPage.ctaExperience, locale)
       : tr(DICT.pkgPage.cta, locale);
 
-  const ld = serviceLd({
-    name: tr(DICT.packages.name[slug], locale),
-    description: tagline,
-    priceCents: pkg.priceCents,
-    slug,
-    locale,
-  });
+  const pkgName = tr(DICT.packages.name[slug], locale);
+  const ld = [
+    serviceLd({
+      name: pkgName,
+      description: tagline,
+      priceCents: pkg.priceCents,
+      slug,
+      locale,
+    }),
+    productLd({
+      name: pkgName,
+      description: tagline,
+      priceCents: pkg.priceCents,
+      slug,
+      imageUrl: pkg.imageUrl,
+      locale,
+    }),
+    breadcrumbLd([
+      { name: locale === "en" ? "Home" : "Home", path: "/" },
+      { name: locale === "en" ? "Packages" : "Pakketten", path: "/#packages" },
+      { name: pkgName, path: `/pakket/${slug}` },
+    ]),
+  ];
 
   return (
     <main className="max-w-[1180px] mx-auto px-5 sm:px-6 pt-4 sm:pt-6 pb-12 sm:pb-16">

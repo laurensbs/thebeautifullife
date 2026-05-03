@@ -40,8 +40,8 @@ export const DICT = {
   footer: {
     tagline: t("the beginning of your beautiful life", "the beginning of your beautiful life"),
     intro: t(
-      "Voor vrouwen die verlangen naar rust, balans en een leven dat goed voelt en moeiteloos begint te stromen.",
-      "For women who long for calm, balance, and a life that feels right and starts to flow effortlessly."
+      "Persoonlijke coaching en werkboeken voor wie verlangt naar rust, helderheid en een leven dat klopt — van een eerste reflectie tot een acht dagen durend traject met Marion.",
+      "Personal coaching and workbooks for those longing for calm, clarity and a life that fits — from a first reflection to an eight-day journey with Marion."
     ),
     discover: t("Ontdek", "Discover"),
     contact: t("Contact", "Contact"),
@@ -54,8 +54,8 @@ export const DICT = {
     threePaths: t("3 Paths. One Goal.", "3 Paths. One Goal."),
     yourIdealLife: t("Your Ideal Life.", "Your Ideal Life."),
     lead: t(
-      "Drie paden om terug te komen bij jezelf. Van een werkboek in je eigen tempo tot 8 dagen samen — kies wat past bij waar jij nu staat.",
-      "Three paths to come back to yourself. From a workbook in your own time to 8 days together — choose what fits where you are now."
+      "Drie paden om weer thuis te komen bij jezelf. Van een werkboek in je eigen tempo tot acht dagen samen met Marion — kies wat past bij waar jij nu staat.",
+      "Three paths to come home to yourself. From a workbook in your own time to eight days alongside Marion — choose what fits where you are now."
     ),
     feat: {
       clarity: t("More Clarity", "More Clarity"),
@@ -568,8 +568,8 @@ export const DICT = {
       "Free reflection questionnaire"
     ),
     intro: t(
-      "Niet klaar voor een pakket — maar wel voor een eerste stap. Vul de gratis reflectie in (~10 minuten) en krijg een eerlijk beeld van waar je nu staat.",
-      "Not ready for a package — but ready for a first step. Fill in the free reflection (~10 minutes) and get an honest picture of where you are now."
+      "Nog geen pakket — wel een eerste stap. Vul de gratis reflectievragenlijst in (ongeveer tien minuten) en krijg een eerlijk beeld van waar je nu staat. Daarna ontvang je een persoonlijke aanbeveling van Marion.",
+      "No package yet — but a first step. Fill in the free reflection questionnaire (about ten minutes) and get an honest picture of where you are now. After that you'll receive a personal recommendation from Marion."
     ),
     cta: t("Begin gratis", "Start free — it's on us"),
 
@@ -603,12 +603,12 @@ export const DICT = {
   // ============ META (SEO) ============
   meta: {
     homeTitle: t(
-      "The Beautiful Life — 3 Paden. Eén Doel. Jouw Ideale Leven.",
-      "The Beautiful Life — 3 Paths. One Goal. Your Ideal Life."
+      "The Beautiful Life — Persoonlijke coaching & werkboeken door Marion Lubach",
+      "The Beautiful Life — Personal coaching & workbooks by Marion Lubach"
     ),
     homeDesc: t(
-      "Van helderheid tot transformatie. Drie pakketten om een leven te ontwerpen dat aansluit bij wie je bent.",
-      "From clarity to transformation. Three packages to design a life that aligns with who you are."
+      "Drie paden naar een leven dat past: een werkboek voor onderweg, persoonlijke begeleiding van Marion, of acht dagen volledig voor jezelf in Spanje of Sardinië. Begin gratis met de reflectievragenlijst.",
+      "Three paths to a life that fits: a workbook for the journey, personal guidance from Marion, or eight days entirely for yourself in Spain or Sardinia. Start for free with the reflection questionnaire."
     ),
   },
 } as const;

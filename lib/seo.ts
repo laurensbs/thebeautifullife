@@ -144,3 +144,98 @@ export function serviceLd({
 export function jsonLd(data: object | object[]): string {
   return JSON.stringify(Array.isArray(data) ? data : [data]);
 }
+
+/**
+ * Product schema voor pakketten — geeft Google rijke kaarten met prijs,
+ * beschikbaarheid en afbeelding in de zoekresultaten. Gebruikt naast
+ * serviceLd() voor extra dekking.
+ */
+export function productLd({
+  name,
+  description,
+  priceCents,
+  slug,
+  imageUrl,
+  locale,
+}: {
+  name: string;
+  description: string;
+  priceCents: number;
+  slug: string;
+  imageUrl?: string;
+  locale: Locale;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name,
+    description,
+    image: imageUrl ? [imageUrl] : undefined,
+    brand: {
+      "@type": "Brand",
+      name: "The Beautiful Life",
+    },
+    inLanguage: locale,
+    url: `${SITE_URL}/pakket/${slug}`,
+    offers: {
+      "@type": "Offer",
+      price: (priceCents / 100).toFixed(2),
+      priceCurrency: "EUR",
+      availability: "https://schema.org/InStock",
+      url: `${SITE_URL}/pakket/${slug}`,
+      seller: {
+        "@type": "Organization",
+        name: "The Beautiful Life",
+      },
+    },
+  };
+}
+
+/**
+ * FAQPage schema — Google kan de FAQ-vragen direct in zoekresultaten tonen.
+ */
+export function faqPageLd(items: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((it) => ({
+      "@type": "Question",
+      name: it.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: it.a,
+      },
+    })),
+  };
+}
+
+/**
+ * BreadcrumbList — helpt Google de site-hiërarchie begrijpen.
+ */
+export function breadcrumbLd(crumbs: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: crumbs.map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: c.name,
+      item: `${SITE_URL}${c.path === "/" ? "" : c.path}`,
+    })),
+  };
+}
+
+/**
+ * WebSite schema met SearchAction — kan sitelinks searchbox triggeren in Google.
+ */
+export const WEBSITE_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "The Beautiful Life",
+  url: SITE_URL,
+  inLanguage: ["nl-NL", "en"],
+  publisher: {
+    "@type": "Organization",
+    name: "The Beautiful Life",
+  },
+};
