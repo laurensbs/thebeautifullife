@@ -236,7 +236,7 @@ function VragenlijstContent() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="06 - 12345678"
-            className="w-full max-w-xs mx-auto block bg-white/70 border border-line rounded-md px-4 py-3 mt-7 font-sans text-sm text-ink text-center placeholder:text-muted focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
+            className="w-full max-w-xs mx-auto block bg-white/70 border border-line rounded-md px-4 py-3 mt-7 font-sans text-base sm:text-sm text-ink text-center placeholder:text-muted focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
             autoFocus
           />
 

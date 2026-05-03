@@ -43,7 +43,7 @@ export default function AboutMarion({ locale }: { locale: Locale }) {
       transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
       className="bg-page-soft rounded-[6px] shadow-[0_12px_40px_rgba(60,50,30,0.08)] overflow-hidden grid lg:grid-cols-[1fr_1.1fr] mt-11"
     >
-      <div className="relative min-h-[280px] sm:min-h-[380px] lg:min-h-[480px] bg-page-dark order-1 lg:order-1">
+      <div className="relative min-h-[280px] sm:min-h-[340px] md:min-h-[360px] lg:min-h-[480px] bg-page-dark order-1 lg:order-1">
         <Image
           src="https://u.cubeupload.com/laurensbos/06420caa3a384d2ea36b.jpeg"
           alt="Marion Lubach"

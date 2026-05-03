@@ -17,7 +17,7 @@ export default function WhatYouGet({ locale }: { locale: Locale }) {
         <span className="inline-block h-px w-7 sm:w-9 bg-tan/50 ml-3 sm:ml-3.5" />
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 sm:gap-4 lg:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-4 lg:gap-5">
         {items.map((text, i) => {
           const Icon = ICONS[i];
           return (

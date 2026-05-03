@@ -92,7 +92,7 @@ export default function FreeForm({ locale }: { locale: Locale }) {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               placeholder={tr(DICT.intake.fields.firstNamePlaceholder, locale)}
-              className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
+              className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-base sm:text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
             />
           </div>
 
@@ -106,7 +106,7 @@ export default function FreeForm({ locale }: { locale: Locale }) {
               value={contact}
               onChange={(e) => setContact(e.target.value)}
               placeholder={tr(DICT.intake.fields.contactPlaceholder, locale)}
-              className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
+              className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-base sm:text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
             />
           </div>
 
@@ -122,7 +122,7 @@ export default function FreeForm({ locale }: { locale: Locale }) {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder={tr(DICT.intake.fields.phonePlaceholder, locale)}
-              className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
+              className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-base sm:text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
             />
           </div>
 

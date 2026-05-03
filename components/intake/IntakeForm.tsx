@@ -174,8 +174,9 @@ function Field({
   const accentBar =
     accent === "sage" ? "bg-sage" : accent === "tan" ? "bg-tan" : "bg-gold";
 
+  // text-base = 16px = voorkomt iOS Safari auto-zoom bij focus op input
   const baseInput =
-    "w-full bg-white/80 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink placeholder:text-muted/80 transition focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30";
+    "w-full bg-white/80 border border-line rounded-md px-4 py-3 font-sans text-base sm:text-sm text-ink placeholder:text-muted/80 transition focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30";
 
   return (
     <div>
@@ -211,7 +212,7 @@ function Field({
 
       {field.type === "scale" && (
         <div>
-          <div className="flex gap-1 sm:gap-1.5 mt-1">
+          <div className="flex gap-1.5 sm:gap-1.5 mt-1">
             {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => {
               const active = Number(value) === n;
               return (
@@ -219,10 +220,10 @@ function Field({
                   key={n}
                   type="button"
                   onClick={() => onChange(n)}
-                  className={`flex-1 h-10 rounded-md border text-sm font-sans transition ${
+                  className={`flex-1 h-12 sm:h-10 min-w-[28px] rounded-md border text-[15px] sm:text-sm font-sans transition ${
                     active
                       ? `${accentBar} text-white border-transparent`
-                      : "bg-white/60 text-ink-soft border-line hover:border-tan/60"
+                      : "bg-white/60 text-ink-soft border-line hover:border-tan/60 active:bg-tan/10"
                   }`}
                 >
                   {n}
@@ -230,7 +231,7 @@ function Field({
               );
             })}
           </div>
-          <div className="flex justify-between text-[10px] text-muted mt-1.5 px-0.5">
+          <div className="flex justify-between text-[11px] text-muted mt-2 px-0.5">
             <span>{scaleLow}</span>
             <span>{scaleHigh}</span>
           </div>

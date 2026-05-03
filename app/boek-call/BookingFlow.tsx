@@ -298,7 +298,7 @@ export default function BookingFlow({
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder="Hoe mag Marion je noemen?"
-                    className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
+                    className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-base sm:text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
                   />
                 </div>
 
@@ -312,7 +312,7 @@ export default function BookingFlow({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="naam@voorbeeld.nl"
-                    className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
+                    className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-base sm:text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
                   />
                 </div>
 
@@ -328,7 +328,7 @@ export default function BookingFlow({
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+31 6 …"
-                    className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
+                    className="w-full bg-white/70 border border-line rounded-md px-4 py-3 font-sans text-base sm:text-sm text-ink focus:outline-none focus:border-tan focus:ring-1 focus:ring-tan/30"
                   />
                 </div>
 

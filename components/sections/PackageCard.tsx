@@ -55,7 +55,7 @@ export default function PackageCard({
       className="group relative bg-page-soft rounded-tl-[40px] rounded-tr-[40px] rounded-bl-[6px] rounded-br-[6px] overflow-hidden shadow-[0_12px_40px_rgba(60,50,30,0.08)] hover:shadow-[0_22px_50px_rgba(60,50,30,0.14)] transition-shadow duration-500 flex flex-col h-full"
     >
       <div
-        className="relative h-[200px] sm:h-[240px] lg:h-[260px] overflow-hidden bg-gradient-to-br from-page-dark to-line"
+        className="relative h-[200px] sm:h-[220px] md:h-[200px] lg:h-[260px] overflow-hidden bg-gradient-to-br from-page-dark to-line"
       >
         {pkg.imageUrl ? (
           <Image
@@ -115,7 +115,7 @@ export default function PackageCard({
 
         <Link
           href={`/pakket/${pkg.slug}`}
-          className={`mt-7 mx-auto block w-full max-w-[240px] text-center px-5 py-3.5 rounded-[3px] text-white font-serif text-[22px] tracking-[0.06em] shadow-[0_6px_18px_rgba(60,50,30,0.12)] hover:shadow-[0_12px_26px_rgba(60,50,30,0.18)] hover:-translate-y-0.5 transition ${ACCENT_BG[pkg.accent]}`}
+          className={`mt-7 mx-auto block w-full max-w-[240px] text-center px-6 py-4 rounded-[3px] text-white font-serif text-[20px] sm:text-[22px] tracking-[0.06em] shadow-[0_6px_18px_rgba(60,50,30,0.12)] hover:shadow-[0_12px_26px_rgba(60,50,30,0.18)] hover:-translate-y-0.5 transition ${ACCENT_BG[pkg.accent]}`}
         >
           {pkg.priceLabel}
         </Link>

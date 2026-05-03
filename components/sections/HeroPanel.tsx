@@ -64,7 +64,7 @@ export default function HeroPanel({ locale }: { locale: Locale }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.4, delay: 0.2 }}
-        className="relative min-h-[420px] sm:min-h-[480px] lg:min-h-[560px] bg-page-dark"
+        className="relative min-h-[280px] sm:min-h-[420px] lg:min-h-[560px] bg-page-dark"
       >
         {/* Mobiel/tablet: verticale foto die de hoogte vult.
             Desktop: brede liggende foto naast de tekst-kolom. */}

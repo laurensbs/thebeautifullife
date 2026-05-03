@@ -44,18 +44,18 @@ export default function FAQ({ locale }: { locale: Locale }) {
               <button
                 type="button"
                 onClick={() => setOpen(isOpen ? null : i)}
-                className="w-full flex items-start justify-between gap-4 px-5 py-4 sm:px-6 sm:py-5 text-left"
+                className="w-full flex items-start justify-between gap-4 px-5 py-5 sm:px-6 sm:py-5 text-left min-h-[60px]"
                 aria-expanded={isOpen}
               >
                 <span className="font-serif text-ink text-[16px] sm:text-[17px] tracking-[0.02em] leading-snug">
                   {item.q}
                 </span>
                 <span
-                  className={`flex-none mt-1 w-6 h-6 rounded-full border border-tan/40 flex items-center justify-center text-tan transition-transform ${
+                  className={`flex-none mt-0.5 w-8 h-8 rounded-full border border-tan/40 flex items-center justify-center text-tan transition-transform ${
                     isOpen ? "rotate-45" : ""
                   }`}
                 >
-                  <Plus size={14} strokeWidth={1.6} />
+                  <Plus size={15} strokeWidth={1.6} />
                 </span>
               </button>
               <AnimatePresence initial={false}>
