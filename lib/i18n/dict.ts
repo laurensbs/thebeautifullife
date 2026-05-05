@@ -51,11 +51,11 @@ export const DICT = {
 
   // ============ HERO ============
   hero: {
-    threePaths: t("3 Paths. One Goal.", "3 Paths. One Goal."),
-    yourIdealLife: t("Your Ideal Life.", "Your Ideal Life."),
+    threePaths: t("In drie stappen", "In three steps"),
+    yourIdealLife: t("naar jouw leven", "to your life"),
     lead: t(
-      "Drie paden om weer thuis te komen bij jezelf. Van een werkboek in je eigen tempo tot acht dagen samen met Marion — kies wat past bij waar jij nu staat.",
-      "Three paths to come home to yourself. From a workbook in your own time to eight days alongside Marion — choose what fits where you are now."
+      "Misschien voel je dat je leven niet meer klopt — maar weet je nog niet wat wél klopt. Hier beginnen we opnieuw, stap voor stap. Van rust naar helderheid naar een leven dat van jou is.",
+      "Perhaps you feel your life no longer fits — but you don't yet know what does. Here we begin again, step by step. From calm to clarity to a life that's truly yours."
     ),
     feat: {
       clarity: t("More Clarity", "More Clarity"),
@@ -91,16 +91,16 @@ export const DICT = {
 
     tagline: {
       ikigai: t(
-        "Het werkboek dat je terugbrengt bij jezelf — in jouw eigen tempo.",
-        "The workbook that brings you back to yourself — in your own time."
+        "Stap 1 — van chaos naar rust. Je vertraagt, komt uit je hoofd, en voelt weer wat er speelt.",
+        "Step 1 — from chaos to calm. You slow down, get out of your head, and feel again what's alive."
       ),
       alignment: t(
-        "Werkboek + 2 persoonlijke calls met Marion. Van helderheid naar een plan dat past bij jouw leven.",
-        "Workbook + 2 personal calls with Marion. From clarity to a plan that fits your life."
+        "Stap 2 — van voelen naar weten. Je krijgt inzicht in wat je écht wilt en wat bij je past.",
+        "Step 2 — from feeling to knowing. You gain insight into what you truly want and what fits you."
       ),
       experience: t(
-        "8 dagen in Spanje of Sardinië. Werkboek, persoonlijke coaching en een levensplan dat blijft.",
-        "8 days in Spain or Sardinia. Workbook, personal coaching, and a life plan that lasts."
+        "Stap 3 — van inzicht naar keuzes. Acht dagen in Spanje of Sardinië om je leven opnieuw vorm te geven.",
+        "Step 3 — from insight to choices. Eight days in Spain or Sardinia to reshape your life."
       ),
     },
 
