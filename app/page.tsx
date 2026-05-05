@@ -43,7 +43,7 @@ export default async function Home() {
       {/* Pakketten — geframed als 3 stappen */}
       <section
         id="packages"
-        className="mt-12 sm:mt-16 scroll-mt-20"
+        className="mt-12 sm:mt-16 scroll-mt-24"
       >
         <div className="text-center max-w-xl mx-auto mb-7 sm:mb-9">
           <p className="font-script text-tan text-2xl sm:text-3xl">

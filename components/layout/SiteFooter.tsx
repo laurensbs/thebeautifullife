@@ -32,36 +32,36 @@ function InstagramIcon({ size = 14 }: { size?: number }) {
 export default function SiteFooter({ locale }: { locale: Locale }) {
   const year = new Date().getFullYear();
   return (
-    <footer className="mt-16 sm:mt-20 lg:mt-24 px-5 sm:px-6 pb-8">
+    <footer className="mt-14 sm:mt-20 lg:mt-24 px-4 sm:px-6 pb-6 sm:pb-8">
       <div className="max-w-[1180px] mx-auto">
         {/* Cream-card met afgeronde bovenhoeken — matcht portaal/landing stijl */}
-        <div className="bg-page-soft rounded-tl-[40px] rounded-tr-[40px] rounded-b-[6px] shadow-[0_18px_48px_rgba(60,50,30,0.08)] overflow-hidden">
+        <div className="bg-page-soft rounded-tl-[32px] rounded-tr-[32px] sm:rounded-tl-[40px] sm:rounded-tr-[40px] rounded-b-[6px] shadow-[0_18px_48px_rgba(60,50,30,0.08)] overflow-hidden">
           {/* Brand / tagline — centered op mobiel + tablet, links op desktop */}
-          <div className="px-6 py-10 sm:px-12 sm:py-12 text-center lg:text-left">
+          <div className="px-5 py-7 sm:px-12 sm:py-12 text-center lg:text-left">
             <div className="inline-flex lg:flex">
               <BrandLogo size="md" align={"left"} />
             </div>
             <Calligraphy
               as="p"
-              className="font-script text-tan text-xl sm:text-2xl mt-3"
+              className="font-script text-tan text-lg sm:text-2xl mt-2 sm:mt-3"
               text={tr(DICT.footer.tagline, locale)}
               durationPerChar={0.04}
             />
 
-            <HeartDivider className="mt-5 mb-6 lg:!justify-start" />
+            <HeartDivider className="mt-4 mb-5 sm:mt-5 sm:mb-6 lg:!justify-start" />
 
-            <p className="text-ink-soft text-sm leading-[1.85] max-w-md mx-auto lg:mx-0">
+            <p className="text-ink-soft text-[13px] sm:text-sm leading-[1.75] sm:leading-[1.85] max-w-md mx-auto lg:mx-0">
               {tr(DICT.footer.intro, locale)}
             </p>
           </div>
 
           {/* Navigation columns */}
-          <div className="border-t border-line/40 px-6 py-9 sm:px-12 sm:py-10 grid grid-cols-1 sm:grid-cols-2 gap-9 sm:gap-12 text-center sm:text-left">
+          <div className="border-t border-line/40 px-5 py-6 sm:px-12 sm:py-10 grid grid-cols-2 gap-6 sm:gap-12 text-left">
             <div>
               <p className="text-[11px] tracking-[0.22em] uppercase text-muted mb-4">
                 {tr(DICT.footer.discover, locale)}
               </p>
-              <ul className="space-y-2.5 text-sm">
+              <ul className="space-y-1.5 sm:space-y-2.5 text-[13px] sm:text-sm">
                 <li>
                   <Link
                     href="/pakket/ikigai"
@@ -117,7 +117,7 @@ export default function SiteFooter({ locale }: { locale: Locale }) {
               <p className="text-[11px] tracking-[0.22em] uppercase text-muted mb-4">
                 {tr(DICT.footer.contact, locale)}
               </p>
-              <ul className="space-y-3 text-sm">
+              <ul className="space-y-2 sm:space-y-3 text-[13px] sm:text-sm">
                 <li>
                   <a
                     href="mailto:contact@thebeautifullife.nl"
@@ -155,7 +155,7 @@ export default function SiteFooter({ locale }: { locale: Locale }) {
           </div>
 
           {/* Bottom strip */}
-          <div className="bg-page-dark/40 border-t border-line/40 px-6 py-5 sm:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-muted text-center sm:text-left">
+          <div className="bg-page-dark/40 border-t border-line/40 px-5 py-4 sm:px-12 sm:py-5 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 text-[10.5px] sm:text-[11px] text-muted text-center sm:text-left">
             <p>
               © {year} The Beautiful Life · Marion Lubach
               <span className="hidden sm:inline text-muted/50"> · </span>
