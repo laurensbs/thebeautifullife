@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import HeartDivider from "@/components/ui/HeartDivider";
 import HeartDraw from "@/components/ui/HeartDraw";
+import MarionAvatar from "@/components/ui/MarionAvatar";
 import { getLocale } from "@/lib/i18n/server";
 import { buildMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -243,6 +244,9 @@ function Page({ locale }: { locale: Locale }) {
       <section className="mt-12 sm:mt-16 bg-page-soft rounded-tl-[40px] rounded-tr-[40px] rounded-b-[6px] shadow-[0_18px_48px_rgba(60,50,30,0.08)] px-6 py-12 sm:px-14 sm:py-16 relative overflow-hidden">
         <span className="absolute top-0 left-0 right-0 h-0.5 bg-tan" />
         <div className="text-center max-w-2xl mx-auto">
+          <div className="flex justify-center mb-6">
+            <MarionAvatar size={88} />
+          </div>
           <p className="font-script text-tan text-3xl">
             {isEN ? "and a few words" : "en een paar woorden"}
           </p>

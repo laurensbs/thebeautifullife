@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight, Mail, CalendarClock, Sparkles, BookOpen, Home } from "lucide-react";
+import { Menu, X, ArrowRight, Mail, CalendarClock, Sparkles, BookOpen, Home, User } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { DICT } from "@/lib/i18n/dict";
 import { tr, type Locale } from "@/lib/i18n/types";
@@ -22,6 +22,7 @@ export default function SiteHeader({ locale }: { locale: Locale }) {
   const [authedName, setAuthedName] = useState<string | null>(null);
 
   const NAV = [
+    { href: "/over", label: locale === "en" ? "About" : "Over" },
     { href: "/#packages", label: tr(DICT.nav.packages, locale) },
   ];
   const myPathLabel = tr(DICT.nav.myPath, locale);
@@ -31,6 +32,7 @@ export default function SiteHeader({ locale }: { locale: Locale }) {
   const isEN = locale === "en";
   const DRAWER_NAV: Array<{ href: string; label: string; icon: React.ReactNode }> = [
     { href: "/", label: isEN ? "Home" : "Home", icon: <Home size={16} strokeWidth={1.5} /> },
+    { href: "/over", label: isEN ? "About Marion" : "Over Marion", icon: <User size={16} strokeWidth={1.5} /> },
     { href: "/#packages", label: tr(DICT.nav.packages, locale), icon: <Sparkles size={16} strokeWidth={1.5} /> },
     { href: "/gratis", label: isEN ? "Free questionnaire" : "Gratis vragenlijst", icon: <BookOpen size={16} strokeWidth={1.5} /> },
     { href: "/boek-call", label: isEN ? "Book a call" : "Boek een call", icon: <CalendarClock size={16} strokeWidth={1.5} /> },
