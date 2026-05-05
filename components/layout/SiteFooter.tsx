@@ -88,6 +88,14 @@ export default function SiteFooter({ locale }: { locale: Locale }) {
                 </li>
                 <li className="pt-3 mt-3 border-t border-line/40">
                   <Link
+                    href="/over"
+                    className="text-ink-soft hover:text-tan transition"
+                  >
+                    {locale === "en" ? "About Marion" : "Over Marion"}
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     href="/mijn-pad"
                     className="text-ink-soft hover:text-tan transition"
                   >

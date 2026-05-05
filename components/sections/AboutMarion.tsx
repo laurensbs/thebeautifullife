@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { type Locale } from "@/lib/i18n/types";
 import HeartDivider from "@/components/ui/HeartDivider";
 
@@ -72,6 +74,17 @@ export default function AboutMarion({ locale }: { locale: Locale }) {
         <p className="font-serif text-ink text-lg tracking-[0.04em] mt-1">
           Marion
         </p>
+
+        <Link
+          href="/over"
+          className="inline-flex items-center gap-1.5 mt-6 text-[11px] tracking-[0.22em] uppercase text-ink-soft hover:text-tan transition self-start group"
+        >
+          {locale === "en" ? "Read more about Marion" : "Lees meer over Marion"}
+          <ArrowRight
+            size={12}
+            className="group-hover:translate-x-0.5 transition-transform"
+          />
+        </Link>
       </div>
     </motion.section>
   );

@@ -3,6 +3,7 @@ import { SITE_URL } from "@/lib/seo";
 
 const PUBLIC_PATHS = [
   { path: "/", priority: 1.0, freq: "weekly" as const },
+  { path: "/over", priority: 0.8, freq: "monthly" as const },
   { path: "/pakket/ikigai", priority: 0.9, freq: "monthly" as const },
   { path: "/pakket/alignment", priority: 0.9, freq: "monthly" as const },
   { path: "/pakket/experience", priority: 0.9, freq: "monthly" as const },
