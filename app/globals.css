@@ -75,13 +75,17 @@ textarea::placeholder {
 }
 .animate-floaty { animation: floaty 7s ease-in-out infinite; }
 
-/* Smooth scroll bij hash-navigatie (#packages etc) zodat het zacht
-   meebeweegt i.p.v. instant springt. */
-html {
-  scroll-behavior: smooth;
+/* Smooth scroll uitsluitend bij hash-anchors (#packages etc) via
+   :target — niet globally op html, want dan worden ook page-navigaties
+   zichtbaar gescrolled (browser-restoration scroll naar boven wordt
+   dan een geanimeerde 'naar beneden' beweging). */
+:target {
+  scroll-margin-top: 6rem;
 }
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+@media (prefers-reduced-motion: no-preference) {
+  /* Smooth alleen activeren bij gebruikers-clicks op hash-links,
+     niet bij Next.js page-navigatie. JS in components/layout/SmoothHash.tsx
+     past scroll-behavior tijdelijk toe alleen bij hash-clicks. */
 }
 
 /* Focus-visible: zichtbare tan-ring voor toetsenbord-navigatie zonder

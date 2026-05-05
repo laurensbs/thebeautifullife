@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Montserrat, Pinyon_Script } from "next/font/google"
 import "./globals.css";
 import ChromeGate from "@/components/layout/ChromeGate";
 import CookieNotice from "@/components/layout/CookieNotice";
+import SmoothHashScroll from "@/components/layout/SmoothHashScroll";
 import { getLocale } from "@/lib/i18n/server";
 import { DICT } from "@/lib/i18n/dict";
 import { tr } from "@/lib/i18n/types";
@@ -69,6 +70,7 @@ export default async function RootLayout({
           {locale === "en" ? "Skip to content" : "Direct naar inhoud"}
         </a>
         <JsonLd data={[ORGANIZATION_LD, PERSON_LD, WEBSITE_LD]} />
+        <SmoothHashScroll />
         <ChromeGate>{children}</ChromeGate>
         <CookieNotice />
       </body>
